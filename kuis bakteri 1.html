@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Interaktif: Struktur Bakteri & Fungsinya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka', cursive;
+        }
+        .touch-btn {
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .touch-btn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Header / Top Bar -->
+    <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 p-4 px-6 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="bg-emerald-500 text-slate-900 p-2.5 rounded-2xl shadow-lg">
+                <i class="fa-solid fa-bacteria text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-emerald-400">BioQuiz Smartboard</h1>
+                <p class="text-xs text-slate-400">Struktur Bakteri & Fungsinya</p>
+            </div>
+        </div>
+        
+        <div id="stats-container" class="hidden flex items-center space-x-6">
+            <div class="bg-slate-700/60 px-4 py-2 rounded-xl border border-slate-600 flex items-center space-x-2">
+                <i class="fa-solid fa-trophy text-amber-400 text-lg"></i>
+                <span class="text-sm text-slate-300">Skor:</span>
+                <span id="score-display" class="font-bold text-xl text-amber-400">0</span>
+            </div>
+            <div class="bg-slate-700/60 px-4 py-2 rounded-xl border border-slate-600 flex items-center space-x-2">
+                <i class="fa-solid fa-list-check text-cyan-400 text-lg"></i>
+                <span id="question-counter" class="font-bold text-slate-200">1/10</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="max-w-2xl w-full bg-slate-800/90 border border-slate-700 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -left-10 -top-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
+            
+            <div class="inline-block p-4 bg-emerald-500/20 text-emerald-400 rounded-full mb-4">
+                <i class="fa-solid fa-microscope text-5xl"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-3 text-white">Petualangan Biologi: Sel Bakteri</h2>
+            <p class="text-slate-300 text-lg mb-8 leading-relaxed">
+                Siap untuk menguji pengetahuan siswa di layar interaktif? Kuis ini berisi 10 pertanyaan tentang struktur dan organel sel bakteri beserta fungsinya.
+            </p>
+            <button onclick="startQuiz()" class="touch-btn w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold text-2xl rounded-2xl shadow-lg shadow-emerald-500/30 flex items-center justify-center space-x-3 cursor-pointer">
+                <span>Mulai Kuis Interaktif</span>
+                <i class="fa-solid fa-play"></i>
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden max-w-4xl w-full flex flex-col gap-6">
+            
+            <!-- Question Card -->
+            <div class="bg-slate-800/90 border border-slate-700 rounded-3xl p-6 md:p-8 shadow-2xl relative">
+                <div class="flex justify-between items-center mb-4">
+                    <span id="badge-category" class="bg-emerald-500/20 text-emerald-300 text-sm font-semibold px-3 py-1 rounded-full border border-emerald-500/30">
+                        Organel Bakteri
+                    </span>
+                    <button onclick="showHint()" class="touch-btn text-amber-400 bg-amber-400/10 hover:bg-amber-400/20 px-4 py-2 rounded-xl text-sm font-bold flex items-center space-x-2 border border-amber-400/30">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>Petunjuk</span>
+                    </button>
+                </div>
+                
+                <h2 id="question-text" class="text-2xl md:text-3xl font-bold leading-snug text-slate-100 min-h-[4rem]">
+                    Teks Pertanyaan...
+                </h2>
+
+                <!-- Hint Box -->
+                <div id="hint-box" class="hidden mt-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-200 text-sm flex items-start space-x-3">
+                    <i class="fa-solid fa-circle-info text-amber-400 text-lg mt-0.5"></i>
+                    <p id="hint-text"></p>
+                </div>
+            </div>
+
+            <!-- Options Grid -->
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Buttons dynamically generated -->
+            </div>
+
+            <!-- Rationale / Feedback Box -->
+            <div id="feedback-box" class="hidden bg-slate-800 border rounded-3xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-start space-x-4">
+                    <div id="feedback-icon" class="p-3 rounded-2xl text-2xl flex-shrink-0"></div>
+                    <div>
+                        <h4 id="feedback-title" class="font-bold text-lg"></h4>
+                        <p id="feedback-text" class="text-slate-300 text-sm md:text-base mt-1"></p>
+                    </div>
+                </div>
+                <button onclick="nextQuestion()" class="touch-btn w-full md:w-auto px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold text-lg rounded-2xl shadow-lg flex items-center justify-center space-x-2 flex-shrink-0 cursor-pointer">
+                    <span>Lanjut</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden max-w-2xl w-full bg-slate-800/90 border border-slate-700 rounded-3xl p-8 text-center shadow-2xl">
+            <div class="inline-block p-4 bg-amber-400/20 text-amber-400 rounded-full mb-4">
+                <i class="fa-solid fa-award text-6xl"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-2">Kuis Selesai!</h2>
+            <p class="text-slate-400 mb-6">Hasil Kerja Keras Kelas Hari Ini</p>
+
+            <div class="bg-slate-900/60 rounded-2xl p-6 border border-slate-700 mb-8 flex justify-around items-center">
+                <div>
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Total Skor</p>
+                    <p id="final-score" class="text-5xl font-black text-amber-400 mt-1">0</p>
+                </div>
+                <div class="h-12 w-px bg-slate-700"></div>
+                <div>
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Akurasi Jawaban</p>
+                    <p id="final-accuracy" class="text-5xl font-black text-emerald-400 mt-1">0%</p>
+                </div>
+            </div>
+
+            <button onclick="restartQuiz()" class="touch-btn w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold text-xl rounded-2xl shadow-lg flex items-center justify-center space-x-3 cursor-pointer">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Ulangi Kuis</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800/80">
+        Dirancang untuk Penggunaan Smart Board di Kelas • Biologi Sel Bakteri
+    </footer>
+
+    <script>
+        const quizData = [
+            {
+                question: "Struktur penyokong luar pada sel bakteri yang berfungsi memberikan bentuk tetap serta melindungi sel dari tekanan osmotik adalah...",
+                options: [
+                    { text: "Dinding Sel", isCorrect: true, rationale: "Dinding sel bakteri terbuat dari peptidoglikan yang memberi bentuk kaku dan mencegah sel pecah akibat osmosis." },
+                    { text: "Membran Plasma", isCorrect: false, rationale: "Membran plasma bersifat selektif permeabel dan mengatur keluar-masuk zat, bukan penyokong kaku luar." },
+                    { text: "Kapsul", isCorrect: false, rationale: "Kapsul berfungsi terutama untuk perlindungan dari sistem imun inang dan perlekatan, bukan penentu bentuk utama." },
+                    { text: "Sitoplasma", isCorrect: false, rationale: "Sitoplasma adalah cairan tempat berlangsungnya reaksi metabolisme sel." }
+                ],
+                hint: "Struktur ini mengandung lapisan peptidoglikan."
+            },
+            {
+                question: "Manakah struktur bakteri yang berperan penting dalam membantu perlekatan sel pada substrat atau jaringan tubuh inang?",
+                options: [
+                    { text: "Pilus / Fimbria", isCorrect: true, rationale: "Fimbria atau pilus adalah struktur seperti rambut halus yang digunakan bakteri untuk menempel pada permukaan." },
+                    { text: "Flagela", isCorrect: false, rationale: "Flagela merupakan alat gerak (motilitas) bagi sel bakteri." },
+                    { text: "Ribosom", isCorrect: false, rationale: "Ribosom adalah organel tempat sintesis protein berlangsung." },
+                    { text: "Plasmid", isCorrect: false, rationale: "Plasmid adalah untai DNA sirkuler tambahan di luar kromosom utama." }
+                ],
+                hint: "Bentuknya berupa rambut-rambut halus melingkupi permukaan sel."
+            },
+            {
+                question: "Bakteri peritrik memiliki ciri khas pada alat geraknya, yaitu...",
+                options: [
+                    { text: "Flagela tersebar di seluruh permukaan sel", isCorrect: true, rationale: "Peritrik ditandai dengan flagela yang tumbuh menyebar di seluruh permukaan sel bakteri." },
+                    { text: "Satu flagela saja di salah satu ujung", isCorrect: false, rationale: "Ciri ini milik tipe bakteri monotrik." },
+                    { text: "Banyak flagela hanya di salah satu ujung", isCorrect: false, rationale: "Ciri ini milik tipe bakteri lofotrik." },
+                    { text: "Satu atau banyak flagela di kedua ujung", isCorrect: false, rationale: "Ciri ini milik tipe bakteri amfitrik." }
+                ],
+                hint: "Kata 'peri' berkaitan dengan daerah di sekeliling/seluruh permukaan."
+            },
+            {
+                question: "Bagian dari sel bakteri yang membawa gen tambahan seperti resistensi terhadap antibiotik adalah...",
+                options: [
+                    { text: "Plasmid", isCorrect: true, rationale: "Plasmid adalah DNA sirkuler kecil yang terpisah dari kromosom utama dan sering membawa gen resistensi antibiotik." },
+                    { text: "Nukleoid", isCorrect: false, rationale: "Nukleoid memuat kromosom utama sel yang mengatur seluruh aktivitas hidup dasar sel." },
+                    { text: "Mesosom", isCorrect: false, rationale: "Mesosom merupakan lipatan membran sel yang berperan dalam respirasi seluler." },
+                    { text: "Endospora", isCorrect: false, rationale: "Endospora adalah bentuk pertahanan diri bakteri saat lingkungan tidak menguntungkan." }
+                ],
+                hint: "Berupa materi genetik melingkar di luar DNA utama."
+            },
+            {
+                question: "Organel sel bakteri yang menjadi tempat terjadinya sintesis protein adalah...",
+                options: [
+                    { text: "Ribosom", isCorrect: true, rationale: "Ribosom pada bakteri (tipe 70S) bertugas menerjemahkan RNA menjadi rantai asam amino (protein)." },
+                    { text: "Lisosom", isCorrect: false, rationale: "Bakteri tidak memiliki lisosom (organel bermembran hanya ada pada eukariot)." },
+                    { text: "Kloroplas", isCorrect: false, rationale: "Bakteri tidak memiliki kloroplas bermembran; fotosintesis bakteri menggunakan lipatan membran khusus." },
+                    { text: "Mitosom", isCorrect: false, rationale: "Mitosom bukan organel umum bakteri dan tidak berfungsi dalam sintesis protein." }
+                ],
+                hint: "Struktur kecil tersusun atas RNA dan protein yang tersebar di sitoplasma."
+            },
+            {
+                question: "Saat kondisi lingkungan sangat buruk atau kekeringan, sebagian bakteri Gram-positif membentuk struktur dorman bertahan hidup yaitu...",
+                options: [
+                    { text: "Endospora", isCorrect: true, rationale: "Endospora adalah struktur tahan panas dan bahan kimia yang dibentuk bakteri untuk bertahan di kondisi ekstrem." },
+                    { text: "Kapsul", isCorrect: false, rationale: "Kapsul adalah lapisan lendir pelindung sehari-hari, bukan struktur dorman ekstrim." },
+                    { text: "Mesosom", isCorrect: false, rationale: "Mesosom berperan dalam respirasi dan pembelahan sel, bukan struktur istirahat." },
+                    { text: "Kista", isCorrect: false, rationale: "Meski mirip, pembentukan endospora adalah mekanisme bertahan paling khas dan kuat pada bakteri tertentu." }
+                ],
+                hint: "Struktur ini sangat tahan panas dan kondisi ekstrem."
+            },
+            {
+                question: "Lapisan tebal berlendir di luar dinding sel yang melindungi bakteri patogen dari fagositosis sel imun adalah...",
+                options: [
+                    { text: "Kapsul", isCorrect: true, rationale: "Kapsul terdiri dari polisakarida/polipeptida yang licin sehingga menyulitkan sel imun menelan (fagositosis) bakteri." },
+                    { text: "Membran luar", isCorrect: false, rationale: "Membran luar terdapat pada Gram-negatif, tetapi lapisan pelindung licin paling luar adalah kapsul." },
+                    { text: "Dinding sel", isCorrect: false, rationale: "Dinding sel menentukan bentuk sel, bukan lapisan lendir terluar." },
+                    { text: "Glikokaliks lunak", isCorrect: false, rationale: "Lapisan padat dan terikat kuat dinamakan kapsul." }
+                ],
+                hint: "Lapisan berlendir ini membuat bakteri menjadi lebih ganas (patogen)."
+            },
+            {
+                question: "Mengapa sel bakteri dikelompokkan ke dalam organisme prokariotik?",
+                options: [
+                    { text: "Tidak memiliki membran inti sel", isCorrect: true, rationale: "Prokariotik berarti materi genetiknya (DNA) berada bebas di nukleoid tanpa dibungkus membran inti." },
+                    { text: "Tidak memiliki materi genetik DNA", isCorrect: false, rationale: "Bakteri tetap memiliki DNA sebagai pembawa informasi genetik." },
+                    { text: "Tidak memiliki membran sel plasma", isCorrect: false, rationale: "Bakteri memiliki membran plasma untuk membatasi isi sel dengan luar." },
+                    { text: "Memiliki organel bermembran ganda", isCorrect: false, rationale: "Bakteri justru TIDAK memiliki organel bermembran ganda." }
+                ],
+                hint: "Fokus pada struktur pembungkus inti sel (nukleus)."
+            },
+            {
+                question: "Lipatan membran sel ke arah dalam yang berperan dalam pembentukan dinding sel baru dan respirasi adalah...",
+                options: [
+                    { text: "Mesosom", isCorrect: true, rationale: "Mesosom terbentuk dari penonjolan membran sel ke dalam dan berfungsi serupa mitokondria pada eukariot." },
+                    { text: "Vakuola", isCorrect: false, rationale: "Vakuola bermembran tidak ditemukan pada struktur sel prokariotik umum." },
+                    { text: "Badan Golgi", isCorrect: false, rationale: "Bakteri tidak memiliki kompleks organel bermembran seperti Badan Golgi." },
+                    { text: "Plasmid", isCorrect: false, rationale: "Plasmid adalah materi genetik melingkar." }
+                ],
+                hint: "Organel hasil pelebaran/lipatan membran plasma ke dalam."
+            },
+            {
+                question: "Komponen utama penyusun dinding sel bakteri yang membedakannya dengan dinding sel tumbuhan atau jamur adalah...",
+                options: [
+                    { text: "Peptidoglikan", isCorrect: true, rationale: "Peptidoglikan (murein) adalah gabungan polisakarida dan peptide yang khas hanya ada pada dinding sel bakteri." },
+                    { text: "Selulosa", isCorrect: false, rationale: "Selulosa adalah penyusun utama dinding sel tumbuhan." },
+                    { text: "Kitin", isCorrect: false, rationale: "Kitin adalah penyusun utama dinding sel jamur (fungi)." },
+                    { text: "Pektin", isCorrect: false, rationale: "Pektin terdapat pada penyusun lamela tengah tumbuhan." }
+                ],
+                hint: "Senyawa gabungan gula dan asam amino khas sel prokariot."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        function startQuiz() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('stats-container').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            answered = false;
+            const q = quizData[currentQuestionIndex];
+            
+            document.getElementById('question-counter').innerText = `${currentQuestionIndex + 1}/${quizData.length}`;
+            document.getElementById('question-text').innerText = q.question;
+            document.getElementById('hint-box').classList.add('hidden');
+            document.getElementById('hint-text').innerText = q.hint;
+            document.getElementById('feedback-box').classList.add('hidden');
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            // Shuffle options slightly or present clearly
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `touch-btn w-full p-5 bg-slate-800 hover:bg-slate-750 border-2 border-slate-700 hover:border-slate-500 rounded-2xl text-left text-lg font-semibold flex items-center justify-between cursor-pointer transition-all shadow-md`;
+                btn.onclick = () => selectOption(btn, opt);
+                
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <span class="w-10 h-10 rounded-xl bg-slate-700 text-slate-300 flex items-center justify-center font-bold text-base flex-shrink-0">
+                            ${String.fromCharCode(65 + idx)}
+                        </span>
+                        <span class="text-slate-100">${opt.text}</span>
+                    </div>
+                    <i class="fa-regular fa-circle text-slate-500 text-xl icon-indicator"></i>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function showHint() {
+            document.getElementById('hint-box').classList.toggle('hidden');
+        }
+
+        function selectOption(selectedBtn, option) {
+            if (answered) return;
+            answered = true;
+
+            const allButtons = document.getElementById('options-container').children;
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            // Disable pointer on all buttons
+            for (let btn of allButtons) {
+                btn.classList.add('cursor-default');
+            }
+
+            if (option.isCorrect) {
+                score += 10;
+                document.getElementById('score-display').innerText = score;
+                
+                selectedBtn.className = "touch-btn w-full p-5 bg-emerald-500/20 border-2 border-emerald-500 rounded-2xl text-left text-lg font-semibold flex items-center justify-between shadow-md";
+                selectedBtn.querySelector('.icon-indicator').className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+                
+                feedbackBox.className = "bg-emerald-950/80 border border-emerald-500/50 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4";
+                feedbackIcon.className = "p-3 rounded-2xl text-2xl flex-shrink-0 bg-emerald-500/20 text-emerald-400";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+                feedbackTitle.className = "font-bold text-lg text-emerald-300";
+                feedbackTitle.innerText = "Jawaban Tepat!";
+                
+                // Fire confetti on smartboard
+                confetti({
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { y: 0.8 }
+                });
+            } else {
+                selectedBtn.className = "touch-btn w-full p-5 bg-rose-500/20 border-2 border-rose-500 rounded-2xl text-left text-lg font-semibold flex items-center justify-between shadow-md";
+                selectedBtn.querySelector('.icon-indicator').className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
+
+                // Highlight correct answer
+                const q = quizData[currentQuestionIndex];
+                q.options.forEach((opt, idx) => {
+                    if (opt.isCorrect) {
+                        allButtons[idx].className = "touch-btn w-full p-5 bg-emerald-500/10 border-2 border-emerald-500/40 rounded-2xl text-left text-lg font-semibold flex items-center justify-between shadow-md";
+                        allButtons[idx].querySelector('.icon-indicator').className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+                    }
+                });
+
+                feedbackBox.className = "bg-rose-950/80 border border-rose-500/50 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4";
+                feedbackIcon.className = "p-3 rounded-2xl text-2xl flex-shrink-0 bg-rose-500/20 text-rose-400";
+                feedbackIcon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                feedbackTitle.className = "font-bold text-lg text-rose-300";
+                feedbackTitle.innerText = "Kurang Tepat";
+            }
+
+            feedbackText.innerText = option.rationale;
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            const accuracy = Math.round((score / (quizData.length * 10)) * 100);
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-accuracy').innerText = `${accuracy}%`;
+
+            if (accuracy >= 70) {
+                confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+            }
+        }
+
+        function restartQuiz() {
+            score = 0;
+            currentQuestionIndex = 0;
+            document.getElementById('score-display').innerText = '0';
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('stats-container').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+```eof
+
+http://googleusercontent.com/immersive_entry_chip/0
+
+Saya telah membuatkan dua berkas kuis interaktif mengenai **Struktur Bakteri dan Fungsinya**:
+
+1. **Aplikasi Kuis Web Interaktif (`bakteri_quiz_smartboard.html`)**: Sangat cocok langsung dibuka melalui peramban browser di *Smart Board*. Desainnya memiliki tombol sentuh besar, petunjuk (*hint*), penjelasan jawaban instan (*rationale*), penambahan skor otomatis, dan efek animasi konfeti saat siswa menjawab dengan benar.
+2. **Format Kuis JSON (`bakteri_quiz.json`)**: Berisi 10 pertanyaan komprehensif mengenai dinding sel (peptidoglikan), kapsul, flagela, pilus, plasmid, ribosom, mesosom, endospora, dan ciri prokariotik.
+
+Semoga kuis ini dapat membuat suasana pembelajaran Biologi di kelas Anda menjadi lebih interaktif dan menyenangkan!
