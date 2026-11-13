@@ -1,0 +1,800 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Jelajah Mendel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: satu kolom. Pelacak tahap menempel di atas, tiap tahap berisi kartu bagian.
+   Warna alel dipakai konsisten: kapital = dominan (jingga), kecil = resesif (biru). */
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --surface2:#E8EEF2; --fg:#16222C; --muted:#52616E; --line:#D2DBE2;
+  --accent:#0B7A75; --accent-fg:#FFFFFF; --accent-soft:#D8F0EE;
+  --dom:#B45309; --rec:#2458D6;
+  --good:#157F3C; --good-soft:#DDF3E4; --bad:#B42318; --bad-soft:#FBE4E1; --warn-soft:#FFF1D6;
+  --ph1:#D6EFEC; --ph2:#FBE3CC; --ph3:#DCE5FB; --ph4:#EADCF5;
+  --font-head:'Space Grotesk',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif; --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E161C; --surface:#16212A; --surface2:#1F2C37; --fg:#E7EEF3; --muted:#9AAAB7; --line:#2C3B48;
+  --accent:#3CC3BB; --accent-fg:#06201F; --accent-soft:#12383A;
+  --dom:#F5A25D; --rec:#7CA6FF;
+  --good:#4CC57B; --good-soft:#123422; --bad:#FF8A7D; --bad-soft:#40201C; --warn-soft:#3A2D12;
+  --ph1:#143B3A; --ph2:#43291A; --ph3:#1C2B50; --ph4:#32224A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E161C; --surface:#16212A; --surface2:#1F2C37; --fg:#E7EEF3; --muted:#9AAAB7; --line:#2C3B48;
+  --accent:#3CC3BB; --accent-fg:#06201F; --accent-soft:#12383A;
+  --dom:#F5A25D; --rec:#7CA6FF;
+  --good:#4CC57B; --good-soft:#123422; --bad:#FF8A7D; --bad-soft:#40201C; --warn-soft:#3A2D12;
+  --ph1:#143B3A; --ph2:#43291A; --ph3:#1C2B50; --ph4:#32224A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--font-body);padding-block:0 56px;overflow-wrap:break-word}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--font-head);line-height:1.2;margin:0;text-wrap:balance}
+h2{font-size:24px} h3{font-size:18px}
+p{margin:0}
+b{font-weight:600}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.d{color:var(--dom);font-weight:700}.r{color:var(--rec);font-weight:700}
+.mono{font-family:var(--font-mono)}
+.small{font-size:14px;color:var(--muted)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{padding-block:10px 0}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{flex:none;width:30px;height:30px}
+.brand h1{font-size:19px}
+.brand p{font-size:13px;color:var(--muted)}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}
+.stage{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font-size:13px;font-weight:500;text-align:left}
+.stage .n{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--surface2);font:600 12px var(--font-mono)}
+.stage .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stage[aria-current="step"]{border-color:var(--accent);background:var(--accent-soft)}
+.stage[aria-current="step"] .n{background:var(--accent);color:var(--accent-fg)}
+.stage.ok .n{background:var(--good);color:#fff}
+.bar{height:4px;background:var(--surface2);margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+@media (max-width:480px){.stage{flex-direction:column;gap:3px;padding:6px 4px;text-align:center;font-size:12px}.stage .t{max-width:100%}.brand p{display:none}}
+
+main{display:flex;flex-direction:column;gap:16px;padding-block:20px 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.intro{background:var(--accent-soft);border-color:transparent}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.note{font-size:14px;color:var(--muted);background:var(--surface2);border-radius:8px;padding:8px 12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:8px 16px;border:1.5px solid var(--accent);border-radius:10px;background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:15px;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.sm{min-height:36px;padding:4px 12px;font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cta{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;margin-top:4px}
+
+/* glosarium */
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;align-items:start}
+details.term{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0}
+details.term summary{cursor:pointer;padding:10px 12px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details.term summary::after{content:"+";font-family:var(--font-mono);color:var(--accent)}
+details.term[open] summary::after{content:"−"}
+details.term[open]{background:var(--accent-soft);border-color:transparent}
+details.term div{padding:0 12px 12px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+details.term .ex{color:var(--muted);font-size:14px}
+
+/* chip dan penjelajah */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:40px;padding:6px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font-size:15px;font-weight:500}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chip.geno-chip{font-family:var(--font-mono);font-size:16px;border-radius:10px}
+.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.explout{display:flex;flex-wrap:wrap;gap:16px;align-items:center;background:var(--surface2);border-radius:12px;padding:14px}
+.geno-big{font:600 40px var(--font-mono);letter-spacing:.04em}
+.explout ul{margin:0;padding-left:18px;flex:1 1 220px}
+
+/* alel dan gamet */
+.alleles{display:flex;flex-wrap:wrap;gap:10px}
+.allele{display:flex;align-items:center;gap:12px;flex:1 1 200px;border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.big{font:600 34px var(--font-mono)}
+.parents{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.parent{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.parent .geno-big{font-size:30px}
+.gams{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gam{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface2);font:600 18px var(--font-mono)}
+.gam.w{width:auto;min-width:52px;padding:0 10px;border-radius:22px}
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmp th,.cmp td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+.cmp th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tblw{overflow-x:auto}
+
+/* langkah */
+.walk{display:flex;flex-direction:column;gap:14px}
+.step{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;scroll-margin-top:110px;background:var(--surface)}
+.step-h{display:flex;gap:10px;align-items:center}
+.step-n{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--accent);color:var(--accent-fg);font:600 14px var(--font-mono)}
+.step-h h3{font-size:17px}
+.step-b{display:flex;flex-direction:column;gap:12px;min-width:0}
+.step-f{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.gate{font-size:13px;color:var(--muted)}
+.fin{background:var(--good-soft);color:var(--fg);border-radius:10px;padding:10px 14px;font-weight:500}
+
+/* kotak Punnett */
+.pal{display:flex;flex-wrap:wrap;gap:8px}
+.pgrid{display:grid;gap:6px;align-items:stretch}
+.pcorner{display:grid;place-items:center;font-size:11px;color:var(--muted);font-family:var(--font-mono);text-align:center;padding:2px}
+.phead{display:grid;place-items:center;min-height:38px;padding:0 6px;font:600 16px var(--font-mono);background:var(--surface2);border-radius:8px}
+.cell{display:grid;place-items:center;min-height:52px;min-width:0;padding:2px;border:1.5px dashed var(--line);border-radius:8px;background:var(--surface);font:600 clamp(13px,3.6vw,18px) var(--font-mono);cursor:pointer}
+.cell:empty::before{content:"?";color:var(--muted)}
+.cell.f{border-style:solid}
+.cell.ok{border:2px solid var(--good)}
+.cell.no{border:2px solid var(--bad);background:var(--bad-soft)}
+.cell.hl{outline:3px solid var(--accent);outline-offset:1px}
+.cell.ph1{background:var(--ph1);border-style:solid;border-color:transparent}
+.cell.ph2{background:var(--ph2);border-style:solid;border-color:transparent}
+.cell.ph3{background:var(--ph3);border-style:solid;border-color:transparent}
+.cell.ph4{background:var(--ph4);border-style:solid;border-color:transparent}
+.cell:disabled{cursor:default}
+.statl{font-size:14px;min-height:21px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--line);vertical-align:-2px;margin-right:6px}
+.legend .sw{margin:0}
+.sw.ph1{background:var(--ph1)}.sw.ph2{background:var(--ph2)}.sw.ph3{background:var(--ph3)}.sw.ph4{background:var(--ph4)}
+.fork{display:grid;grid-template-columns:auto auto auto;column-gap:14px;row-gap:6px;align-items:center;justify-content:start}
+.fk{display:grid;place-items:center;min-width:46px;min-height:38px;padding:0 10px;border-radius:8px;font:600 18px var(--font-mono);background:var(--surface2)}
+.fk.span{align-self:stretch}
+.fk.out{background:var(--accent-soft);border:1.5px solid var(--accent)}
+.fkh{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ratio{display:flex;flex-direction:column;gap:8px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;white-space:nowrap}
+.tbl th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tbl td:first-child{white-space:normal}
+.cnt{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.cnt label{display:flex;align-items:center;gap:8px;font-size:14px}
+.cnt input{width:64px;min-height:38px;padding:4px 8px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);font:600 16px var(--font-mono);text-align:center}
+.cnt input.ok{border-color:var(--good)}.cnt input.no{border-color:var(--bad);background:var(--bad-soft)}
+
+/* simulator */
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctlrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+input[type=range]{width:100%;accent-color:var(--accent);min-height:32px}
+.simout{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+
+/* soal */
+.qlist{display:flex;flex-direction:column;gap:12px}
+.q{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.q-prompt{font-weight:500}
+.pill{align-self:flex-start;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px}
+.lv1{background:var(--good-soft);color:var(--good)}.lv2{background:var(--warn-soft);color:var(--dom)}.lv3{background:var(--bad-soft);color:var(--bad)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;min-height:46px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.opt .lt{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:6px;background:var(--surface2);font:600 12px var(--font-mono)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.numrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.numrow input{width:120px;min-height:44px;padding:6px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font:600 18px var(--font-mono)}
+.unit{font-weight:500}
+.q-tools{display:flex;gap:8px;flex-wrap:wrap}
+.hintbox{background:var(--warn-soft);border-radius:10px;padding:10px 14px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.fb{border-radius:10px;padding:10px 14px;font-size:15px;display:flex;flex-direction:column;gap:4px}
+.fb.good{background:var(--good-soft)}.fb.bad{background:var(--bad-soft)}
+.fb .h{font-weight:700}.fb.good .h{color:var(--good)}.fb.bad .h{color:var(--bad)}
+.score{font-weight:600}
+
+/* evaluasi */
+.prog{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent)}
+.big-score{font:700 56px var(--font-head);line-height:1}
+.tagrow{display:grid;grid-template-columns:minmax(0,150px) 1fr auto;gap:10px;align-items:center;font-size:14px}
+.tagrow .prog{height:10px}
+.rev{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 30 30" aria-hidden="true"><path d="M8 3c14 8 0 16 14 24M22 3C8 11 22 19 8 27" fill="none" stroke="var(--dom)" stroke-width="2.4" stroke-linecap="round"/><path d="M11 8h8M10 15h10M11 22h8" stroke="var(--rec)" stroke-width="2" stroke-linecap="round"/></svg>
+    <div><h1>Jelajah Mendel</h1><p>Pewarisan sifat pada manusia</p></div>
+  </div>
+  <nav id="stages" class="stages" aria-label="Tahap belajar"></nav>
+  <div class="bar" id="bar" role="progressbar" aria-label="Kemajuan belajar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="barfill"></i></div>
+</div></header>
+<main class="wrap" id="app"></main>
+
+<script>
+(function(){
+'use strict';
+var RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+function h(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; if(tag==='button') e.type='button'; return e; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function g(s){ return String(s).split('').map(function(c){ var up=c===c.toUpperCase()&&c!==c.toLowerCase(); return '<span class="'+(up?'d':'r')+'">'+c+'</span>'; }).join(''); }
+function fmt(x){ return String(+x.toFixed(2)).replace('.',','); }
+function shuffle(a){ var b=a.slice(); for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; } return b; }
+function gcd(a,b){ return b?gcd(b,a%b):a; }
+function simp(arr){ var d=arr.reduce(gcd,0); return arr.map(function(x){return x/d;}); }
+var uid=0;
+
+/* ---------- logika genetika ---------- */
+function normCross(a,b){
+  var out='';
+  for(var i=0;i<a.length;i++){
+    var p=[a[i],b[i]].sort(function(x,y){ return (x===x.toUpperCase()?0:1)-(y===y.toUpperCase()?0:1); });
+    out+=p.join('');
+  }
+  return out;
+}
+function gametes(gen){
+  var pairs=gen.match(/../g), res=[''];
+  pairs.forEach(function(p){ var nx=[]; res.forEach(function(r){ nx.push(r+p[0]); nx.push(r+p[1]); }); res=nx; });
+  return res;
+}
+var TRAITS={
+  albinisme:{name:'Albinisme',l:'A',dom:'Pigmentasi normal',rec:'Albinisme',carrier:true,
+    note:'Albinisme okulokutan diwariskan secara autosomal resesif. Individu dengan albinisme bergenotipe aa.'},
+  polidaktili:{name:'Polidaktili',l:'P',dom:'Polidaktili (jari berlebih)',rec:'Jumlah jari normal',carrier:false,
+    note:'Polidaktili umumnya diwariskan secara autosomal dominan. Di sini disederhanakan: ekspresinya di dunia nyata bisa bervariasi.'},
+  ptc:{name:'Mengecap PTC',l:'T',dom:'Dapat mengecap PTC',rec:'Tidak dapat mengecap PTC',carrier:false,
+    note:'Kemampuan mengecap rasa pahit PTC sering dipakai sebagai model satu gen dengan T dominan. Kenyataannya dipengaruhi lebih dari satu faktor.'}
+};
+function monoDef(t){
+  var L=t.l, l=L.toLowerCase();
+  var d={ genoOrder:[L+L,L+l,l+l],
+    phenos:[{key:'dom',label:t.dom,cls:'ph1'},{key:'rec',label:t.rec,cls:'ph4'}],
+    phenoOf:function(x){ return x.indexOf(L)>=0?'dom':'rec'; } };
+  d.cls=function(x){ return d.phenos.filter(function(p){return p.key===d.phenoOf(x);})[0].cls; };
+  return d;
+}
+var DI={
+  genoOrder:['PPAA','PPAa','PpAA','PpAa','PPaa','Ppaa','ppAA','ppAa','ppaa'],
+  phenos:[{key:'P_A_',label:'Polidaktili, pigmen normal',cls:'ph1'},{key:'P_aa',label:'Polidaktili, albino',cls:'ph2'},
+          {key:'ppA_',label:'Jari normal, pigmen normal',cls:'ph3'},{key:'ppaa',label:'Jari normal, albino',cls:'ph4'}],
+  phenoOf:function(x){ return (x.indexOf('P')>=0?'P_':'pp')+(x.indexOf('A')>=0?'A_':'aa'); }
+};
+DI.cls=function(x){ return DI.phenos.filter(function(p){return p.key===DI.phenoOf(x);})[0].cls; };
+
+function summaryHTML(cells,def,n){
+  var T=cells.length, gc={}, pc={};
+  cells.forEach(function(c){ gc[c]=(gc[c]||0)+1; var k=def.phenoOf(c); pc[k]=(pc[k]||0)+1; });
+  var gK=def.genoOrder.filter(function(k){return gc[k];}), pK=def.phenos.filter(function(p){return pc[p.key];});
+  var gs=simp(gK.map(function(k){return gc[k];})), ps=simp(pK.map(function(p){return pc[p.key];}));
+  function row(label,cnt){ return '<td>'+label+'</td><td>'+cnt+'/'+T+'</td><td>'+fmt(cnt/T*100)+'%</td>'+(n!=null?'<td>'+fmt(cnt/T*n)+'</td>':''); }
+  function head(first){ return '<thead><tr><th>'+first+'</th><th>Kotak</th><th>Peluang</th>'+(n!=null?'<th>Dari '+n+' anak</th>':'')+'</tr></thead>'; }
+  return '<div class="ratio">'
+   +'<p><b>Rasio genotipe</b> &nbsp;'+gK.map(function(k,i){return gs[i]+' <span class="mono">'+g(k)+'</span>';}).join(' : ')+'</p>'
+   +'<div class="tblw"><table class="tbl">'+head('Genotipe')+'<tbody>'+gK.map(function(k){return '<tr>'+row('<span class="mono">'+g(k)+'</span>',gc[k])+'</tr>';}).join('')+'</tbody></table></div>'
+   +'<p><b>Rasio fenotipe</b> &nbsp;'+ps.join(' : ')+'</p>'
+   +'<div class="tblw"><table class="tbl">'+head('Fenotipe')+'<tbody>'+pK.map(function(p){return '<tr>'+row('<span class="sw '+p.cls+'"></span>'+p.label,pc[p.key])+'</tr>';}).join('')+'</tbody></table></div></div>';
+}
+function legendHTML(def){ return '<div class="legend">'+def.phenos.map(function(p){return '<span><i class="sw '+p.cls+'"></i>'+p.label+'</span>';}).join('')+'</div>'; }
+
+/* ---------- kemajuan dan navigasi ---------- */
+var done={}, FLAGS=['k','m1','m2','d1','d2','x'];
+var STAGES=[
+  {id:'konsep',label:'Konsep',ok:function(){return done.k;}},
+  {id:'monohibrid',label:'Monohibrid',ok:function(){return done.m1&&done.m2;}},
+  {id:'dihibrid',label:'Dihibrid',ok:function(){return done.d1&&done.d2;}},
+  {id:'evaluasi',label:'Evaluasi',ok:function(){return done.x;}}
+];
+var cur=0, app=document.getElementById('app'), nav=document.getElementById('stages');
+function mark(f){ done[f]=true; updateNav(); }
+function updateNav(){
+  var n=FLAGS.filter(function(f){return done[f];}).length, pct=Math.round(n/FLAGS.length*100);
+  document.getElementById('barfill').style.width=pct+'%';
+  document.getElementById('bar').setAttribute('aria-valuenow',pct);
+  nav.innerHTML='';
+  STAGES.forEach(function(s,i){
+    var b=h('button','stage'+(s.ok()?' ok':''),'<span class="n">'+(s.ok()?'✓':(i+1))+'</span><span class="t">'+s.label+'</span>');
+    if(i===cur) b.setAttribute('aria-current','step');
+    b.onclick=function(){ location.hash=s.id; };
+    nav.append(b);
+  });
+}
+function ctaRow(prev,next){
+  var r=h('div','cta');
+  var a=prev!=null?h('button','btn ghost','← '+STAGES[prev].label):h('span');
+  if(prev!=null) a.onclick=function(){ location.hash=STAGES[prev].id; };
+  r.append(a);
+  if(next!=null){ var b=h('button','btn','Lanjut ke '+STAGES[next].label+' →'); b.onclick=function(){ location.hash=STAGES[next].id; }; r.append(b); }
+  return r;
+}
+function introCard(eyebrow,title,text){
+  var c=h('section','card intro');
+  c.innerHTML='<span class="eyebrow">'+eyebrow+'</span><h2>'+title+'</h2><p>'+text+'</p>';
+  return c;
+}
+
+/* ---------- komponen: soal ---------- */
+function parseNum(s,unit){
+  s=String(s).toLowerCase().replace(/\s+/g,'').replace('%','');
+  if(unit&&unit!=='%'){ s=s.replace(unit.toLowerCase(),''); }
+  if(s.indexOf('/')>0){ var p=s.split('/'); var a=parseFloat(p[0].replace(',','.')), b=parseFloat(p[1].replace(',','.')); if(!b) return NaN; return unit==='%'?a/b*100:a/b; }
+  return parseFloat(s.replace(',','.'));
+}
+function Question(q,o){
+  o=o||{}; var exam=o.mode==='exam', id='q'+(++uid);
+  var box=h('div','q');
+  if(q.level) box.append(h('span','pill lv'+q.lv,q.level));
+  box.append(h('p','q-prompt',q.prompt));
+  var body=h('div','q-body'); box.append(body);
+  var hintBox=h('div','hintbox'); hintBox.hidden=true;
+  var fb=h('div','fb'); fb.hidden=true; fb.setAttribute('role','status');
+  var tools=h('div','q-tools');
+  var tries=0, hl=0, finished=false, chosen=null, hints=q.hints||[];
+  var hintBtn=h('button','btn ghost sm','Petunjuk (0/'+hints.length+')');
+  var nextBtn=null, finishHook=null;
+  if(!exam&&hints.length){
+    tools.append(hintBtn);
+    hintBtn.onclick=function(){
+      if(finished||hl>=hints.length) return;
+      hl++; hintBox.hidden=false;
+      hintBox.innerHTML=hints.slice(0,hl).map(function(t,i){return '<p><b>Petunjuk '+(i+1)+'.</b> '+t+'</p>';}).join('');
+      hintBtn.textContent='Petunjuk ('+hl+'/'+hints.length+')';
+      if(hl>=hints.length) hintBtn.disabled=true;
+    };
+  }
+  function miss(){ fb.hidden=false; fb.className='fb bad'; fb.innerHTML='<span class="h">Belum tepat.</span><span>Coba lagi. Petunjuk bisa membantu.</span>'; }
+  function finish(correct){
+    finished=true; hintBtn.disabled=true;
+    fb.hidden=false; fb.className='fb '+(correct?'good':'bad');
+    fb.innerHTML='<span class="h">'+(correct?'Tepat!':'Jawaban yang benar sudah ditunjukkan.')+'</span><span>'+q.explain+'</span>';
+    if(finishHook) finishHook();
+    if(o.onDone) o.onDone({correct:correct,first:correct&&tries===1});
+  }
+  var opts, els, inp, isOk=function(){ return false; };
+  if(q.type==='mcq'){
+    opts=q.options.map(function(t,i){return {t:t,ok:i===q.answer};});
+    if(o.shuffle) opts=shuffle(opts);
+    var list=h('div','opts'); body.append(list);
+    els=opts.map(function(op,i){
+      var b=h('button','opt','<span class="lt">'+'ABCD'.charAt(i)+'</span><span>'+op.t+'</span>');
+      b.onclick=function(){
+        if(finished) return;
+        if(exam){ chosen=i; els.forEach(function(e,k){e.classList.toggle('sel',k===i);}); nextBtn.disabled=false; return; }
+        tries++;
+        if(op.ok){ b.classList.add('ok'); lockAll(); finish(true); }
+        else{
+          b.classList.add('no'); b.disabled=true;
+          if(tries>=2){ els.forEach(function(e,k){ if(opts[k].ok) e.classList.add('ok'); }); lockAll(); finish(false); } else miss();
+        }
+      };
+      list.append(b); return b;
+    });
+  } else {
+    var row=h('div','numrow'); inp=h('input'); inp.id=id+'-in'; inp.type='text'; inp.setAttribute('inputmode','decimal'); inp.autocomplete='off';
+    inp.setAttribute('aria-label','Jawabanmu');
+    row.append(inp);
+    if(q.unit) row.append(h('span','unit',esc(q.unit)));
+    var tol=q.unit==='%'?0.06:0.001;
+    isOk=function(){ var v=parseNum(inp.value,q.unit); return !isNaN(v)&&Math.abs(v-q.answer)<=tol; };
+    if(exam){ inp.oninput=function(){ nextBtn.disabled=!inp.value.trim(); }; }
+    else{
+      var cb=h('button','btn sm','Periksa'); row.append(cb);
+      var run=function(){
+        if(finished||!inp.value.trim()) return;
+        tries++;
+        if(isOk()){ inp.classList.add('ok'); inp.disabled=true; cb.disabled=true; finish(true); }
+        else if(tries>=2){ inp.disabled=true; cb.disabled=true; finish(false); }
+        else miss();
+      };
+      cb.onclick=run; inp.onkeydown=function(e){ if(e.key==='Enter') run(); };
+    }
+    body.append(row);
+  }
+  function lockAll(){ els.forEach(function(e){ e.disabled=true; }); }
+  box.append(tools,hintBox,fb);
+  if(exam){
+    nextBtn=h('button','btn',o.nextLabel||'Lanjut'); nextBtn.disabled=true;
+    nextBtn.onclick=function(){
+      var ok, given;
+      if(q.type==='mcq'){ ok=opts[chosen].ok; given=opts[chosen].t; } else { ok=isOk(); given=esc(inp.value.trim()+(q.unit?' '+q.unit:'')); }
+      if(o.onDone) o.onDone({correct:ok,given:given});
+    };
+    box.append(nextBtn);
+  }
+  return box;
+}
+function answerKey(q){ return q.type==='mcq'?q.options[q.answer]:(fmt(q.answer)+(q.unit?' '+esc(q.unit):'')); }
+
+/* ---------- komponen: langkah bertahap ---------- */
+function Walk(steps,onFinish){
+  var root=h('div','walk');
+  function show(i){
+    var s=steps[i], blk=h('section','step');
+    blk.innerHTML='<div class="step-h"><span class="step-n">'+(i+1)+'</span><h3>'+s.title+'</h3></div>';
+    var body=h('div','step-b'), foot=h('div','step-f');
+    blk.append(body,foot); root.append(blk);
+    var last=i===steps.length-1, btn=h('button','btn',last?'Selesai':'Lanjut'), note=h('span','gate','Selesaikan bagian di atas dulu.');
+    btn.disabled=true; foot.append(btn,note);
+    var ready=false;
+    function complete(){ if(ready) return; ready=true; btn.disabled=false; note.hidden=true; }
+    btn.onclick=function(){
+      foot.remove();
+      if(last){ root.append(h('div','fin','Semua langkah selesai. Lanjut ke bagian berikutnya.')); if(onFinish) onFinish(); }
+      else{ show(i+1); }
+    };
+    s.render(body,complete);
+    if(!s.gate) complete();
+    if(i>0) blk.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  }
+  show(0);
+  return root;
+}
+
+/* ---------- komponen: kotak Punnett isian ---------- */
+function Punnett(cfg){
+  var rowG=cfg.rowG, colG=cfg.colG, def=cfg.def, R=rowG.length, C=colG.length;
+  var truth=rowG.map(function(r){return colG.map(function(c){return normCross(r,c);});});
+  var val=rowG.map(function(){return colG.map(function(){return '';});});
+  var sel=null, solved=false, hlCell=null, cells=[];
+  var root=h('div','pn card-in'); root.style.display='flex'; root.style.flexDirection='column'; root.style.gap='10px';
+  root.append(h('p','small','Pilih genotipe, lalu ketuk kotak yang sesuai. Gabungkan alel baris dengan alel kolom.'));
+  var pal=h('div','pal'); root.append(pal);
+  cfg.palette.forEach(function(p){
+    var b=h('button','chip geno-chip',g(p)); b.dataset.v=p; b.setAttribute('aria-pressed','false');
+    b.onclick=function(){ if(solved) return; sel=(sel===p?null:p); Array.prototype.forEach.call(pal.children,function(x){ x.setAttribute('aria-pressed',String(x.dataset.v===sel)); }); };
+    pal.append(b);
+  });
+  var grid=h('div','pgrid'); grid.style.gridTemplateColumns='auto repeat('+C+',minmax(0,1fr))';
+  grid.append(h('div','pcorner','♀ ↓<br>♂ →'));
+  colG.forEach(function(c){ grid.append(h('div','phead',g(c))); });
+  rowG.forEach(function(r,i){
+    grid.append(h('div','phead',g(r))); cells[i]=[];
+    colG.forEach(function(c,j){
+      var b=h('button','cell'); b.setAttribute('aria-label','Kotak baris '+(i+1)+', kolom '+(j+1));
+      b.onclick=function(){ place(i,j); }; cells[i][j]=b; grid.append(b);
+    });
+  });
+  root.append(grid);
+  var st=h('p','statl'); st.setAttribute('role','status'); root.append(st);
+  var legend=h('div'); legend.innerHTML=legendHTML(def); legend.hidden=true; root.append(legend);
+  var tools=h('div','row'), cB=h('button','btn sm','Periksa jawaban'), hB=h('button','btn ghost sm','Petunjuk'), rB=h('button','btn ghost sm','Tampilkan jawaban');
+  rB.hidden=true; tools.append(cB,hB,rB); root.append(tools);
+  function draw(i,j){ var b=cells[i][j]; b.innerHTML=val[i][j]?g(val[i][j]):''; b.classList.toggle('f',!!val[i][j]); b.classList.remove('ok','no','hl'); }
+  function place(i,j){
+    if(solved) return;
+    if(sel){ val[i][j]=sel; draw(i,j); st.textContent=''; }
+    else if(val[i][j]){ val[i][j]=''; draw(i,j); }
+    else st.textContent='Pilih genotipe dari daftar di atas dulu.';
+  }
+  function finishP(peek){
+    solved=true;
+    for(var i=0;i<R;i++) for(var j=0;j<C;j++){ val[i][j]=truth[i][j]; draw(i,j); cells[i][j].classList.add(def.cls(truth[i][j])); cells[i][j].disabled=true; }
+    st.innerHTML=peek?'Jawaban ditampilkan. Perhatikan polanya, lalu lanjut.':'<b style="color:var(--good)">Semua kotak benar!</b>';
+    tools.hidden=true; pal.hidden=true; legend.hidden=false;
+    if(cfg.onSolved) cfg.onSolved(peek);
+  }
+  cB.onclick=function(){
+    var right=0, wrong=0, empty=0;
+    for(var i=0;i<R;i++) for(var j=0;j<C;j++){
+      var c=cells[i][j]; c.classList.remove('ok','no','hl');
+      if(!val[i][j]) empty++; else if(val[i][j]===truth[i][j]){ right++; c.classList.add('ok'); } else { wrong++; c.classList.add('no'); }
+    }
+    if(right===R*C){ finishP(false); return; }
+    st.textContent=right+' kotak benar, '+wrong+' salah, '+empty+' kosong.';
+    if(wrong>0) rB.hidden=false;
+  };
+  hB.onclick=function(){
+    for(var i=0;i<R;i++) for(var j=0;j<C;j++){
+      if(val[i][j]!==truth[i][j]){
+        if(hlCell) hlCell.classList.remove('hl');
+        hlCell=cells[i][j]; hlCell.classList.add('hl');
+        st.innerHTML='Kotak baris '+(i+1)+', kolom '+(j+1)+': gabungkan <span class="mono">'+g(rowG[i])+'</span> (baris) dengan <span class="mono">'+g(colG[j])+'</span> (kolom).';
+        return;
+      }
+    }
+  };
+  rB.onclick=function(){ finishP(true); };
+  return {el:root,truth:truth};
+}
+function staticGrid(rowG,colG,def){
+  var C=colG.length, html='<div class="pgrid" style="grid-template-columns:auto repeat('+C+',minmax(0,1fr))"><div class="pcorner">♀ ↓<br>♂ →</div>';
+  colG.forEach(function(c){ html+='<div class="phead">'+g(c)+'</div>'; });
+  rowG.forEach(function(r){
+    html+='<div class="phead">'+g(r)+'</div>';
+    colG.forEach(function(c){ var x=normCross(r,c); html+='<div class="cell f '+def.cls(x)+'" style="cursor:default">'+g(x)+'</div>'; });
+  });
+  return html+'</div>';
+}
+
+/* ---------- data ---------- */
+var TERMS=[
+ ['Gen','Satuan pewaris sifat berupa potongan DNA pada kromosom.','Gen yang mengatur pembentukan pigmen melanin pada kulit, rambut, dan mata.'],
+ ['Alel','Bentuk-bentuk alternatif dari satu gen. Ditulis dengan huruf yang sama.','Alel A (pigmentasi normal) dan alel a (albinisme).'],
+ ['Lokus','Letak tertentu suatu gen pada kromosom. Dua alel dari gen yang sama menempati lokus yang sama pada sepasang kromosom homolog.','Gen golongan darah ABO berada di satu lokus pada kromosom nomor 9.'],
+ ['Dominan','Alel yang pengaruhnya tampak walau hanya ada satu salinan. Ditulis dengan huruf kapital.','Alel P pada polidaktili: genotipe Pp sudah menunjukkan jari berlebih.'],
+ ['Resesif','Alel yang pengaruhnya baru tampak bila ada dua salinan. Ditulis dengan huruf kecil.','Albinisme muncul hanya pada genotipe aa.'],
+ ['Genotipe','Susunan alel yang dimiliki individu untuk suatu sifat.','AA, Aa, atau aa.'],
+ ['Fenotipe','Sifat yang tampak atau dapat diukur sebagai hasil genotipe dan lingkungan.','Kulit berpigmen normal atau albino; dapat atau tidak dapat mengecap PTC.'],
+ ['Homozigot','Individu dengan dua alel yang sama untuk suatu gen.','AA (homozigot dominan) dan aa (homozigot resesif).'],
+ ['Heterozigot','Individu dengan dua alel yang berbeda untuk suatu gen. Untuk sifat resesif, sering disebut pembawa (karier).','Aa: berpigmen normal, tetapi membawa alel albinisme.'],
+ ['Gamet','Sel kelamin (sel telur atau sel sperma) yang membawa satu alel dari tiap gen, hasil meiosis.','Induk Aa menghasilkan gamet A dan gamet a dengan peluang sama.'],
+ ['P (Parental)','Generasi induk yang disilangkan.','Ayah Aa dan ibu Aa adalah generasi P.'],
+ ['F1 (Filial 1)','Keturunan pertama hasil persilangan generasi P.','Anak-anak dari pasangan Aa × Aa.'],
+ ['F2 (Filial 2)','Keturunan kedua, hasil persilangan sesama F1.','Cucu dari generasi P.']
+];
+var K_QUIZ=[
+ {type:'mcq',prompt:'Seseorang bergenotipe '+g('Aa')+' disebut ...',options:['Homozigot dominan','Homozigot resesif','Heterozigot','Gamet'],answer:2,explain:'Dua alelnya berbeda ('+g('A')+' dan '+g('a')+'), jadi heterozigot.'},
+ {type:'mcq',prompt:'Alel yang pengaruhnya baru tampak bila berpasangan dengan alel yang sama disebut ...',options:['Dominan','Resesif','Fenotipe','Lokus'],answer:1,explain:'Alel resesif hanya muncul pada keadaan homozigot resesif, misalnya '+g('aa')+'.'},
+ {type:'mcq',prompt:'Kulit albino pada seseorang termasuk ...',options:['Genotipe','Alel','Fenotipe','Gamet'],answer:2,explain:'Sifat yang tampak disebut fenotipe. Genotipenya '+g('aa')+'.'},
+ {type:'mcq',prompt:'Induk bergenotipe '+g('Aa')+' menghasilkan gamet ...',options:['A saja','a saja','Aa','A dan a'],answer:3,explain:'Pasangan alel berpisah saat meiosis. Tiap gamet hanya membawa satu alel, jadi '+g('A')+' atau '+g('a')+'.'}
+];
+var M_PRAC=[
+ {level:'Mudah',lv:1,type:'mcq',prompt:'Pasangan suami istri berpigmen normal sama-sama bergenotipe '+g('Aa')+'. Berapa peluang anak mereka mengalami albinisme?',
+  options:['0%','25%','50%','75%'],answer:1,
+  hints:['Individu dengan albinisme bergenotipe '+g('aa')+'. Buat kotak Punnett '+g('Aa')+' × '+g('Aa')+'.','Isi kotaknya: '+g('AA')+', '+g('Aa')+', '+g('Aa')+', '+g('aa')+'. Berapa dari 4 kotak yang '+g('aa')+'?'],
+  explain:'Dari 4 kotak hanya 1 yang '+g('aa')+', jadi peluangnya 1/4 = 25%.'},
+ {level:'Sedang',lv:2,type:'num',unit:'anak',prompt:'Seorang pria berpigmen normal bergenotipe '+g('Aa')+' menikah dengan wanita dengan albinisme. Jika mereka memiliki 6 anak, berapa perkiraan jumlah anak dengan albinisme?',
+  answer:3,
+  hints:['Wanita dengan albinisme bergenotipe '+g('aa')+', gametnya hanya '+g('a')+'.','Persilangan '+g('Aa')+' × '+g('aa')+' menghasilkan '+g('Aa')+', '+g('Aa')+', '+g('aa')+', '+g('aa')+'. Peluang albinisme = 2/4.'],
+  explain:'Rasio '+g('Aa')+' : '+g('aa')+' = 1 : 1, jadi peluang albinisme 50%. Perkiraan: 50% × 6 anak = 3 anak. Ini perkiraan; hasil nyata bisa berbeda.'},
+ {level:'Sulit',lv:3,type:'mcq',prompt:'Pasangan berpigmen normal memiliki anak pertama dengan albinisme. Berapa peluang anak kedua mereka berpigmen normal dan pembawa alel albinisme ('+g('Aa')+')?',
+  options:['25%','50%','75%','100%'],answer:1,
+  hints:['Anak dengan albinisme bergenotipe '+g('aa')+', jadi tiap orang tua pasti menyumbang alel '+g('a')+'. Orang tuanya berpigmen normal, jadi punya juga alel '+g('A')+'.','Genotipe orang tua adalah '+g('Aa')+' × '+g('Aa')+'. Berapa kotak yang '+g('Aa')+'?'],
+  explain:'Orang tua pasti '+g('Aa')+' × '+g('Aa')+'. Hasilnya '+g('AA')+' : '+g('Aa')+' : '+g('aa')+' = 1 : 2 : 1, sehingga '+g('Aa')+' = 2/4 = 50%. Setiap kelahiran saling bebas, anak pertama tidak mengubah peluang.'}
+];
+var D_PRAC=[
+ {level:'Mudah',lv:1,type:'mcq',prompt:'Pasangan bergenotipe '+g('PpAa')+' × '+g('PpAa')+'. Berapa peluang anak berjari normal dan albino ('+g('ppaa')+')?',
+  options:['1/16 (6,25%)','3/16 (18,75%)','9/16 (56,25%)','1/4 (25%)'],answer:0,
+  hints:['Fenotipe jari normal dan albino hanya muncul dari genotipe '+g('ppaa')+'.','Pada kotak Punnett 4 × 4 (16 kotak), hitung berapa kotak '+g('ppaa')+'.'],
+  explain:'Hanya 1 dari 16 kotak yang '+g('ppaa')+'. Dengan cara cepat: peluang '+g('pp')+' = 1/4, peluang '+g('aa')+' = 1/4, hasilnya 1/4 × 1/4 = 1/16.'},
+ {level:'Sedang',lv:2,type:'num',unit:'%',prompt:'Pasangan '+g('PpAa')+' × '+g('ppAa')+'. Berapa persen peluang anak berpolidaktili dan berpigmen normal?',
+  answer:37.5,
+  hints:['Pisahkan per gen: '+g('Pp')+' × '+g('pp')+' dan '+g('Aa')+' × '+g('Aa')+'. Hitung peluang masing-masing.','Peluang polidaktili ('+g('Pp')+') = 1/2. Peluang pigmen normal ('+g('A_')+') = 3/4. Kalikan keduanya.'],
+  explain:'Per gen: '+g('Pp')+' × '+g('pp')+' menghasilkan 1/2 polidaktili. '+g('Aa')+' × '+g('Aa')+' menghasilkan 3/4 pigmen normal. Karena gen bergabung bebas, peluangnya 1/2 × 3/4 = 3/8 = 37,5%.'},
+ {level:'Sulit',lv:3,type:'num',unit:'individu',prompt:'Dari persilangan '+g('PpAa')+' × '+g('PpAa')+' dihasilkan 80 keturunan (model populasi besar). Berapa perkiraan jumlah keturunan berpolidaktili dengan pigmen normal?',
+  answer:45,
+  hints:['Fenotipe polidaktili dan pigmen normal adalah '+g('P_A_')+'. Dalam rasio 9 : 3 : 3 : 1 kelompok ini mendapat bagian terbesar.','Peluangnya 9/16. Kalikan dengan 80.'],
+  explain:'Peluang '+g('P_A_')+' = 9/16. Perkiraan jumlahnya 9/16 × 80 = 45 individu.'}
+];
+var EXAM=[
+ {tag:'Monohibrid',type:'mcq',prompt:'Persilangan '+g('Aa')+' × '+g('aa')+' menghasilkan rasio genotipe ...',options:['1 : 1','1 : 2 : 1','3 : 1','9 : 3 : 3 : 1'],answer:0,explain:'Hasilnya '+g('Aa')+', '+g('Aa')+', '+g('aa')+', '+g('aa')+', yaitu '+g('Aa')+' : '+g('aa')+' = 1 : 1.'},
+ {tag:'Dihibrid',type:'mcq',prompt:'Jenis gamet yang dihasilkan individu bergenotipe '+g('AaBb')+' adalah ...',options:[g('AB')+', '+g('Ab')+', '+g('aB')+', '+g('ab'),g('Aa')+', '+g('Bb'),g('AB')+', '+g('ab'),g('AA')+', '+g('BB')+', '+g('aa')+', '+g('bb')],answer:0,explain:'Tiap gamet membawa satu alel dari tiap gen. Kombinasinya: '+g('AB')+', '+g('Ab')+', '+g('aB')+', '+g('ab')+'.'},
+ {tag:'Dihibrid',type:'num',unit:'jenis',prompt:'Berapa jenis gamet yang dibentuk individu bergenotipe '+g('PpAa')+'?',answer:4,explain:'Gen pertama memberi 2 pilihan ('+g('P')+' atau '+g('p')+') dan gen kedua 2 pilihan ('+g('A')+' atau '+g('a')+'). Totalnya 2 × 2 = 4 jenis.'},
+ {tag:'Dihibrid',type:'mcq',prompt:'Rasio fenotipe F2 pada persilangan dihibrid dengan dominansi penuh adalah ...',options:['1 : 2 : 1','3 : 1','9 : 3 : 3 : 1','1 : 1 : 1 : 1'],answer:2,explain:'Dari 16 kotak Punnett: 9 dominan-dominan, 3 dominan-resesif, 3 resesif-dominan, 1 resesif-resesif.'},
+ {tag:'Peluang & rasio',type:'mcq',prompt:'Pasangan '+g('Aa')+' × '+g('Aa')+'. Berapa peluang anak bergenotipe homozigot?',options:['25%','50%','75%','100%'],answer:1,explain:g('AA')+' = 25% dan '+g('aa')+' = 25%. Jumlahnya 50%.'},
+ {tag:'Monohibrid',type:'mcq',prompt:'Sepasang suami istri berpigmen normal memiliki anak dengan albinisme. Genotipe kedua orang tua adalah ...',options:[g('AA')+' dan '+g('Aa'),g('Aa')+' dan '+g('Aa'),g('AA')+' dan '+g('AA'),g('Aa')+' dan '+g('aa')],answer:1,explain:'Anak '+g('aa')+' mendapat alel '+g('a')+' dari kedua orang tua. Keduanya berpigmen normal, jadi keduanya '+g('Aa')+'.'},
+ {tag:'Peluang & rasio',type:'num',unit:'anak',prompt:'Pria polidaktili bergenotipe '+g('Pp')+' menikah dengan wanita berjari normal ('+g('pp')+'). Jika mereka memiliki 8 anak, berapa perkiraan jumlah anak berpolidaktili?',answer:4,explain:g('Pp')+' × '+g('pp')+' menghasilkan 1/2 '+g('Pp')+' (polidaktili). Perkiraan: 1/2 × 8 = 4 anak.'},
+ {tag:'Konsep',type:'mcq',prompt:'Isi Hukum Mendel II (pemilihan bebas) adalah ...',options:['Pasangan alel berpisah saat pembentukan gamet','Alel dari gen berbeda memisah dan bergabung secara bebas saat pembentukan gamet','Alel dominan selalu menutupi alel resesif','Semua gen terletak pada kromosom yang sama'],answer:1,explain:'Hukum Mendel I membahas pemisahan alel. Hukum Mendel II menyatakan alel dari gen berbeda mengelompok bebas, sehingga muncul kombinasi baru seperti '+g('Pa')+' dan '+g('pA')+'.'},
+ {tag:'Peluang & rasio',type:'mcq',prompt:'Pasangan '+g('PpAa')+' × '+g('ppaa')+'. Berapa peluang anak berpolidaktili dan albino ('+g('Ppaa')+')?',options:['12,5%','25%','50%','75%'],answer:1,explain:'Per gen: '+g('Pp')+' × '+g('pp')+' memberi 1/2 polidaktili, '+g('Aa')+' × '+g('aa')+' memberi 1/2 albino. Peluangnya 1/2 × 1/2 = 1/4 = 25%.'},
+ {tag:'Dihibrid',type:'num',unit:'genotipe',prompt:'Persilangan '+g('AaBb')+' × '+g('AaBb')+' menghasilkan berapa macam genotipe berbeda pada keturunannya?',answer:9,explain:'Tiap gen menghasilkan 3 genotipe ('+g('AA')+', '+g('Aa')+', '+g('aa')+'), sehingga 3 × 3 = 9 macam genotipe.'}
+];
+
+/* ---------- Tahap 1 ---------- */
+function Explorer(){
+  var card=h('section','card');
+  card.innerHTML='<h3>Penjelajah genotipe</h3><p>Pilih sifat dan genotipe. Lihat fenotipe dan istilahnya.</p>';
+  var key='albinisme', gi=1;
+  var tc=h('div','chips'), gc=h('div','chips'), out=h('div','explout');
+  card.append(h('span','lab','Sifat'),tc,h('span','lab','Genotipe'),gc,out);
+  function render(){
+    var t=TRAITS[key], L=t.l, l=L.toLowerCase(), gl=[L+L,L+l,l+l];
+    tc.innerHTML=''; gc.innerHTML='';
+    Object.keys(TRAITS).forEach(function(k){ var b=h('button','chip',TRAITS[k].name); b.setAttribute('aria-pressed',String(k===key)); b.onclick=function(){ key=k; render(); }; tc.append(b); });
+    gl.forEach(function(x,i){ var b=h('button','chip geno-chip',g(x)); b.setAttribute('aria-pressed',String(i===gi)); b.onclick=function(){ gi=i; render(); }; gc.append(b); });
+    var gt=gl[gi], type=['Homozigot dominan','Heterozigot','Homozigot resesif'][gi];
+    if(gi===1&&t.carrier) type+=' (pembawa sifat)';
+    out.innerHTML='<div class="geno-big">'+g(gt)+'</div><ul><li><b>Istilah:</b> '+type+'</li><li><b>Fenotipe:</b> '+(gi<2?t.dom:t.rec)+'</li></ul><p class="note" style="flex:1 1 100%">'+t.note+'</p>';
+  }
+  render(); return card;
+}
+function stageKonsep(m){
+  m.append(introCard('Tahap 1','Pahami konsepnya','Kenali istilah yang muncul di setiap soal pewarisan sifat. Buka tiap istilah, coba penjelajah genotipe, lalu kerjakan kuis mini.'));
+  var tc=h('section','card'); tc.innerHTML='<h3>Istilah kunci</h3><p class="small">Ketuk istilah untuk melihat arti dan contohnya pada manusia.</p>';
+  var grid=h('div','terms');
+  TERMS.forEach(function(t){ var d=h('details','term'); d.innerHTML='<summary>'+t[0]+'</summary><div><span>'+t[1]+'</span><span class="ex"><b>Contoh:</b> '+t[2]+'</span></div>'; grid.append(d); });
+  tc.append(grid); m.append(tc, Explorer());
+  var qc=h('section','card'); qc.innerHTML='<h3>Kuis mini</h3>'; var sc=h('p','score','Terjawab 0 dari '+K_QUIZ.length); qc.append(sc);
+  var n=0, first=0, list=h('div','qlist'); qc.append(list);
+  K_QUIZ.forEach(function(q){ list.append(Question(q,{shuffle:true,onDone:function(r){ n++; if(r.first) first++; sc.textContent='Terjawab '+n+' dari '+K_QUIZ.length+' · benar pada percobaan pertama: '+first; if(n===K_QUIZ.length) mark('k'); }})); });
+  m.append(qc, ctaRow(null,1));
+}
+
+/* ---------- Tahap 2 ---------- */
+function monoSteps(){
+  var D=monoDef(TRAITS.albinisme), cells=[];
+  return [
+   {title:'Tentukan sifat dominan dan resesif, lalu beri simbol',render:function(b){
+     b.innerHTML='<p>Huruf <b>kapital</b> untuk alel dominan, huruf <b>kecil</b> untuk alel resesif.</p>'
+      +'<div class="alleles"><div class="allele"><span class="big d">A</span><div><b>Dominan</b><br>Pigmentasi normal</div></div><div class="allele"><span class="big r">a</span><div><b>Resesif</b><br>Albinisme</div></div></div>'
+      +'<p class="note">Individu dengan albinisme memiliki dua alel resesif, yaitu <span class="mono">'+g('aa')+'</span>.</p>'; }},
+   {title:'Tuliskan genotipe kedua induk (P)',render:function(b){
+     b.innerHTML='<p>Ayah dan ibu sama-sama berpigmen normal, tetapi keduanya pembawa alel albinisme (heterozigot).</p>'
+      +'<div class="parents"><div class="parent"><span class="lab">Ayah ♂</span><span class="geno-big">'+g('Aa')+'</span><span class="small">Pigmen normal</span></div><div class="parent"><span class="lab">Ibu ♀</span><span class="geno-big">'+g('Aa')+'</span><span class="small">Pigmen normal</span></div></div>'
+      +'<p>Penulisan: <span class="mono">P: '+g('Aa')+' × '+g('Aa')+'</span></p><p class="note">Fenotipe yang sama tidak berarti genotipe yang sama. <span class="mono">'+g('AA')+'</span> dan <span class="mono">'+g('Aa')+'</span> sama-sama tampak normal.</p>'; }},
+   {title:'Tentukan gamet masing-masing induk',render:function(b){
+     b.innerHTML='<p>Saat meiosis, pasangan alel berpisah (Hukum Mendel I). Tiap gamet hanya membawa satu alel.</p>'
+      +'<div class="parents"><div class="parent"><span class="lab">Gamet ayah</span><div class="gams"><span class="gam">'+g('A')+'</span><span class="small">atau</span><span class="gam">'+g('a')+'</span></div></div><div class="parent"><span class="lab">Gamet ibu</span><div class="gams"><span class="gam">'+g('A')+'</span><span class="small">atau</span><span class="gam">'+g('a')+'</span></div></div></div>'; }},
+   {title:'Isi kotak Punnett',gate:true,render:function(b,done){
+     var p=Punnett({rowG:['A','a'],colG:['A','a'],palette:['AA','Aa','aa'],def:D,onSolved:function(){ cells=[].concat.apply([],p.truth); done(); }});
+     b.append(p.el); }},
+   {title:'Tentukan rasio genotipe dan fenotipe F1',gate:true,render:function(b,done){
+     var q=Question({type:'mcq',prompt:'Berapa rasio fenotipe F1 (pigmen normal : albinisme)?',options:['3 : 1','1 : 1','1 : 2 : 1','2 : 1'],answer:0,
+       hints:['Pigmen normal muncul pada genotipe '+g('AA')+' dan '+g('Aa')+'. Hitung kotaknya.'],
+       explain:'Ada 3 kotak pigmen normal ('+g('AA')+', '+g('Aa')+', '+g('Aa')+') dan 1 kotak albinisme ('+g('aa')+'). Rasio genotipe 1 : 2 : 1 menjadi rasio fenotipe 3 : 1 karena '+g('A')+' dominan.'},
+       {shuffle:true,onDone:function(){ var s=h('div'); s.innerHTML=summaryHTML(cells,D); b.append(s); done(); }});
+     b.append(q); }},
+   {title:'Hitung peluang dan jumlah keturunan',gate:true,render:function(b,done){
+     b.append(h('p','','Rumus perkiraan: <b>jumlah anak × peluang</b>. Peluang albinisme tiap kelahiran sama dan saling bebas.'));
+     b.append(Question({type:'num',unit:'anak',answer:2,prompt:'Jika pasangan '+g('Aa')+' × '+g('Aa')+' ini memiliki 8 anak, berapa perkiraan jumlah anak dengan albinisme?',
+       hints:['Peluang albinisme = 1/4 = 25%.','8 × 1/4 = ?'],
+       explain:'Peluang albinisme 1/4, jadi 8 × 1/4 = 2 anak. Ini nilai harapan. Pada kenyataannya jumlahnya bisa 0, 1, 3, atau lebih.'},{onDone:function(){ done(); }}));
+   }}
+  ];
+}
+function Simulator(){
+  var card=h('section','card'); card.innerHTML='<h3>Simulator kotak Punnett</h3><p>Pilih sifat dan genotipe kedua induk. Kotak Punnett, rasio, dan perkiraan jumlah anak terisi otomatis.</p>';
+  var st={t:'albinisme',f:1,m:1,n:8};
+  var tc=h('div','chips'), fc=h('div','chips'), mc=h('div','chips'), out=h('div','simout');
+  var slider=h('input'); slider.type='range'; slider.min=1; slider.max=12; slider.value=st.n; slider.id='sim-n'; slider.setAttribute('aria-label','Jumlah anak');
+  var nlab=h('span','lab','');
+  var c1=h('div','ctl'), c2=h('div','ctl'), c3=h('div','ctl'), c4=h('div','ctl');
+  c1.append(h('span','lab','Sifat'),tc); c2.append(h('span','lab','Genotipe ayah ♂'),fc); c3.append(h('span','lab','Genotipe ibu ♀'),mc); c4.append(nlab,slider);
+  var cr=h('div','ctlrow'); cr.append(c2,c3,c4);
+  card.append(c1,cr,out);
+  function render(){
+    var t=TRAITS[st.t], L=t.l, l=L.toLowerCase(), gl=[L+L,L+l,l+l], D=monoDef(t);
+    tc.innerHTML=''; fc.innerHTML=''; mc.innerHTML='';
+    Object.keys(TRAITS).forEach(function(k){ var b=h('button','chip',TRAITS[k].name); b.setAttribute('aria-pressed',String(k===st.t)); b.onclick=function(){ st.t=k; render(); }; tc.append(b); });
+    [['f',fc],['m',mc]].forEach(function(pair){ gl.forEach(function(x,i){ var b=h('button','chip geno-chip',g(x)); b.setAttribute('aria-pressed',String(i===st[pair[0]])); b.onclick=function(){ st[pair[0]]=i; render(); }; pair[1].append(b); }); });
+    nlab.textContent='Jumlah anak: '+st.n;
+    var fa=gl[st.f], mo=gl[st.m], cellsArr=[];
+    var rowG=gametes(mo), colG=gametes(fa);
+    rowG.forEach(function(r){ colG.forEach(function(c){ cellsArr.push(normCross(r,c)); }); });
+    out.innerHTML='<p><span class="mono">P: '+g(fa)+' × '+g(mo)+'</span> &nbsp;('+t.name+')</p>'+staticGrid(rowG,colG,D)+legendHTML(D)+summaryHTML(cellsArr,D,st.n)
+      +'<p class="note">Angka pada kolom "Dari '+st.n+' anak" adalah perkiraan rata-rata, bukan kepastian. Tiap anak punya peluang yang sama dan saling bebas.</p>';
+  }
+  slider.oninput=function(){ st.n=+slider.value; render(); };
+  render(); return card;
+}
+function Practice(items,flag,title,sub){
+  var card=h('section','card'); card.innerHTML='<h3>'+title+'</h3><p class="small">'+sub+'</p>';
+  var bar=h('div','row'), sc=h('span','score',''), sh=h('button','btn ghost sm','Acak pilihan jawaban'); bar.append(sc,sh);
+  var list=h('div','qlist'); card.append(bar,list);
+  var n=0;
+  function build(s){ list.innerHTML=''; n=0; upd(); items.forEach(function(q){ list.append(Question(q,{shuffle:s,onDone:function(){ n++; upd(); if(n===items.length) mark(flag); }})); }); }
+  function upd(){ sc.textContent='Terjawab '+n+' dari '+items.length; }
+  sh.onclick=function(){ build(true); };
+  build(false); return card;
+}
+function stageMono(m){
+  m.append(introCard('Tahap 2','Persilangan monohibrid','Persilangan dengan satu sifat beda. Ikuti enam langkah penyelesaian, uji ide di simulator, lalu kerjakan latihan bertingkat.'));
+  var c=h('section','card'); c.innerHTML='<h3>Contoh bertahap: albinisme dalam keluarga</h3><p class="small">Tekan Lanjut untuk membuka langkah berikutnya.</p>';
+  c.append(Walk(monoSteps(),function(){ mark('m1'); }));
+  m.append(c, Simulator(), Practice(M_PRAC,'m2','Latihan monohibrid','Tiga soal bertingkat. Tiap soal punya dua petunjuk dan pembahasan.'), ctaRow(0,2));
+}
+
+/* ---------- Tahap 3 ---------- */
+function diSteps(){
+  var cells=[];
+  return [
+   {title:'Bedakan monohibrid dan dihibrid',render:function(b){
+     b.innerHTML='<div class="tblw"><table class="cmp"><thead><tr><th></th><th>Monohibrid</th><th>Dihibrid</th></tr></thead><tbody>'
+      +'<tr><td>Sifat beda</td><td>1</td><td>2</td></tr>'
+      +'<tr><td>Contoh P</td><td class="mono">'+g('Aa')+' × '+g('Aa')+'</td><td class="mono">'+g('AaBb')+' × '+g('AaBb')+'</td></tr>'
+      +'<tr><td>Jenis gamet</td><td>2</td><td>4</td></tr>'
+      +'<tr><td>Kotak Punnett</td><td>2 × 2 = 4</td><td>4 × 4 = 16</td></tr>'
+      +'<tr><td>Rasio fenotipe F2</td><td>3 : 1</td><td>9 : 3 : 3 : 1</td></tr></tbody></table></div>'
+      +'<p><b>Hukum Mendel I (pemisahan alel):</b> pasangan alel berpisah saat pembentukan gamet.</p>'
+      +'<p><b>Hukum Mendel II (pemilihan bebas):</b> alel dari gen yang berbeda memisah dan bergabung secara bebas, sehingga muncul kombinasi baru.</p>'; }},
+   {title:'Tentukan sifat, simbol, dan genotipe induk',render:function(b){
+     b.innerHTML='<div class="alleles"><div class="allele"><span class="big d">P</span><div><b>Dominan</b><br>Polidaktili (jari berlebih)<br><span class="small"><span class="mono">'+g('p')+'</span>: jumlah jari normal</span></div></div>'
+      +'<div class="allele"><span class="big d">A</span><div><b>Dominan</b><br>Pigmentasi normal<br><span class="small"><span class="mono">'+g('a')+'</span>: albinisme</span></div></div></div>'
+      +'<p>Kedua orang tua bergenotipe heterozigot untuk kedua gen:</p><p class="mono" style="font-size:20px">P: '+g('PpAa')+' × '+g('PpAa')+'</p>'
+      +'<p class="note">Contoh ini disederhanakan untuk belajar. Gen polidaktili dan albinisme dianggap berada pada kromosom berbeda sehingga memenuhi pemilihan bebas.</p>'; }},
+   {title:'Tentukan gamet dengan metode garpu',gate:true,render:function(b,done){
+     var lv=0, info=h('p','small','Ayah dan ibu sama-sama '+'<span class="mono">'+g('PpAa')+'</span>, jadi gamet keduanya sama.');
+     var tree=h('div','fork');
+     var heads=['Gen 1','Gen 2','Gamet'].map(function(t,i){ var e=h('div','fkh',t); e.dataset.l=i+1; e.hidden=true; tree.append(e); return e; });
+     var els=[];
+     [['P',0],['p',2]].forEach(function(a){ var e=h('div','fk span',g(a[0])); e.style.gridRow=(a[1]+2)+' / span 2'; e.style.gridColumn='1'; e.dataset.l=1; e.hidden=true; tree.append(e); els.push(e); });
+     [['P','A'],['P','a'],['p','A'],['p','a']].forEach(function(x,i){
+       var e2=h('div','fk',g(x[1])); e2.style.gridRow=String(i+2); e2.style.gridColumn='2'; e2.dataset.l=2; e2.hidden=true; tree.append(e2);
+       var e3=h('div','fk out',g(x[0]+x[1])); e3.style.gridRow=String(i+2); e3.style.gridColumn='3'; e3.dataset.l=3; e3.hidden=true; tree.append(e3);
+       els.push(e2,e3);
+     });
+     var btn=h('button','btn sm','Pisahkan alel gen pertama');
+     var msgs=['','Gen pertama ('+g('Pp')+') memisah: tiap gamet menerima '+g('P')+' atau '+g('p')+'.','Setiap alel gen pertama dapat berpasangan dengan '+g('A')+' atau '+g('a')+' (pemilihan bebas, Hukum Mendel II).','Hasilnya 4 jenis gamet dengan peluang sama, masing-masing 1/4: '+g('PA')+', '+g('Pa')+', '+g('pA')+', '+g('pa')+'.'];
+     var labels=['','Pasangkan dengan alel gen kedua','Tuliskan gamet',''];
+     btn.onclick=function(){
+       lv++; heads.concat(els).forEach(function(e){ e.hidden=+e.dataset.l>lv; });
+       info.innerHTML=msgs[lv];
+       if(lv>=3){ btn.hidden=true; done(); } else btn.textContent=labels[lv];
+     };
+     b.append(info,tree,btn); }},
+   {title:'Isi kotak Punnett 4 × 4',gate:true,render:function(b,done){
+     var gam=['PA','Pa','pA','pa'];
+     var p=Punnett({rowG:gam,colG:gam,palette:DI.genoOrder,def:DI,onSolved:function(){ cells=[].concat.apply([],p.truth); done(); }});
+     b.append(p.el); }},
+   {title:'Hitung rasio fenotipe dan genotipe',gate:true,render:function(b,done){
+     b.append(h('p','','Hitung jumlah kotak untuk tiap fenotipe. Gunakan warna kotak Punnett di langkah sebelumnya.'));
+     var wrap=h('div','cnt'), inputs=[];
+     DI.phenos.forEach(function(p,i){ var lb=h('label','','<span class="sw '+p.cls+'"></span>'); var t=h('span','',p.label); var inp=h('input'); inp.type='text'; inp.setAttribute('inputmode','numeric'); inp.id='di-cnt-'+i; inp.setAttribute('aria-label','Jumlah kotak '+p.label); lb.append(t,inp); wrap.append(lb); inputs.push(inp); });
+     var st=h('p','statl'), btn=h('button','btn sm','Periksa'), box=h('div');
+     b.append(wrap,btn,st,box);
+     btn.onclick=function(){
+       var good=0; inputs.forEach(function(inp,i){ var want=cells.filter(function(c){return DI.phenoOf(c)===DI.phenos[i].key;}).length; var ok=+inp.value.trim()===want&&inp.value.trim()!==''; inp.classList.toggle('ok',ok); inp.classList.toggle('no',!ok); if(ok) good++; });
+       if(good===4){ st.innerHTML='<b style="color:var(--good)">Tepat! Rasio fenotipe 9 : 3 : 3 : 1.</b>'; btn.hidden=true; inputs.forEach(function(x){x.disabled=true;}); box.innerHTML=summaryHTML(cells,DI); done(); }
+       else st.textContent=good+' dari 4 benar. Hitung ulang kotak yang berwarna sama.';
+     }; }},
+   {title:'Hitung peluang kombinasi tertentu',gate:true,render:function(b,done){
+     b.append(h('p','','Ada dua cara: hitung kotak pada tabel Punnett, atau pisahkan per gen lalu kalikan peluangnya.'));
+     b.append(Question({type:'num',unit:'%',answer:18.75,prompt:'Berapa persen peluang anak berpolidaktili dan albino ('+g('P_aa')+')?',
+       hints:['Cari kotak berfenotipe polidaktili dan albino. Berapa dari 16?','Cara cepat: peluang polidaktili = 3/4, peluang albino = 1/4. Kalikan.'],
+       explain:'Ada 3 dari 16 kotak. Dengan cara cepat: 3/4 × 1/4 = 3/16 = 18,75%.'},{onDone:function(){ done(); }}));
+   }}
+  ];
+}
+function stageDi(m){
+  m.append(introCard('Tahap 3','Persilangan dihibrid','Persilangan dengan dua sifat beda. Kamu akan menentukan gamet dengan metode garpu, mengisi kotak Punnett 4 × 4, lalu menghitung rasio dan peluang.'));
+  var c=h('section','card'); c.innerHTML='<h3>Contoh bertahap: polidaktili dan albinisme</h3><p class="small">Contoh model untuk belajar. Tekan Lanjut untuk membuka langkah berikutnya.</p>';
+  c.append(Walk(diSteps(),function(){ mark('d1'); }));
+  m.append(c, Practice(D_PRAC,'d2','Latihan dihibrid','Tiga soal bertingkat. Coba pisahkan per gen, lalu kalikan peluangnya.'), ctaRow(1,3));
+}
+
+/* ---------- Tahap 4 ---------- */
+function stageExam(m){
+  m.append(introCard('Tahap 4','Evaluasi akhir','Sepuluh soal campuran. Jawaban baru dibahas setelah semua soal selesai.'));
+  var card=h('section','card'); m.append(card);
+  var TAGS={'Konsep':0,'Monohibrid':1,'Dihibrid':2,'Peluang & rasio':1};
+  function start(){
+    var qs=shuffle(EXAM), idx=0, res=[];
+    function showQ(){
+      card.innerHTML='';
+      var head=h('div','row'); head.style.justifyContent='space-between';
+      head.append(h('b','','Soal '+(idx+1)+' dari '+qs.length));
+      card.append(head);
+      var pg=h('div','prog'); pg.innerHTML='<i style="width:'+(idx/qs.length*100)+'%"></i>'; card.append(pg);
+      card.append(Question(qs[idx],{mode:'exam',shuffle:true,nextLabel:idx===qs.length-1?'Lihat hasil':'Lanjut',onDone:function(r){
+        res.push({q:qs[idx],correct:r.correct,given:r.given}); idx++;
+        if(idx<qs.length) showQ(); else result(res);
+        card.scrollIntoView({block:'start'});
+      }}));
+    }
+    showQ();
+  }
+  function result(res){
+    mark('x');
+    var score=res.filter(function(r){return r.correct;}).length, tags={};
+    res.forEach(function(r){ var t=r.q.tag; tags[t]=tags[t]||{n:0,ok:0}; tags[t].n++; if(r.correct) tags[t].ok++; });
+    card.innerHTML='';
+    var top=h('div','row'); top.style.gap='16px';
+    top.innerHTML='<span class="big-score">'+score+'/'+res.length+'</span><span>'+(score===res.length?'Sempurna. Semua konsep sudah kuat.':score>=7?'Bagus. Periksa bagian yang masih lemah di bawah.':'Masih ada konsep yang perlu diulang. Mulai dari bagian terlemah di bawah.')+'</span>';
+    card.append(top);
+    card.append(h('h3','','Pemahaman per topik'));
+    var weak=null, weakPct=2;
+    Object.keys(tags).forEach(function(t){
+      var x=tags[t], pct=x.ok/x.n; if(pct<weakPct){ weakPct=pct; weak=t; }
+      var r=h('div','tagrow','<span>'+t+'</span><div class="prog"><i style="width:'+pct*100+'%"></i></div><b>'+x.ok+'/'+x.n+'</b>'); card.append(r);
+    });
+    if(weak&&weakPct<1){
+      var n=h('div','note','Topik yang paling perlu diulang: <b>'+weak+'</b>. ');
+      var a=h('button','btn ghost sm','Buka '+STAGES[TAGS[weak]].label); a.onclick=function(){ location.hash=STAGES[TAGS[weak]].id; };
+      n.append(a); card.append(n);
+    }
+    var wrong=res.filter(function(r){return !r.correct;});
+    if(wrong.length){
+      card.append(h('h3','','Pembahasan soal yang belum tepat'));
+      wrong.forEach(function(r){ card.append(h('div','rev','<p>'+r.q.prompt+'</p><p><b>Jawabanmu:</b> '+r.given+'</p><p><b>Jawaban benar:</b> '+answerKey(r.q)+'</p><p class="small">'+r.q.explain+'</p>')); });
+    }
+    var rb=h('button','btn','Ulangi dengan soal diacak'); rb.onclick=start;
+    var cr=h('div','cta'); cr.append(rb); card.append(cr);
+  }
+  start();
+  m.append(ctaRow(2,null));
+}
+
+/* ---------- router ---------- */
+var BUILD=[stageKonsep,stageMono,stageDi,stageExam];
+function route(){
+  var id=location.hash.slice(1), i=STAGES.findIndex(function(s){return s.id===id;});
+  cur=i<0?0:i;
+  app.innerHTML=''; BUILD[cur](app); updateNav();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+route();
+})();
+</script>
+
+</body></html>
