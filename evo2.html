@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENGAPA POPULASI BERUBAH? Ekspedisi Evolusi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka (ceria & ramah layar besar) & Plus Jakarta Sans (jelas terbaca) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Fredoka', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        ocean: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' },
+                        emerald: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857' },
+                        amber: { 50: '#fffbeb', 100: '#fef3c7', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+                        coral: { 50: '#fff1f2', 100: '#ffe4e6', 500: '#f43f5e', 600: '#e11d48' },
+                        violet: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 700: '#6d28d9' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom styles for Smart Board Touch Optimization, Animations & Game Feel */
+        body {
+            background: radial-gradient(circle at top left, #e0f2fe 0%, #f0fdf4 45%, #fefce8 100%);
+            min-height: 100vh;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+
+        /* 3D Tactile Smart Board Buttons */
+        .btn-3d {
+            transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, filter 0.15s ease;
+            min-height: 62px;
+        }
+        .btn-3d:active:not(:disabled) {
+            transform: translateY(4px) scale(0.98);
+        }
+        .btn-3d-blue {
+            background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+            box-shadow: 0 6px 0 #0369a1, 0 10px 20px rgba(2, 132, 199, 0.25);
+        }
+        .btn-3d-blue:active:not(:disabled) { box-shadow: 0 2px 0 #0369a1; }
+
+        .btn-3d-emerald {
+            background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+            box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(5, 150, 105, 0.25);
+        }
+        .btn-3d-emerald:active:not(:disabled) { box-shadow: 0 2px 0 #047857; }
+
+        .btn-3d-amber {
+            background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+            box-shadow: 0 6px 0 #b45309, 0 10px 20px rgba(217, 119, 6, 0.25);
+        }
+        .btn-3d-amber:active:not(:disabled) { box-shadow: 0 2px 0 #b45309; }
+
+        .btn-3d-coral {
+            background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+            box-shadow: 0 6px 0 #be123c, 0 10px 20px rgba(225, 29, 72, 0.25);
+        }
+        .btn-3d-coral:active:not(:disabled) { box-shadow: 0 2px 0 #be123c; }
+
+        .btn-3d-violet {
+            background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+            box-shadow: 0 6px 0 #5b21b6, 0 10px 20px rgba(124, 58, 237, 0.25);
+        }
+        .btn-3d-violet:active:not(:disabled) { box-shadow: 0 2px 0 #5b21b6; }
+
+        .btn-option {
+            transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 5px 0 #cbd5e1;
+            min-height: 72px;
+        }
+        .btn-option:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #94a3b8;
+        }
+        .btn-option:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #94a3b8;
+        }
+
+        /* Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: floatSlow 4.5s ease-in-out infinite;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.88) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop {
+            animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+            50% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+        }
+        .active-team-ring {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Custom Scrollbar for Smart Board */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="font-sans text-slate-800 antialiased selection:bg-amber-200">
+
+    <!-- Confetti Overlay -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Floating Decorative Biology SVGs in Background -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-20">
+        <!-- Ammonite Fossil SVG -->
+        <svg class="w-40 h-40 text-amber-600 absolute -top-6 -left-6 animate-float" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M50 50 C50 45, 55 45, 55 50 C55 58, 42 58, 42 50 C42 38, 62 38, 62 50 C62 66, 34 66, 34 50 C34 30, 70 30, 70 50 C70 74, 26 74, 26 50 C26 22, 78 22, 78 50 C78 82, 18 82, 18 50 C18 14, 86 14, 86 50" stroke-linecap="round"/>
+        </svg>
+        <!-- DNA Helix SVG -->
+        <svg class="w-48 h-48 text-ocean-600 absolute bottom-4 right-4 animate-float" style="animation-delay: 1.5s;" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M30 10 Q70 30 30 50 Q70 70 30 90" />
+            <path d="M70 10 Q30 30 70 50 Q30 70 70 90" />
+            <line x1="38" y1="20" x2="62" y2="20" />
+            <line x1="38" y1="40" x2="62" y2="40" />
+            <line x1="38" y1="60" x2="62" y2="60" />
+            <line x1="38" y1="80" x2="62" y2="80" />
+        </svg>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app" class="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 flex flex-col min-h-screen">
+
+        <!-- TOP CONTROL & SCOREBOARD BAR -->
+        <header class="bg-white/90 backdrop-blur-md rounded-3xl shadow-lg border-2 border-white px-4 py-3 mb-4 flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand / Title -->
+            <div class="flex items-center gap-3">
+                <button onclick="confirmGoHome()" title="Kembali ke Beranda" class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-ocean-600 text-white flex items-center justify-center shadow-md hover:scale-105 transition">
+                    <!-- Evolution Tree Icon -->
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22v-7"/>
+                        <path d="M12 15l-5-5V5"/>
+                        <path d="M12 15l5-5V5"/>
+                        <path d="M7 10l-3-3"/>
+                        <path d="M17 10l3-3"/>
+                        <circle cx="7" cy="4" r="1.5" fill="currentColor"/>
+                        <circle cx="17" cy="4" r="1.5" fill="currentColor"/>
+                        <circle cx="3" cy="6" r="1.5" fill="currentColor"/>
+                        <circle cx="21" cy="6" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-100 px-2.5 py-0.5 rounded-full">LKPD Biologi • Pertemuan 1</span>
+                    <h1 class="font-display text-lg sm:text-xl md:text-2xl font-bold text-slate-800 leading-tight">
+                        MENGAPA POPULASI BERUBAH? <span class="text-ocean-600">Ekspedisi Evolusi</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Live Team Scoreboard (Visible during gameplay) -->
+            <div id="top-scoreboard" class="hidden flex-1 flex flex-wrap items-center justify-center gap-2 mx-2">
+                <!-- Dynamically rendered team pills -->
+            </div>
+
+            <!-- Utility Controls (Timer, Audio, Fullscreen, Home) -->
+            <div class="flex items-center gap-2">
+                <!-- Timer Badge -->
+                <div id="timer-badge" class="hidden items-center gap-1.5 bg-amber-100 border-2 border-amber-400 text-amber-900 font-display font-bold text-lg px-3.5 py-2 rounded-2xl shadow-sm">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5"/><path d="M9 2h6"/>
+                    </svg>
+                    <span id="timer-text">45s</span>
+                </div>
+
+                <!-- Sound Mute/Unmute Button -->
+                <button id="btn-sound" onclick="toggleSound()" class="p-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 border-2 border-slate-200 transition flex items-center justify-center" title="Suara Efek Game">
+                    <svg id="icon-sound-on" class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                    </svg>
+                    <svg id="icon-sound-off" class="w-6 h-6 text-coral-600 hidden" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+                    </svg>
+                </button>
+
+                <!-- Fullscreen Smart Board Button -->
+                <button onclick="toggleFullscreen()" class="p-3 rounded-2xl bg-ocean-100 hover:bg-ocean-200 text-ocean-800 border-2 border-ocean-200 transition flex items-center gap-1.5 font-bold text-sm" title="Mode Layar Penuh Smart Board">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                    </svg>
+                    <span class="hidden md:inline">Layar Penuh</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ==================== SCREEN 1: LOBBY / SETUP KELAS ==================== -->
+        <main id="screen-setup" class="flex-1 flex flex-col justify-center animate-pop">
+            <div class="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-xl border-4 border-white p-5 sm:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    
+                    <!-- Left Hero Illustration & Intro -->
+                    <div class="lg:col-span-5 bg-gradient-to-br from-ocean-600 via-emerald-600 to-teal-700 rounded-3xl p-6 text-white shadow-inner relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3.5 py-1.5 rounded-full text-sm font-bold mb-3">
+                                <span>🧬</span> Misi Sains Kelas Biologi
+                            </div>
+                            <h2 class="font-display text-3xl sm:text-4xl font-bold leading-tight mb-3">
+                                Jelajahi Bukti & Mekanisme Evolusi!
+                            </h2>
+                            <p class="text-ocean-50 text-base sm:text-lg leading-relaxed mb-5">
+                                Uji pemahaman LKPD Pertemuan 1 melalui 4 Zona Misi interaktif: <strong>Mitos vs Fakta</strong>, <strong>5 Stasiun Bukti</strong>, <strong>Lab Data Jerapah Lamarck vs Darwin–Wallace</strong>, dan <strong>Tantangan Kalimat Ilmiah</strong>.
+                            </p>
+
+                            <!-- Custom SVG Illustration: Giraffe + Phylogenetic Tree + Wallace Line -->
+                            <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-4 border border-white/25 flex items-center justify-around">
+                                <!-- Giraffe SVG -->
+                                <svg class="w-24 h-24" viewBox="0 0 100 100" fill="none">
+                                    <circle cx="50" cy="50" r="45" fill="#fef3c7" fill-opacity="0.25"/>
+                                    <path d="M42 88 L46 42 L56 42 L62 88 Z" fill="#fbbf24"/>
+                                    <ellipse cx="52" cy="36" rx="11" ry="8" fill="#fbbf24"/>
+                                    <circle cx="48" cy="26" r="2.5" fill="#92400e"/>
+                                    <circle cx="56" cy="26" r="2.5" fill="#92400e"/>
+                                    <line x1="48" y1="28" x2="48" y2="31" stroke="#92400e" stroke-width="2.5"/>
+                                    <line x1="56" y1="28" x2="56" y2="31" stroke="#92400e" stroke-width="2.5"/>
+                                    <circle cx="49" cy="35" r="2" fill="#1e293b"/>
+                                    <circle cx="56" cy="35" r="2" fill="#1e293b"/>
+                                    <circle cx="50" cy="54" r="3.5" fill="#d97706"/>
+                                    <circle cx="53" cy="68" r="4" fill="#d97706"/>
+                                    <circle cx="48" cy="79" r="3" fill="#d97706"/>
+                                </svg>
+                                <div class="text-left">
+                                    <div class="font-display font-bold text-lg text-amber-300">4 Zona Ekspedisi</div>
+                                    <div class="text-sm text-white/90">• 16 Tantangan & Mini-Game</div>
+                                    <div class="text-sm text-white/90">• Mode Kelompok (1–5 Tim)</div>
+                                    <div class="text-sm text-white/90">• Pembahasan Ilmiah LKPD</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Configuration Panel (Smart Board Friendly) -->
+                    <div class="lg:col-span-7 space-y-5">
+                        <!-- Step 1: Jumlah Kelompok -->
+                        <div>
+                            <label class="block font-display text-xl font-bold text-slate-800 mb-2.5">
+                                1. Pilih Mode Bermain / Jumlah Kelompok (Sesuai LKPD):
+                            </label>
+                            <div class="grid grid-cols-5 gap-2.5" id="team-count-selector">
+                                <button type="button" onclick="setTeamCount(1)" data-count="1" class="team-count-btn btn-option rounded-2xl border-2 border-slate-300 bg-white font-display font-bold text-lg sm:text-xl py-3 text-slate-700">
+                                    1 Tim<span class="block text-xs font-sans font-semibold text-slate-500">Klasikal</span>
+                                </button>
+                                <button type="button" onclick="setTeamCount(2)" data-count="2" class="team-count-btn btn-option rounded-2xl border-2 border-slate-300 bg-white font-display font-bold text-lg sm:text-xl py-3 text-slate-700">
+                                    2 Tim<span class="block text-xs font-sans font-semibold text-slate-500">Duel</span>
+                                </button>
+                                <button type="button" onclick="setTeamCount(3)" data-count="3" class="team-count-btn btn-option rounded-2xl border-2 border-slate-300 bg-white font-display font-bold text-lg sm:text-xl py-3 text-slate-700">
+                                    3 Tim<span class="block text-xs font-sans font-semibold text-slate-500">Kelompok</span>
+                                </button>
+                                <button type="button" onclick="setTeamCount(4)" data-count="4" class="team-count-btn btn-option rounded-2xl border-2 border-slate-300 bg-white font-display font-bold text-lg sm:text-xl py-3 text-slate-700">
+                                    4 Tim<span class="block text-xs font-sans font-semibold text-slate-500">Kelompok</span>
+                                </button>
+                                <button type="button" onclick="setTeamCount(5)" data-count="5" class="team-count-btn btn-option rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-display font-bold text-lg sm:text-xl py-3 text-emerald-800">
+                                    5 Tim<span class="block text-xs font-sans font-semibold text-emerald-600">5 Stasiun</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Nama Kelompok -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="font-display text-xl font-bold text-slate-800">
+                                    2. Nama Kelompok Peneliti:
+                                </label>
+                                <button type="button" onclick="resetDefaultTeamNames()" class="text-sm font-bold text-ocean-600 hover:underline px-2 py-1">
+                                    ↻ Reset Nama Stasiun
+                                </button>
+                            </div>
+                            <div id="team-names-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                                <!-- Generated inputs -->
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Pengaturan Waktu Diskusi -->
+                        <div>
+                            <label class="block font-display text-xl font-bold text-slate-800 mb-2">
+                                3. Pengaturan Waktu Menjawab:
+                            </label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button type="button" onclick="setTimerSetting(0)" data-timer="0" class="timer-opt-btn btn-option rounded-2xl border-2 border-ocean-500 bg-ocean-50 text-ocean-800 font-bold text-base sm:text-lg py-3 px-3">
+                                    ♾️ Tanpa Batas<span class="block text-xs font-normal text-ocean-600">Fokus Diskusi</span>
+                                </button>
+                                <button type="button" onclick="setTimerSetting(45)" data-timer="45" class="timer-opt-btn btn-option rounded-2xl border-2 border-slate-300 bg-white text-slate-700 font-bold text-base sm:text-lg py-3 px-3">
+                                    ⏱️ 45 Detik<span class="block text-xs font-normal text-slate-500">Standar Kelas</span>
+                                </button>
+                                <button type="button" onclick="setTimerSetting(30)" data-timer="30" class="timer-opt-btn btn-option rounded-2xl border-2 border-slate-300 bg-white text-slate-700 font-bold text-base sm:text-lg py-3 px-3">
+                                    ⚡ 30 Detik<span class="block text-xs font-normal text-slate-500">Tantangan Cepat</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Start Expedition Button -->
+                        <div class="pt-2">
+                            <button type="button" onclick="startGame()" class="w-full btn-3d btn-3d-emerald text-white font-display font-bold text-2xl sm:text-3xl py-4 px-8 rounded-3xl flex items-center justify-center gap-3 tracking-wide">
+                                <span>🚀 MULAI EKSPEDISI EVOLUSI</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==================== SCREEN 2: PETA EKSPEDISI (ZONE SELECTOR) ==================== -->
+        <section id="screen-map" class="hidden flex-1 flex flex-col justify-center animate-pop">
+            <div class="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-xl border-4 border-white p-5 sm:p-8">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-sm font-extrabold uppercase tracking-wider text-ocean-600">Peta Ekspedisi LKPD Pertemuan 1</span>
+                        <h2 class="font-display text-2xl sm:text-4xl font-bold text-slate-800">Pilih Zona Misi Berikutnya</h2>
+                    </div>
+                    <div id="map-turn-banner" class="bg-amber-100 border-2 border-amber-400 px-5 py-2.5 rounded-2xl flex items-center gap-3">
+                        <span class="text-2xl">🧭</span>
+                        <div>
+                            <div class="text-xs font-bold uppercase text-amber-700">Giliran Memilih / Menjawab:</div>
+                            <div id="map-current-team" class="font-display text-xl font-bold text-amber-950">Tim 1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Expedition Zone Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="zones-grid">
+                    <!-- Rendered dynamically -->
+                </div>
+
+                <!-- Finish Early / View Final Podium Button -->
+                <div class="mt-6 pt-4 border-t-2 border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                    <div class="text-sm sm:text-base font-semibold text-slate-600">
+                        Progres Ekspedisi: <span id="overall-progress-text" class="font-bold text-emerald-600">0 / 16 Tantangan Selesai</span>
+                    </div>
+                    <button onclick="showPodium()" class="btn-3d btn-3d-amber text-white font-display font-bold text-lg px-6 py-3 rounded-2xl flex items-center gap-2">
+                        <span>🏆 Lihat Podium & Refleksi LKPD 1D</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 3: ARENA PERTANYAAN & MINI-GAMES ==================== -->
+        <section id="screen-game" class="hidden flex-1 flex flex-col animate-pop">
+            <div class="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-xl border-4 border-white p-4 sm:p-7 flex-1 flex flex-col justify-between">
+                
+                <!-- Top Question Meta Bar -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b-2 border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <button onclick="backToMap()" class="px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-sm sm:text-base flex items-center gap-1.5 transition">
+                            <span>🗺️</span> Peta Zona
+                        </button>
+                        <span id="q-zone-badge" class="px-4 py-2 rounded-2xl font-display font-bold text-sm sm:text-base bg-ocean-100 text-ocean-800">
+                            Zona 1: Mitos vs Fakta
+                        </span>
+                        <span id="q-progress-badge" class="px-3.5 py-2 rounded-2xl font-bold text-sm bg-slate-100 text-slate-600">
+                            Soal 1 / 4
+                        </span>
+                    </div>
+
+                    <!-- Active Team & Hint Button -->
+                    <div class="flex items-center gap-3">
+                        <div id="game-active-team-badge" class="px-4 py-2 rounded-2xl bg-amber-100 border-2 border-amber-400 font-display font-bold text-base sm:text-lg text-amber-950 flex items-center gap-2">
+                            <span>🎯</span> <span id="game-team-name">Tim Fosil</span>
+                        </div>
+                        <button id="btn-hint" onclick="toggleHint()" class="px-4 py-2.5 rounded-2xl bg-violet-100 hover:bg-violet-200 border-2 border-violet-300 text-violet-800 font-bold text-sm sm:text-base flex items-center gap-1.5 transition">
+                            <span>💡</span> Petunjuk LKPD
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hint Box (Hidden by default) -->
+                <div id="hint-box" class="hidden my-3 bg-violet-50 border-2 border-violet-300 rounded-2xl p-4 text-violet-950 flex items-start gap-3 animate-pop">
+                    <span class="text-2xl">📖</span>
+                    <div>
+                        <div class="font-bold text-sm uppercase tracking-wider text-violet-700">Petunjuk dari Dasar Teori LKPD:</div>
+                        <p id="hint-text" class="text-base sm:text-lg font-medium mt-0.5"></p>
+                    </div>
+                </div>
+
+                <!-- Dynamic Question / Mini-Game Content Container -->
+                <div id="question-workspace" class="my-4 flex-1 flex flex-col justify-center">
+                    <!-- Rendered dynamically based on question type: 'truefalse', 'mcq', 'sorting', 'matching', 'datachart' -->
+                </div>
+
+                <!-- Bottom Action Bar (for Sorting / Matching check) -->
+                <div id="workspace-footer" class="hidden pt-3 border-t-2 border-slate-100 flex justify-end">
+                    <!-- Dynamic submit button for multi-item mini-games -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 4: PODIUM & REFLEKSI LKPD 1D ==================== -->
+        <section id="screen-podium" class="hidden flex-1 flex flex-col justify-center animate-pop">
+            <div class="bg-white/95 backdrop-blur-md rounded-[2rem] shadow-xl border-4 border-white p-5 sm:p-8">
+                <div class="text-center mb-6">
+                    <span class="inline-block bg-amber-100 text-amber-800 font-extrabold px-4 py-1.5 rounded-full text-sm uppercase tracking-wider mb-2">
+                        🎉 Ekspedisi Evolusi Selesai!
+                    </span>
+                    <h2 class="font-display text-3xl sm:text-5xl font-bold text-slate-800">
+                        Podium Peneliti Evolusi Terbaik
+                    </h2>
+                </div>
+
+                <!-- Leaderboard Podium Cards -->
+                <div id="podium-standings" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+                    <!-- Rendered dynamically -->
+                </div>
+
+                <!-- LKPD 1D Scientific Synthesis & Reflection Card -->
+                <div class="bg-gradient-to-br from-emerald-50 to-ocean-50 border-2 border-emerald-200 rounded-3xl p-5 sm:p-6 mb-6">
+                    <h3 class="font-display text-xl sm:text-2xl font-bold text-emerald-900 mb-3 flex items-center gap-2">
+                        <span>📝</span> Rangkuman Konsep Kunci (Bahan Refleksi Lembar Kerja 1D):
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm sm:text-base">
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-100">
+                            <div class="font-bold text-ocean-700 mb-1">1. Populasi sebagai Unit Evolusi</div>
+                            <p class="text-slate-600">Individu tidak berevolusi selama hidupnya. Evolusi adalah perubahan proporsi alel dan sifat terwariskan pada <strong>populasi</strong> antar generasi, dan <strong>tidak bertujuan</strong>.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-100">
+                            <div class="font-bold text-emerald-700 mb-1">2. Lima Bukti Evolusi</div>
+                            <p class="text-slate-600">Didukung oleh <strong>Fosil</strong>, <strong>Anatomi Perbandingan</strong> (homolog, analog, vestigial), <strong>Embriologi</strong>, <strong>Biokimia/Molekuler</strong>, dan <strong>Biogeografi</strong> (Garis Wallace).</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-emerald-100">
+                            <div class="font-bold text-amber-700 mb-1">3. Darwin–Wallace vs Lamarck</div>
+                            <p class="text-slate-600">Sifat latihan selama hidup (Data A) tidak diwariskan. Keberhasilan reproduksi diferensial pada variasi alami (Data B) menjelaskan seleksi alam.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-4">
+                    <button onclick="backToMap()" class="btn-3d btn-3d-blue text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl">
+                        🗺️ Kembali ke Peta Zona
+                    </button>
+                    <button onclick="resetEntireGame()" class="btn-3d btn-3d-emerald text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl">
+                        🔄 Main Lagi dari Awal
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== FEEDBACK MODAL (SCIENTIFIC EXPLANATION) ==================== -->
+    <div id="feedback-modal" class="fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+        <div id="feedback-card" class="bg-white rounded-[2rem] max-w-2xl w-full p-6 sm:p-8 shadow-2xl border-4 border-white animate-pop">
+            <div class="flex items-center gap-4 mb-4">
+                <div id="fb-icon-box" class="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shrink-0">
+                    ✅
+                </div>
+                <div>
+                    <div id="fb-points-badge" class="inline-block text-sm font-extrabold px-3 py-1 rounded-full mb-1">
+                        +100 Poin!
+                    </div>
+                    <h3 id="fb-title" class="font-display text-2xl sm:text-3xl font-bold text-slate-800">
+                        Tepat Sekali!
+                    </h3>
+                </div>
+            </div>
+
+            <!-- Scientific Explanation Box -->
+            <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 sm:p-5 mb-6">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-ocean-600 mb-1.5">
+                    🔬 Penjelasan Ilmiah Sesuai LKPD:
+                </div>
+                <p id="fb-explanation" class="text-slate-700 text-base sm:text-lg leading-relaxed font-medium">
+                    Penjelasan ilmiah muncul di sini.
+                </p>
+            </div>
+
+            <button id="fb-next-btn" onclick="proceedAfterFeedback()" class="w-full btn-3d btn-3d-blue text-white font-display font-bold text-xl sm:text-2xl py-4 rounded-2xl">
+                Lanjutkan Ekspedisi ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== CUSTOM CONFIRM MODAL (NO alert/confirm) ==================== -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden bg-slate-900/65 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-4 border-white animate-pop text-center">
+            <div class="text-5xl mb-3">🧭</div>
+            <h3 class="font-display text-2xl font-bold text-slate-800 mb-2">Kembali ke Pengaturan Awal?</h3>
+            <p class="text-slate-600 mb-6">Skor dan progres ekspedisi saat ini akan direset jika kembali ke halaman utama.</p>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="closeConfirmModal()" class="py-3.5 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-lg">
+                    Batal
+                </button>
+                <button onclick="resetEntireGame()" class="btn-3d btn-3d-coral text-white font-display font-bold text-lg py-3.5 px-4 rounded-2xl">
+                    Ya, Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT: SOUND, DATA LKPD, & GAME ENGINE ==================== -->
+    <script>
+        /* =========================================================================
+           1. WEB AUDIO API SYNTHESIZER (NO EXTERNAL AUDIO URLS NEEDED)
+           ========================================================================= */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTone(freq, type = 'sine', duration = 0.15, delay = 0, gainVal = 0.18) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+                gain.gain.setValueAtTime(gainVal, audioCtx.currentTime + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + delay);
+                osc.stop(audioCtx.currentTime + delay + duration);
+            } catch (e) { /* Ignore audio block if any */ }
+        }
+
+        const SFX = {
+            tap: () => playTone(520, 'triangle', 0.08, 0, 0.12),
+            correct: () => {
+                playTone(523.25, 'triangle', 0.14, 0, 0.2);     // C5
+                playTone(659.25, 'triangle', 0.14, 0.09, 0.2);  // E5
+                playTone(783.99, 'triangle', 0.28, 0.18, 0.22); // G5
+            },
+            wrong: () => {
+                playTone(260, 'sawtooth', 0.18, 0, 0.15);
+                playTone(210, 'sawtooth', 0.28, 0.14, 0.15);
+            },
+            fanfare: () => {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((n, idx) => playTone(n, 'triangle', 0.25, idx * 0.11, 0.22));
+            }
+        };
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('icon-sound-on').classList.toggle('hidden', !soundEnabled);
+            document.getElementById('icon-sound-off').classList.toggle('hidden', soundEnabled);
+            if (soundEnabled) SFX.tap();
+        }
+
+        function toggleFullscreen() {
+            SFX.tap();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        /* =========================================================================
+           2. LKPD EVOLUTION CURRICULUM DATA (PERTEMUAN 1: ZONA 1 - ZONA 4)
+           ========================================================================= */
+        const DEFAULT_TEAM_NAMES = [
+            "Tim Fosil",
+            "Tim Anatomi",
+            "Tim Embriologi",
+            "Tim Biokimia",
+            "Tim Biogeografi"
+        ];
+
+        const TEAM_COLORS = [
+            { bg: "bg-ocean-500", light: "bg-ocean-100", text: "text-ocean-900", border: "border-ocean-500" },
+            { bg: "bg-emerald-500", light: "bg-emerald-100", text: "text-emerald-900", border: "border-emerald-500" },
+            { bg: "bg-amber-500", light: "bg-amber-100", text: "text-amber-900", border: "border-amber-500" },
+            { bg: "bg-violet-500", light: "bg-violet-100", text: "text-violet-900", border: "border-violet-500" },
+            { bg: "bg-coral-500", light: "bg-coral-100", text: "text-coral-900", border: "border-coral-500" }
+        ];
+
+        const EXPEDITION_ZONES = [
+            {
+                id: 0,
+                code: "ZONA 1 • LKPD 1A",
+                title: "Mitos atau Fakta Evolusi",
+                subtitle: "Uji Diagnostik Konsep Dasar & Miskonsepsi Evolusi",
+                color: "ocean",
+                icon: "🔍",
+                questions: [
+                    {
+                        id: "z1_q1",
+                        type: "truefalse",
+                        tag: "Pernyataan Diagnostik LKPD 1A #1",
+                        prompt: "“Individu berevolusi selama masa hidupnya untuk menyesuaikan diri dengan lingkungan.”",
+                        subprompt: "Berdasarkan Dasar Teori LKPD, apakah pernyataan ini BENAR atau SALAH?",
+                        correctAnswer: false,
+                        hint: "Perhatikan siapa yang menjadi unit evolusi: individu atau populasi? Apakah susunan genetik individu berubah selama hidupnya?",
+                        explanation: "SALAH. Individu tidak mengubah susunan genetik yang diwariskannya selama hidup. Populasi-lah yang menjadi unit evolusi, yaitu perubahan proporsi alel dan sifat terwariskan dari satu generasi ke generasi berikutnya."
+                    },
+                    {
+                        id: "z1_q2",
+                        type: "truefalse",
+                        tag: "Pernyataan Diagnostik LKPD 1A #2",
+                        prompt: "“Evolusi bertujuan membuat makhluk hidup menjadi semakin sempurna dari waktu ke waktu.”",
+                        subprompt: "Tentukan apakah pernyataan diagnostik ini BENAR atau SALAH!",
+                        correctAnswer: false,
+                        hint: "Ingat catatan di LKPD: 'Evolusi tidak bertujuan'. Perubahan populasi dipengaruhi seleksi maupun peristiwa acak.",
+                        explanation: "SALAH. Evolusi TIDAK bertujuan (bukan teleologis) dan tidak selalu menghasilkan sifat adaptif. Hanyutan genetik (genetic drift) misalnya menghasilkan perubahan acak yang tidak terarah pada populasi kecil."
+                    },
+                    {
+                        id: "z1_q3",
+                        type: "truefalse",
+                        tag: "Pernyataan Diagnostik LKPD 1A #3",
+                        prompt: "“Teori evolusi hanyalah dugaan sementara yang belum didukung oleh bukti ilmiah.”",
+                        subprompt: "Tentukan apakah pernyataan diagnostik ini BENAR atau SALAH!",
+                        correctAnswer: false,
+                        hint: "Dalam sains, istilah 'teori' berbeda dengan 'tebakan'. Ingat 5 stasiun bukti pada Lembar Kerja 1B!",
+                        explanation: "SALAH. Dalam sains, teori evolusi adalah penjelasan ilmiah komprehensif yang didukung oleh berbagai bukti independen yang saling menguatkan: fosil, anatomi perbandingan, embriologi, biokimia/molekuler, dan biogeografi."
+                    },
+                    {
+                        id: "z1_q4",
+                        type: "mcq",
+                        tag: "Konsep Unit & Mekanisme Evolusi",
+                        prompt: "Manakah definisi EVOLUSI yang paling tepat sesuai dengan Dasar Teori di LKPD?",
+                        options: [
+                            "Perubahan bentuk tubuh satu individu hewan selama hidupnya agar bertahan hidup",
+                            "Perubahan karakteristik terwariskan pada populasi organisme dari satu generasi ke generasi berikutnya",
+                            "Keinginan makhluk hidup untuk memperbaiki organnya agar semakin sempurna",
+                            "Perpindahan individu dari satu habitat ke habitat baru tanpa perubahan alel"
+                        ],
+                        correctIndex: 1,
+                        hint: "Kata kuncinya adalah 'karakteristik terwariskan', 'populasi', dan 'antar generasi'.",
+                        explanation: "TEPAT! Evolusi adalah perubahan karakteristik terwariskan (proporsi alel dan sifat) pada populasi organisme dari satu generasi ke generasi berikutnya."
+                    }
+                ]
+            },
+            {
+                id: 1,
+                code: "ZONA 2 • LKPD 1B",
+                title: "Jelajah 5 Stasiun Bukti",
+                subtitle: "Fosil, Anatomi (Homolog/Analog/Vestigial), Embriologi, Molekuler & Biogeografi",
+                color: "emerald",
+                icon: "🦴",
+                questions: [
+                    {
+                        id: "z2_q1",
+                        type: "sorting",
+                        tag: "Mini-Game Klasifikasi Struktur Anatomi (LKPD 1B)",
+                        prompt: "Kelompokkan 6 contoh organ berikut ke dalam kategori HOMOLOG, ANALOG, atau VESTIGIAL!",
+                        subprompt: "Ketuk kartu contoh organ, lalu ketuk kotak kategori yang sesuai di bawah.",
+                        buckets: [
+                            { id: "homolog", label: "HOMOLOG", desc: "Asal struktur sama, fungsi beda (Nenek moyang sama)", color: "ocean" },
+                            { id: "analog", label: "ANALOG", desc: "Asal struktur beda, fungsi sama (Adaptasi serupa)", color: "amber" },
+                            { id: "vestigial", label: "VESTIGIAL", desc: "Struktur sisa menyusut, kehilangan fungsi utama", color: "violet" }
+                        ],
+                        items: [
+                            { id: "i1", text: "Sayap kelelawar & sirip paus", target: "homolog" },
+                            { id: "i2", text: "Sayap kupu-kupu & sayap burung", target: "analog" },
+                            { id: "i3", text: "Tulang ekor (koksiks) pada manusia", target: "vestigial" },
+                            { id: "i4", text: "Tangan manusia & kaki depan kuda", target: "homolog" },
+                            { id: "i5", text: "Sirip hiu (ikan) & sirip lumba-lumba (mamalia)", target: "analog" },
+                            { id: "i6", text: "Sisa tulang panggul pada ular/paus", target: "vestigial" }
+                        ],
+                        hint: "Homolog = rangka dasar sama (misal tulang pentadaktil mamalia). Analog = fungsi terbang/berenang sama tapi asal jaringan berbeda. Vestigial = organ sisa.",
+                        explanation: "LUAR BIASA! Struktur Homolog (tangan manusia, sayap kelelawar, sirip paus) menunjukkan kesamaan nenek moyang; Analog (sayap serangga vs burung) menunjukkan evolusi konvergen; Vestigial (tulang ekor, sisa panggul paus) adalah jejak sejarah evolusi."
+                    },
+                    {
+                        id: "z2_q2",
+                        type: "mcq",
+                        tag: "Stasiun 5: Biogeografi & Peta Garis Wallace",
+                        prompt: "Mengapa pengamatan persebaran fauna di sekitar Garis Wallace (Paparan Sunda vs Wallacea/Sahul) menjadi bukti kuat evolusi?",
+                        options: [
+                            "Karena semua pulau di Indonesia memiliki spesies mamalia besar yang identik",
+                            "Isolasi geografis akibat pemisahan daratan membuat populasi berevolusi secara terpisah sesuai kondisi lokalnya",
+                            "Hewan berpindah menyeberangi palung laut dalam setiap musim kawin",
+                            "Iklim di Kalimantan dan Sulawesi sangat bertolak belakang sehingga hewan tidak bisa hidup"
+                        ],
+                        correctIndex: 1,
+                        hint: "Perhatikan peran 'isolasi geografis' dan sejarah geologis paparan benua pada Stasiun Biogeografi.",
+                        explanation: "BENAR! Biogeografi menunjukkan bahwa spesies di wilayah yang terisolasi oleh sawar geografis (seperti palung laut dalam pada Garis Wallace) berevolusi secara independen dari nenek moyang yang terpisah."
+                    },
+                    {
+                        id: "z2_q3",
+                        type: "mcq",
+                        tag: "Stasiun 4: Bukti Biokimia / Molekuler",
+                        prompt: "Dalam tabel Lembar Kerja 1B, mengapa bukti Biokimia/Molekuler (seperti perbandingan urutan DNA & asam amino) sering diberi skor kekuatan bukti tertinggi (skor 3)?",
+                        options: [
+                            "Karena molekul DNA dapat dilihat langsung dengan mata telanjang di lapangan",
+                            "Karena DNA merupakan materi genetik yang diwariskan langsung, sehingga tingkat kemiripan urutan basa menunjukkan kedekatan kekerabatan secara kuantitatif",
+                            "Karena semua makhluk hidup memiliki jumlah kromosom yang sama persis",
+                            "Karena analisis DNA membuktikan individu berubah selama hidupnya"
+                        ],
+                        correctIndex: 1,
+                        hint: "Hubungkan DNA dengan mekanisme pewarisan sifat dan hubungan kekerabatan antar spesies.",
+                        explanation: "TEPAT SEKALI! Bukti molekuler/biokimia membandingkan urutan DNA, RNA, atau protein secara objektif dan kuantitatif. Semakin mirip urutan molekulnya, semakin dekat hubungan kekerabatan evolusionernya."
+                    },
+                    {
+                        id: "z2_q4",
+                        type: "mcq",
+                        tag: "Stasiun 1 & 3: Fosil & Embriologi Perbandingan",
+                        prompt: "Apa persamaan makna yang ditunjukkan oleh urutan lapisan fosil transisi dan kemiripan tahap awal embrio vertebrata (ikan, amfibi, burung, mamalia)?",
+                        options: [
+                            "Menunjukkan bahwa vertebrata darat tidak memiliki hubungan apa pun dengan ikan",
+                            "Menunjukkan adanya nenek moyang bersama dan perubahan bertahap dari waktu ke waktu",
+                            "Membuktikan bahwa embrio mamalia bernapas menggunakan insang dewasa",
+                            "Membuktikan bahwa evolusi berlangsung hanya dalam satu generasi"
+                        ],
+                        correctIndex: 1,
+                        hint: "Ingat celah faring dan ekor pasca-anus pada tahap awal perkembangan embrio vertebrata.",
+                        explanation: "BENAR! Fosil merekam urutan perubahan morfologi lintas waktu geologis, sedangkan embriologi memperlihatkan kemiripan pola perkembangan awal yang diwarisi dari nenek moyang bersama."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                code: "ZONA 3 • LKPD 1C",
+                title: "Lab Data: Lamarck vs Darwin–Wallace",
+                subtitle: "Analisis Data Hipotetis Atlet & Populasi 20 Jerapah Induk",
+                color: "amber",
+                icon: "🦒",
+                questions: [
+                    {
+                        id: "z3_q1",
+                        type: "datachart",
+                        chartType: "dataA",
+                        tag: "Analisis Data A (LKPD Lembar Kerja 1C)",
+                        prompt: "Data A: Seorang atlet memiliki otot besar karena latihan beban intensif, namun anak-anaknya lahir dengan ukuran otot bayi normal (tidak otomatis besar). Apa kesimpulan ilmiah dari Data A?",
+                        options: [
+                            "Membuktikan teori Lamarck bahwa organ yang sering dilatih akan diwariskan ke keturunannya",
+                            "Menjadi titik lemah gagasan Lamarck karena sifat perolehan selama hidup tidak mengubah materi genetik gamet",
+                            "Membuktikan bahwa atlet tersebut mengalami mutasi genetik setiap kali berlatih",
+                            "Menunjukkan bahwa seleksi alam bekerja pada otot atlet dalam satu minggu"
+                        ],
+                        correctIndex: 1,
+                        hint: "Bandingkan gagasan Lamarck ('pewarisan sifat yang diperoleh / acquired traits') dengan fakta genetika.",
+                        explanation: "TEPAT! Data A membantah gagasan Lamarck. Perubahan fisik yang diperoleh selama hidup akibat latihan (use and disuse) terjadi pada sel somatik, bukan pada materi genetik yang diwariskan ke keturunan."
+                    },
+                    {
+                        id: "z3_q2",
+                        type: "datachart",
+                        chartType: "dataB",
+                        tag: "Analisis Grafik Data B: 20 Jerapah Induk (LKPD 1C)",
+                        prompt: "Perhatikan grafik Data B di atas! Pada musim kering hipotetis dari total 20 induk jerapah, berapakah TOTAL anak jerapah yang mencapai dewasa dari masing-masing kelompok (Pendek : Sedang : Panjang)?",
+                        options: [
+                            "Pendek = 6 anak | Sedang = 16 anak | Panjang = 18 anak",
+                            "Pendek = 1 anak | Sedang = 2 anak | Panjang = 3 anak",
+                            "Pendek = 6 anak | Sedang = 8 anak | Panjang = 6 anak",
+                            "Pendek = 18 anak | Sedang = 16 anak | Panjang = 6 anak"
+                        ],
+                        correctIndex: 0,
+                        hint: "Kalikan Jumlah Induk dengan Rata-rata anak mencapai dewasa! (Pendek: 6 × 1,0 | Sedang: 8 × 2,0 | Panjang: 6 × 3,0).",
+                        explanation: "HITUNGAN TEPAT! Pendek (6 × 1,0 = 6 anak), Sedang (8 × 2,0 = 16 anak), dan Panjang (6 × 3,0 = 18 anak). Total 40 anak dewasa, dengan proporsi terbesar berasal dari induk berleher panjang (45%)!"
+                    },
+                    {
+                        id: "z3_q3",
+                        type: "datachart",
+                        chartType: "dataB",
+                        tag: "Interpretasi Seleksi Alam pada Data B (LKPD 1C)",
+                        prompt: "Mengapa pada generasi berikutnya proporsi jerapah berleher panjang dalam populasi meningkat berdasarkan Data B?",
+                        options: [
+                            "Karena induk berleher pendek meregangkan lehernya hingga menjadi panjang sebelum melahirkan",
+                            "Karena individu berleher panjang memiliki keberhasilan reproduksi lebih tinggi pada musim kering dan sifatnya terwariskan",
+                            "Karena semua jerapah berleher pendek langsung punah sebelum sempat bereproduksi sama sekali",
+                            "Karena alam sengaja menciptakan jerapah berleher panjang agar pohon akasia tidak terlalu tinggi"
+                        ],
+                        correctIndex: 1,
+                        hint: "Perhatikan bahwa induk berleher pendek masih menghasilkan 1,0 anak, namun induk berleher panjang menghasilkan 3,0 anak (keberhasilan reproduksi diferensial).",
+                        explanation: "SEMPURNA! Inilah inti seleksi alam Darwin–Wallace: adanya variasi alami yang terwariskan dan keberhasilan reproduksi diferensial (individu berleher panjang lebih berhasil bertahan & bereproduksi sehingga proporsi alelnya meningkat)."
+                    },
+                    {
+                        id: "z3_q4",
+                        type: "matching",
+                        tag: "Mini-Game Tabel Perbandingan LKPD 1C",
+                        prompt: "Pasangkan setiap pernyataan berikut dengan tokoh penggagas teorinya: LAMARCK atau DARWIN–WALLACE!",
+                        subprompt: "Ketuk pilihan tokoh pada setiap baris pernyataan di bawah ini.",
+                        pairs: [
+                            { id: "p1", statement: "Mekanisme: Use & Disuse (penggunaan & tidak digunakan) serta pewarisan sifat perolehan.", answer: "Lamarck" },
+                            { id: "p2", statement: "Mekanisme: Variasi alami terwariskan dalam populasi dan seleksi alam.", answer: "Darwin-Wallace" },
+                            { id: "p3", statement: "Penjelasan jerapah: Nenek moyang jerapah terus meregangkan leher menjangkau daun tinggi lalu mewariskannya.", answer: "Lamarck" },
+                            { id: "p4", statement: "Penjelasan jerapah: Individu berleher lebih panjang lebih berhasil bereproduksi pada musim kering sehingga proporsinya naik.", answer: "Darwin-Wallace" }
+                        ],
+                        hint: "Ingat: Lamarck menekankan usaha/latihan organ selama hidup; Darwin–Wallace menekankan variasi awal dalam populasi & keberhasilan reproduksi.",
+                        explanation: "HEBAT! Tabel perbandingan LKPD 1C sudah lengkap: gagasan Darwin–Wallace paling konsisten dengan bukti pewarisan genetik modern (Data A dan Data B)."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                code: "ZONA 4 • SINTESIS AKHIR",
+                title: "Tantangan Kalimat Ilmiah & Mekanisme Populasi",
+                subtitle: "Menghindari Bahasa Teleologis & Analisis 5 Faktor Perubahan Populasi",
+                color: "violet",
+                icon: "🧬",
+                questions: [
+                    {
+                        id: "z4_q1",
+                        type: "mcq",
+                        tag: "Kalimat Ilmiah Anti-Miskonsepsi (LKPD Bagian A)",
+                        prompt: "Guru meminta kelompokmu menjelaskan mengapa burung pemakan biji keras di suatu pulau memiliki paruh tebal. Manakah kalimat ILMIAH yang paling tepat sesuai aturan LKPD?",
+                        options: [
+                            "“Burung membutuhkan paruh tebal untuk memecah biji keras, sehingga mereka menumbuhkan paruh tebal.”",
+                            "“Evolusi bertujuan membuat paruh burung menjadi lebih kuat dan sempurna di pulau itu.”",
+                            "“Individu berparuh lebih tebal lebih berhasil bertahan hidup dan bereproduksi, sehingga proporsi alel paruh tebal meningkat pada generasi berikutnya.”",
+                            "“Setiap burung melatih paruhnya setiap hari hingga paruhnya menebal dan diwariskan ke anaknya.”"
+                        ],
+                        correctIndex: 2,
+                        hint: "Lihat contoh kalimat ilmiah di LKPD Bagian A: hindari kata 'membutuhkan' atau 'bertujuan', gunakan konsep keberhasilan reproduksi & proporsi.",
+                        explanation: "TEPAT SEKALI! Kalimat ilmiah evolusi tidak menggunakan bahasa teleologis ('burung membutuhkan paruh...'), melainkan menjelaskan variasi, keberhasilan reproduksi diferensial, dan perubahan proporsi alel antar generasi."
+                    },
+                    {
+                        id: "z4_q2",
+                        type: "mcq",
+                        tag: "Faktor Perubahan Populasi: Hanyutan Genetik vs Seleksi Alam",
+                        prompt: "Sebuah letusan gunung berapi menyisakan secara acak hanya 10 ekor kumbang dari populasi awal 5.000 ekor (efek leher botol), sehingga frekuensi warna kumbang berubah drastis tanpa memandang keunggulan adaptifnya. Mekanisme apakah ini?",
+                        options: [
+                            "Seleksi alam terarah",
+                            "Hanyutan genetik (Genetic drift)",
+                            "Pewarisan sifat perolehan Lamarck",
+                            "Perkawinan acak tanpa perubahan alel"
+                        ],
+                        correctIndex: 1,
+                        hint: "Periksa Dasar Teori LKPD: mekanisme mana yang menghasilkan 'perubahan acak dan kuat pada populasi kecil'?",
+                        explanation: "BENAR! Hanyutan genetik (genetic drift) menghasilkan perubahan frekuensi alel secara ACAK dan berdampak kuat pada populasi kecil (seperti bencana alam / bottleneck effect), sehingga tidak selalu bersifat adaptif."
+                    },
+                    {
+                        id: "z4_q3",
+                        type: "mcq",
+                        tag: "Bahan Baku Variasi & Aliran Gen (LKPD Bagian A)",
+                        prompt: "Manakah kombinasi sumber bahan baku variasi terwariskan dan mekanisme yang menyamakan/menambah variasi antarpopulasi akibat migrasi individu?",
+                        options: [
+                            "Bahan baku: Mutasi & rekombinasi | Migrasi antarpopulasi: Aliran gen (Gene flow)",
+                            "Bahan baku: Latihan otot & nutrisi | Migrasi antarpopulasi: Hanyutan genetik",
+                            "Bahan baku: Seleksi alam | Migrasi antarpopulasi: Perkawinan tidak acak",
+                            "Bahan baku: Keinginan individu | Migrasi antarpopulasi: Evolusi konvergen"
+                        ],
+                        correctIndex: 0,
+                        hint: "Baca kembali paragraf kedua Dasar Teori LKPD tentang bahan baku variasi dan aliran gen.",
+                        explanation: "LENGKAP & AKURAT! Variasi terwariskan berasal dari mutasi, rekombinasi, dan aliran gen sebagai bahan baku evolusi; sementara aliran gen (gene flow) menyamakan atau menambah variasi antarpopulasi."
+                    },
+                    {
+                        id: "z4_q4",
+                        type: "mcq",
+                        tag: "Revisi Prediksi Awal (Sintesis LKPD 1A – 1D)",
+                        prompt: "Sebagai kesimpulan akhir Pertemuan 1 (Lembar Kerja 1D), pernyataan manakah yang merangkum keseluruhan konsep evolusi secara utuh?",
+                        options: [
+                            "Evolusi adalah perubahan terarah menuju kesempurnaan yang terjadi pada individu selama hidupnya",
+                            "Evolusi adalah perubahan proporsi sifat terwariskan dalam populasi antar generasi akibat seleksi alam, hanyutan genetik, aliran gen, mutasi, dan perkawinan tidak acak",
+                            "Evolusi hanya dapat dibuktikan melalui fosil jerapah dan tidak memiliki bukti molekuler",
+                            "Semua perubahan frekuensi alel pada populasi selalu menghasilkan sifat yang menguntungkan organisme"
+                        ],
+                        correctIndex: 1,
+                        hint: "Gabungkan definisi populasi, antar generasi, dan 5 faktor perubahan populasi di Dasar Teori LKPD.",
+                        explanation: "SELAMAT! Kamu telah menguasai seluruh tujuan pembelajaran LKPD Evolusi Pertemuan 1 dengan sangat baik!"
+                    }
+                ]
+            }
+        ];
+
+        /* =========================================================================
+           3. GAME STATE MANAGEMENT
+           ========================================================================= */
+        let state = {
+            teamCount: 5,
+            teams: [], // { name, score, streak, colorIdx }
+            currentTeamIdx: 0,
+            timerDuration: 0, // 0 = unlimited, 30, 45
+            timerRemaining: 0,
+            timerInterval: null,
+            activeZoneIdx: 0,
+            activeQuestionIdx: 0,
+            completedQuestions: new Set(), // stores question ids like "z1_q1"
+            // Interactive Mini-Game States
+            selectedSortItem: null,
+            sortAssignments: {}, // itemId -> bucketId
+            matchingSelections: {} // pairId -> "Lamarck" | "Darwin-Wallace"
+        };
+
+        /* =========================================================================
+           4. SETUP SCREEN LOGIC
+           ========================================================================= */
+        function initSetupScreen() {
+            setTeamCount(5);
+            setTimerSetting(0);
+        }
+
+        function setTeamCount(count) {
+            SFX.tap();
+            state.teamCount = count;
+            document.querySelectorAll('.team-count-btn').forEach(btn => {
+                const isSelected = Number(btn.dataset.count) === count;
+                btn.classList.toggle('border-emerald-500', isSelected);
+                btn.classList.toggle('bg-emerald-50', isSelected);
+                btn.classList.toggle('text-emerald-800', isSelected);
+                btn.classList.toggle('border-slate-300', !isSelected);
+                btn.classList.toggle('bg-white', !isSelected);
+                btn.classList.toggle('text-slate-700', !isSelected);
+            });
+            renderTeamInputs();
+        }
+
+        function renderTeamInputs() {
+            const container = document.getElementById('team-names-container');
+            const existingInputs = Array.from(container.querySelectorAll('input')).map(i => i.value);
+            container.innerHTML = '';
+
+            for (let i = 0; i < state.teamCount; i++) {
+                const color = TEAM_COLORS[i % TEAM_COLORS.length];
+                const defaultName = state.teamCount === 1 ? "Kelas Biologi" : DEFAULT_TEAM_NAMES[i];
+                const val = existingInputs[i] || defaultName;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex items-center gap-2 p-2 rounded-2xl border-2 ${color.border} ${color.light}`;
+                wrapper.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl ${color.bg} text-white font-display font-bold flex items-center justify-center shrink-0">
+                        ${i + 1}
+                    </span>
+                    <input type="text" id="team-input-${i}" value="${val}" maxlength="20"
+                        class="w-full bg-white/90 px-3 py-2 rounded-xl font-bold text-slate-800 text-base focus:outline-none focus:ring-2 focus:ring-ocean-500"
+                        placeholder="Nama Tim ${i + 1}">
+                `;
+                container.appendChild(wrapper);
+            }
+        }
+
+        function resetDefaultTeamNames() {
+            SFX.tap();
+            for (let i = 0; i < state.teamCount; i++) {
+                const inp = document.getElementById(`team-input-${i}`);
+                if (inp) inp.value = state.teamCount === 1 ? "Kelas Biologi" : DEFAULT_TEAM_NAMES[i];
+            }
+        }
+
+        function setTimerSetting(seconds) {
+            SFX.tap();
+            state.timerDuration = seconds;
+            document.querySelectorAll('.timer-opt-btn').forEach(btn => {
+                const isSelected = Number(btn.dataset.timer) === seconds;
+                btn.classList.toggle('border-ocean-500', isSelected);
+                btn.classList.toggle('bg-ocean-50', isSelected);
+                btn.classList.toggle('text-ocean-800', isSelected);
+                btn.classList.toggle('border-slate-300', !isSelected);
+                btn.classList.toggle('bg-white', !isSelected);
+                btn.classList.toggle('text-slate-700', !isSelected);
+            });
+        }
+
+        function startGame() {
+            SFX.fanfare();
+            state.teams = [];
+            for (let i = 0; i < state.teamCount; i++) {
+                const inp = document.getElementById(`team-input-${i}`);
+                const name = (inp && inp.value.trim()) ? inp.value.trim() : `Tim ${i + 1}`;
+                state.teams.push({
+                    name: name,
+                    score: 0,
+                    streak: 0,
+                    colorIdx: i % TEAM_COLORS.length
+                });
+            }
+            state.currentTeamIdx = 0;
+            state.completedQuestions.clear();
+
+            document.getElementById('top-scoreboard').classList.remove('hidden');
+            updateScoreboardUI();
+            switchScreen('screen-map');
+            renderExpeditionMap();
+        }
+
+        /* =========================================================================
+           5. NAVIGATION & SCOREBOARD UI
+           ========================================================================= */
+        function switchScreen(screenId) {
+            stopTimer();
+            ['screen-setup', 'screen-map', 'screen-game', 'screen-podium'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function updateScoreboardUI() {
+            const sb = document.getElementById('top-scoreboard');
+            sb.innerHTML = '';
+            state.teams.forEach((team, idx) => {
+                const color = TEAM_COLORS[team.colorIdx];
+                const isActive = idx === state.currentTeamIdx;
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.onclick = () => {
+                    SFX.tap();
+                    state.currentTeamIdx = idx;
+                    updateScoreboardUI();
+                    updateActiveTeamLabels();
+                };
+                pill.title = "Ketuk untuk mengganti giliran tim secara manual";
+                pill.className = `px-3.5 py-1.5 rounded-2xl border-2 transition flex items-center gap-2 ${
+                    isActive
+                        ? `${color.bg} text-white border-amber-300 shadow-md scale-105 active-team-ring`
+                        : `bg-white text-slate-700 ${color.border} opacity-85 hover:opacity-100`
+                }`;
+                pill.innerHTML = `
+                    <span class="font-bold text-sm sm:text-base truncate max-w-[110px]">${team.name}</span>
+                    <span class="font-display font-bold text-base sm:text-lg px-2 py-0.5 rounded-xl ${isActive ? 'bg-black/25 text-amber-200' : 'bg-slate-100 text-slate-900'}">
+                        ${team.score}
+                    </span>
+                    ${team.streak >= 2 ? `<span class="text-xs font-extrabold bg-amber-400 text-slate-900 px-1.5 py-0.5 rounded-lg">🔥${team.streak}</span>` : ''}
+                `;
+                sb.appendChild(pill);
+            });
+            updateActiveTeamLabels();
+        }
+
+        function updateActiveTeamLabels() {
+            if (!state.teams.length) return;
+            const activeTeam = state.teams[state.currentTeamIdx];
+            const mapTeam = document.getElementById('map-current-team');
+            const gameTeam = document.getElementById('game-team-name');
+            if (mapTeam) mapTeam.textContent = activeTeam.name;
+            if (gameTeam) gameTeam.textContent = activeTeam.name;
+        }
+
+        function advanceTeamTurn() {
+            if (state.teams.length > 1) {
+                state.currentTeamIdx = (state.currentTeamIdx + 1) % state.teams.length;
+                updateScoreboardUI();
+            }
+        }
+
+        /* =========================================================================
+           6. EXPEDITION MAP SCREEN
+           ========================================================================= */
+        function renderExpeditionMap() {
+            const grid = document.getElementById('zones-grid');
+            grid.innerHTML = '';
+
+            let totalQ = 0;
+            let totalDone = 0;
+
+            EXPEDITION_ZONES.forEach((zone, zIdx) => {
+                const doneCount = zone.questions.filter(q => state.completedQuestions.has(q.id)).length;
+                const qLen = zone.questions.length;
+                totalQ += qLen;
+                totalDone += doneCount;
+                const isComplete = doneCount === qLen;
+
+                const colorMap = {
+                    ocean: { bg: 'from-ocean-500 to-ocean-700', badge: 'bg-ocean-100 text-ocean-800', border: 'border-ocean-300', btn: 'btn-3d-blue' },
+                    emerald: { bg: 'from-emerald-500 to-emerald-700', badge: 'bg-emerald-100 text-emerald-800', border: 'border-emerald-300', btn: 'btn-3d-emerald' },
+                    amber: { bg: 'from-amber-400 to-amber-600', badge: 'bg-amber-100 text-amber-900', border: 'border-amber-300', btn: 'btn-3d-amber' },
+                    violet: { bg: 'from-violet-500 to-violet-700', badge: 'bg-violet-100 text-violet-800', border: 'border-violet-300', btn: 'btn-3d-violet' }
+                };
+                const c = colorMap[zone.color];
+
+                const card = document.createElement('div');
+                card.className = `rounded-3xl border-3 ${c.border} bg-white p-5 shadow-md hover:shadow-xl transition flex flex-col justify-between gap-4 relative overflow-hidden`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-extrabold tracking-wider ${c.badge}">
+                                ${zone.code}
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-extrabold ${isComplete ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600'}">
+                                ${isComplete ? '✅ Tuntas' : `${doneCount} / ${qLen} Selesai`}
+                            </span>
+                        </div>
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${c.bg} text-white flex items-center justify-center text-3xl shrink-0 shadow">
+                                ${zone.icon}
+                            </div>
+                            <div>
+                                <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-800 leading-snug">
+                                    ${zone.title}
+                                </h3>
+                                <p class="text-slate-600 text-sm sm:text-base mt-1">
+                                    ${zone.subtitle}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-3 pt-2">
+                        <!-- Progress Dots -->
+                        <div class="flex items-center gap-1.5">
+                            ${zone.questions.map(q => `
+                                <span class="w-3.5 h-3.5 rounded-full ${state.completedQuestions.has(q.id) ? 'bg-emerald-500' : 'bg-slate-200'}"></span>
+                            `).join('')}
+                        </div>
+                        <button onclick="enterZone(${zIdx})" class="btn-3d ${c.btn} text-white font-display font-bold text-lg px-6 py-2.5 rounded-2xl">
+                            ${isComplete ? 'Ulangi Zona ↻' : (doneCount > 0 ? 'Lanjutkan ➔' : 'Masuk Zona ➔')}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('overall-progress-text').textContent = `${totalDone} / ${totalQ} Tantangan Selesai`;
+        }
+
+        function enterZone(zoneIdx) {
+            SFX.tap();
+            state.activeZoneIdx = zoneIdx;
+            const zone = EXPEDITION_ZONES[zoneIdx];
+            // Find first uncompleted question, or start from 0 if all completed
+            const nextIdx = zone.questions.findIndex(q => !state.completedQuestions.has(q.id));
+            state.activeQuestionIdx = nextIdx !== -1 ? nextIdx : 0;
+
+            switchScreen('screen-game');
+            renderCurrentQuestion();
+        }
+
+        function backToMap() {
+            SFX.tap();
+            switchScreen('screen-map');
+            renderExpeditionMap();
+        }
+
+        /* =========================================================================
+           7. TIMER SYSTEM
+           ========================================================================= */
+        function startTimer() {
+            stopTimer();
+            const badge = document.getElementById('timer-badge');
+            const text = document.getElementById('timer-text');
+            if (state.timerDuration <= 0) {
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+                return;
+            }
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+            state.timerRemaining = state.timerDuration;
+            text.textContent = `${state.timerRemaining}s`;
+            badge.classList.remove('bg-coral-100', 'border-coral-500', 'text-coral-900');
+            badge.classList.add('bg-amber-100', 'border-amber-400', 'text-amber-900');
+
+            state.timerInterval = setInterval(() => {
+                state.timerRemaining--;
+                text.textContent = `${state.timerRemaining}s`;
+                if (state.timerRemaining <= 10) {
+                    badge.classList.remove('bg-amber-100', 'border-amber-400', 'text-amber-900');
+                    badge.classList.add('bg-coral-100', 'border-coral-500', 'text-coral-900');
+                    playTone(880, 'sine', 0.06, 0, 0.08);
+                }
+                if (state.timerRemaining <= 0) {
+                    stopTimer();
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
+        }
+
+        function handleTimeUp() {
+            const zone = EXPEDITION_ZONES[state.activeZoneIdx];
+            const q = zone.questions[state.activeQuestionIdx];
+            SFX.wrong();
+            state.teams[state.currentTeamIdx].streak = 0;
+            state.completedQuestions.add(q.id);
+            updateScoreboardUI();
+            showFeedbackModal(false, 0, "Waktu Habis! ⏰", q.explanation);
+        }
+
+        /* =========================================================================
+           8. QUESTION & MINI-GAME RENDERERS
+           ========================================================================= */
+        function toggleHint() {
+            SFX.tap();
+            const box = document.getElementById('hint-box');
+            box.classList.toggle('hidden');
+        }
+
+        function renderCurrentQuestion() {
+            const zone = EXPEDITION_ZONES[state.activeZoneIdx];
+            const q = zone.questions[state.activeQuestionIdx];
+
+            // Update Meta Badges
+            document.getElementById('q-zone-badge').textContent = `${zone.icon} ${zone.title}`;
+            document.getElementById('q-progress-badge').textContent = `Tantangan ${state.activeQuestionIdx + 1} / ${zone.questions.length}`;
+            document.getElementById('hint-box').classList.add('hidden');
+            document.getElementById('hint-text').textContent = q.hint;
+
+            const workspace = document.getElementById('question-workspace');
+            const footer = document.getElementById('workspace-footer');
+            workspace.innerHTML = '';
+            footer.innerHTML = '';
+            footer.classList.add('hidden');
+
+            startTimer();
+
+            if (q.type === 'truefalse') {
+                renderTrueFalseQuestion(q, workspace);
+            } else if (q.type === 'mcq') {
+                renderMCQQuestion(q, workspace);
+            } else if (q.type === 'datachart') {
+                renderDataChartQuestion(q, workspace);
+            } else if (q.type === 'sorting') {
+                renderSortingMiniGame(q, workspace, footer);
+            } else if (q.type === 'matching') {
+                renderMatchingMiniGame(q, workspace, footer);
+            }
+        }
+
+        /* --- TYPE A: TRUE / FALSE (MITOS VS FAKTA LKPD 1A) --- */
+        function renderTrueFalseQuestion(q, container) {
+            container.innerHTML = `
+                <div class="max-w-4xl mx-auto w-full text-center space-y-6 py-4">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-ocean-100 text-ocean-800 font-extrabold text-sm">
+                        ${q.tag}
+                    </span>
+                    <div class="bg-gradient-to-br from-slate-50 to-ocean-50/60 border-2 border-slate-200 rounded-3xl p-6 sm:p-9 shadow-inner">
+                        <h3 class="font-display text-2xl sm:text-4xl font-bold text-slate-800 leading-snug">
+                            ${q.prompt}
+                        </h3>
+                        <p class="text-slate-500 font-semibold text-base sm:text-lg mt-3">
+                            ${q.subprompt}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                        <button onclick="submitTrueFalse(true)" class="btn-3d btn-3d-emerald text-white rounded-3xl py-6 px-6 flex items-center justify-center gap-4">
+                            <span class="text-4xl bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center">✔️</span>
+                            <div class="text-left">
+                                <div class="font-display text-2xl sm:text-3xl font-bold">BENAR</div>
+                                <div class="text-emerald-100 text-sm font-semibold">Fakta Ilmiah Evolusi</div>
+                            </div>
+                        </button>
+                        <button onclick="submitTrueFalse(false)" class="btn-3d btn-3d-coral text-white rounded-3xl py-6 px-6 flex items-center justify-center gap-4">
+                            <span class="text-4xl bg-white/20 w-14 h-14 rounded-2xl flex items-center justify-center">✖️</span>
+                            <div class="text-left">
+                                <div class="font-display text-2xl sm:text-3xl font-bold">SALAH</div>
+                                <div class="text-rose-100 text-sm font-semibold">Miskonsepsi / Mitos</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitTrueFalse(userChoice) {
+            stopTimer();
+            const q = EXPEDITION_ZONES[state.activeZoneIdx].questions[state.activeQuestionIdx];
+            const isCorrect = userChoice === q.correctAnswer;
+            evaluateScoreAndFeedback(isCorrect, q);
+        }
+
+        /* --- TYPE B: MULTIPLE CHOICE (MCQ) --- */
+        function renderMCQQuestion(q, container) {
+            const letters = ['A', 'B', 'C', 'D'];
+            container.innerHTML = `
+                <div class="max-w-5xl mx-auto w-full space-y-5">
+                    <div class="text-center">
+                        <span class="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-sm mb-2">
+                            ${q.tag}
+                        </span>
+                        <h3 class="font-display text-xl sm:text-3xl font-bold text-slate-800 leading-snug">
+                            ${q.prompt}
+                        </h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="submitMCQ(${idx})" class="btn-option bg-white hover:bg-ocean-50 border-2 border-slate-300 hover:border-ocean-500 rounded-2xl p-4 sm:p-5 text-left flex items-center gap-4 group">
+                                <span class="w-12 h-12 rounded-2xl bg-slate-100 group-hover:bg-ocean-600 group-hover:text-white font-display font-bold text-xl text-slate-700 flex items-center justify-center shrink-0 transition">
+                                    ${letters[idx]}
+                                </span>
+                                <span class="text-base sm:text-lg font-bold text-slate-700 group-hover:text-slate-900 leading-snug">
+                                    ${opt}
+                                </span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitMCQ(selectedIndex) {
+            stopTimer();
+            const q = EXPEDITION_ZONES[state.activeZoneIdx].questions[state.activeQuestionIdx];
+            const isCorrect = selectedIndex === q.correctIndex;
+            evaluateScoreAndFeedback(isCorrect, q);
+        }
+
+        /* --- TYPE C: DATA LAB CHART (LKPD 1C DATA A & DATA B GIRAFFES) --- */
+        function renderDataChartQuestion(q, container) {
+            const letters = ['A', 'B', 'C', 'D'];
+            let visualPanel = '';
+
+            if (q.chartType === 'dataA') {
+                visualPanel = `
+                    <div class="bg-amber-50 border-2 border-amber-300 rounded-3xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4">
+                        <div class="w-20 h-20 rounded-2xl bg-amber-400 text-white flex items-center justify-center text-4xl shrink-0 shadow">
+                            💪👶
+                        </div>
+                        <div>
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-amber-800">Kartu Data Hipotetis A (LKPD 1C)</div>
+                            <p class="text-slate-800 font-bold text-base sm:text-lg mt-1">
+                                Seorang atlet memiliki otot lengan sangat besar karena latihan angkat beban bertahun-tahun. Namun, anak-anaknya lahir dengan otot bayi normal (tidak otomatis besar).
+                            </p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                visualPanel = `
+                    <div class="bg-amber-50/80 border-2 border-amber-300 rounded-3xl p-4 sm:p-5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200 px-3 py-1 rounded-full">
+                                📊 Data Hipotetis B: Populasi 20 Jerapah Induk (Musim Kering)
+                            </span>
+                            <span class="text-xs font-bold text-slate-600">Total Induk = 20 ekor</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                            <!-- Data Table -->
+                            <div class="md:col-span-6 overflow-hidden rounded-2xl border border-amber-300 bg-white">
+                                <table class="w-full text-left text-sm sm:text-base">
+                                    <thead class="bg-amber-500 text-white font-display">
+                                        <tr>
+                                            <th class="py-2 px-3">Panjang Leher Induk</th>
+                                            <th class="py-2 px-3 text-center">Jml Induk</th>
+                                            <th class="py-2 px-3 text-center">Rata-rata Anak Dewasa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-amber-100 font-bold text-slate-700">
+                                        <tr><td class="py-2 px-3">🦒 Pendek</td><td class="py-2 px-3 text-center">6</td><td class="py-2 px-3 text-center text-coral-600">1,0</td></tr>
+                                        <tr><td class="py-2 px-3">🦒 Sedang</td><td class="py-2 px-3 text-center">8</td><td class="py-2 px-3 text-center text-amber-600">2,0</td></tr>
+                                        <tr><td class="py-2 px-3">🦒 Panjang</td><td class="py-2 px-3 text-center">6</td><td class="py-2 px-3 text-center text-emerald-600">3,0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Interactive Visual Bar Chart -->
+                            <div class="md:col-span-6 bg-white rounded-2xl border border-amber-300 p-3.5">
+                                <div class="text-xs font-bold text-slate-500 mb-2 text-center">Grafik Rata-rata Anak Mencapai Dewasa per Induk</div>
+                                <div class="space-y-2.5">
+                                    <div>
+                                        <div class="flex justify-between text-xs font-bold mb-1"><span>Leher Pendek (6 induk)</span><span class="text-coral-600">1,0 anak/induk</span></div>
+                                        <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden"><div class="bg-coral-500 h-full rounded-full" style="width: 33.3%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs font-bold mb-1"><span>Leher Sedang (8 induk)</span><span class="text-amber-600">2,0 anak/induk</span></div>
+                                        <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden"><div class="bg-amber-500 h-full rounded-full" style="width: 66.6%"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs font-bold mb-1"><span>Leher Panjang (6 induk)</span><span class="text-emerald-600">3,0 anak/induk</span></div>
+                                        <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full rounded-full" style="width: 100%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="max-w-5xl mx-auto w-full space-y-4">
+                    ${visualPanel}
+                    <h3 class="font-display text-lg sm:text-2xl font-bold text-slate-800 leading-snug">
+                        ${q.prompt}
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="submitMCQ(${idx})" class="btn-option bg-white hover:bg-amber-50 border-2 border-slate-300 hover:border-amber-500 rounded-2xl p-3.5 sm:p-4 text-left flex items-center gap-3.5 group">
+                                <span class="w-11 h-11 rounded-xl bg-slate-100 group-hover:bg-amber-500 group-hover:text-white font-display font-bold text-lg text-slate-700 flex items-center justify-center shrink-0 transition">
+                                    ${letters[idx]}
+                                </span>
+                                <span class="text-sm sm:text-base font-bold text-slate-700 group-hover:text-slate-900 leading-snug">
+                                    ${opt}
+                                </span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        /* --- TYPE D: TOUCH-FRIENDLY SORTING MINI-GAME (HOMOLOG / ANALOG / VESTIGIAL) --- */
+        function renderSortingMiniGame(q, container, footer) {
+            state.selectedSortItem = null;
+            state.sortAssignments = {};
+
+            const renderBoard = () => {
+                const unassigned = q.items.filter(item => !state.sortAssignments[item.id]);
+
+                container.innerHTML = `
+                    <div class="max-w-6xl mx-auto w-full space-y-4">
+                        <div class="text-center">
+                            <span class="inline-block px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs sm:text-sm mb-1">
+                                ${q.tag}
+                            </span>
+                            <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-800">${q.prompt}</h3>
+                            <p class="text-sm text-slate-500 font-semibold">${q.subprompt}</p>
+                        </div>
+
+                        <!-- Unassigned Cards Pool -->
+                        <div class="bg-slate-100/90 border-2 border-dashed border-slate-300 rounded-2xl p-3 min-h-[76px] flex flex-wrap items-center justify-center gap-2.5">
+                            ${unassigned.length === 0
+                                ? `<span class="text-emerald-700 font-bold text-base">✨ Semua kartu telah ditempatkan! Tekan tombol "Periksa Klasifikasi" di bawah.</span>`
+                                : unassigned.map(item => {
+                                    const isSel = state.selectedSortItem === item.id;
+                                    return `
+                                        <button type="button" onclick="selectSortCard('${item.id}')"
+                                            class="px-4 py-3 rounded-2xl font-bold text-sm sm:text-base transition shadow-sm border-2 ${
+                                                isSel
+                                                    ? 'bg-amber-400 text-slate-950 border-amber-600 scale-105 ring-4 ring-amber-200'
+                                                    : 'bg-white text-slate-800 border-slate-300 hover:border-ocean-500'
+                                            }">
+                                            🦴 ${item.text}
+                                        </button>
+                                    `;
+                                }).join('')
+                            }
+                        </div>
+
+                        <!-- 3 Category Buckets -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            ${q.buckets.map(b => {
+                                const assignedItems = q.items.filter(it => state.sortAssignments[it.id] === b.id);
+                                const bStyles = {
+                                    ocean: 'border-ocean-500 bg-ocean-50/70 text-ocean-900',
+                                    amber: 'border-amber-500 bg-amber-50/70 text-amber-900',
+                                    violet: 'border-violet-500 bg-violet-50/70 text-violet-900'
+                                }[b.color];
+
+                                return `
+                                    <div onclick="placeInBucket('${b.id}')"
+                                        class="cursor-pointer rounded-3xl border-3 ${bStyles} p-4 min-h-[190px] flex flex-col justify-between transition hover:shadow-md ${state.selectedSortItem ? 'ring-2 ring-dashed ring-slate-400' : ''}">
+                                        <div>
+                                            <div class="font-display text-xl font-bold text-center">${b.label}</div>
+                                            <div class="text-xs font-semibold text-center opacity-80 mb-3">${b.desc}</div>
+                                            <div class="space-y-2">
+                                                ${assignedItems.map(it => `
+                                                    <div onclick="event.stopPropagation(); removeFromBucket('${it.id}')"
+                                                        title="Ketuk untuk mengembalikan kartu"
+                                                        class="bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm font-bold text-slate-800 flex items-center justify-between shadow-sm hover:bg-rose-50">
+                                                        <span>${it.text}</span>
+                                                        <span class="text-xs text-rose-500 font-extrabold ml-2">✕</span>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                        <div class="text-center text-xs font-bold opacity-60 pt-2">
+                                            ${state.selectedSortItem ? '👇 Ketuk kotak ini untuk menaruh kartu' : 'Ketuk kartu di atas lalu pilih kotak ini'}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+
+                // Show submit button when all 6 items are placed
+                if (unassigned.length === 0) {
+                    footer.classList.remove('hidden');
+                    footer.innerHTML = `
+                        <button onclick="submitSortingMiniGame()" class="btn-3d btn-3d-emerald text-white font-display font-bold text-xl px-8 py-3.5 rounded-2xl">
+                            ✅ Periksa Klasifikasi Struktur
+                        </button>
+                    `;
+                } else {
+                    footer.classList.add('hidden');
+                }
+            };
+
+            window.selectSortCard = (itemId) => {
+                SFX.tap();
+                state.selectedSortItem = (state.selectedSortItem === itemId) ? null : itemId;
+                renderBoard();
+            };
+
+            window.placeInBucket = (bucketId) => {
+                if (!state.selectedSortItem) return;
+                SFX.tap();
+                state.sortAssignments[state.selectedSortItem] = bucketId;
+                state.selectedSortItem = null;
+                renderBoard();
+            };
+
+            window.removeFromBucket = (itemId) => {
+                SFX.tap();
+                delete state.sortAssignments[itemId];
+                renderBoard();
+            };
+
+            renderBoard();
+        }
+
+        function submitSortingMiniGame() {
+            stopTimer();
+            const q = EXPEDITION_ZONES[state.activeZoneIdx].questions[state.activeQuestionIdx];
+            let correctCount = 0;
+            q.items.forEach(item => {
+                if (state.sortAssignments[item.id] === item.target) correctCount++;
+            });
+            const isAllCorrect = correctCount === q.items.length;
+            evaluateScoreAndFeedback(
+                isAllCorrect,
+                q,
+                isAllCorrect ? "Klasifikasi Sempurna (6/6)! 🎉" : `Benar ${correctCount} dari 6 Struktur`
+            );
+        }
+
+        /* --- TYPE E: MATCHING MINI-GAME (LAMARCK VS DARWIN-WALLACE LKPD 1C) --- */
+        function renderMatchingMiniGame(q, container, footer) {
+            state.matchingSelections = {};
+
+            const renderRows = () => {
+                const allAnswered = q.pairs.every(p => state.matchingSelections[p.id]);
+                container.innerHTML = `
+                    <div class="max-w-5xl mx-auto w-full space-y-4">
+                        <div class="text-center">
+                            <span class="inline-block px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs sm:text-sm mb-1">
+                                ${q.tag}
+                            </span>
+                            <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-800">${q.prompt}</h3>
+                        </div>
+
+                        <div class="space-y-3">
+                            ${q.pairs.map((pair, idx) => {
+                                const chosen = state.matchingSelections[pair.id];
+                                return `
+                                    <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-3.5 sm:p-4 flex flex-col md:flex-row items-center justify-between gap-3">
+                                        <div class="font-bold text-slate-800 text-sm sm:text-base flex-1">
+                                            <span class="text-amber-600 font-display mr-1.5">${idx + 1}.</span> ${pair.statement}
+                                        </div>
+                                        <div class="flex items-center gap-2.5 shrink-0 w-full md:w-auto">
+                                            <button type="button" onclick="chooseMatch('${pair.id}', 'Lamarck')"
+                                                class="flex-1 md:flex-none px-4 py-3 rounded-xl font-display font-bold text-base border-2 transition ${
+                                                    chosen === 'Lamarck'
+                                                        ? 'bg-coral-500 text-white border-coral-700 shadow'
+                                                        : 'bg-white text-slate-700 border-slate-300 hover:border-coral-400'
+                                                }">
+                                                Lamarck
+                                            </button>
+                                            <button type="button" onclick="chooseMatch('${pair.id}', 'Darwin-Wallace')"
+                                                class="flex-1 md:flex-none px-4 py-3 rounded-xl font-display font-bold text-base border-2 transition ${
+                                                    chosen === 'Darwin-Wallace'
+                                                        ? 'bg-emerald-600 text-white border-emerald-800 shadow'
+                                                        : 'bg-white text-slate-700 border-slate-300 hover:border-emerald-400'
+                                                }">
+                                                Darwin–Wallace
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+
+                if (allAnswered) {
+                    footer.classList.remove('hidden');
+                    footer.innerHTML = `
+                        <button onclick="submitMatchingMiniGame()" class="btn-3d btn-3d-amber text-white font-display font-bold text-xl px-8 py-3.5 rounded-2xl">
+                            ✅ Periksa Tabel Perbandingan
+                        </button>
+                    `;
+                } else {
+                    footer.classList.add('hidden');
+                }
+            };
+
+            window.chooseMatch = (pairId, val) => {
+                SFX.tap();
+                state.matchingSelections[pairId] = val;
+                renderRows();
+            };
+
+            renderRows();
+        }
+
+        function submitMatchingMiniGame() {
+            stopTimer();
+            const q = EXPEDITION_ZONES[state.activeZoneIdx].questions[state.activeQuestionIdx];
+            let correctCount = 0;
+            q.pairs.forEach(p => {
+                if (state.matchingSelections[p.id] === p.answer) correctCount++;
+            });
+            const isAllCorrect = correctCount === q.pairs.length;
+            evaluateScoreAndFeedback(
+                isAllCorrect,
+                q,
+                isAllCorrect ? "Tabel Perbandingan Tepat (4/4)! 🎉" : `Benar ${correctCount} dari 4 Pernyataan`
+            );
+        }
+
+        /* =========================================================================
+           9. SCORING & FEEDBACK MODAL
+           ========================================================================= */
+        function evaluateScoreAndFeedback(isCorrect, questionObj, customTitle = null) {
+            const team = state.teams[state.currentTeamIdx];
+            const isAlreadyCompleted = state.completedQuestions.has(questionObj.id);
+            let earnedPoints = 0;
+
+            if (isCorrect) {
+                SFX.correct();
+                team.streak += 1;
+                const streakBonus = (team.streak >= 2) ? 20 : 0;
+                earnedPoints = isAlreadyCompleted ? 25 : (100 + streakBonus);
+                team.score += earnedPoints;
+                state.completedQuestions.add(questionObj.id);
+            } else {
+                SFX.wrong();
+                team.streak = 0;
+                state.completedQuestions.add(questionObj.id);
+                document.getElementById('question-workspace').classList.add('animate-shake');
+                setTimeout(() => document.getElementById('question-workspace').classList.remove('animate-shake'), 450);
+            }
+
+            updateScoreboardUI();
+
+            const titleText = customTitle || (isCorrect ? "Jawaban Tepat Sekali! 🎉" : "Kurang Tepat — Mari Pelajari! 🔍");
+            showFeedbackModal(isCorrect, earnedPoints, titleText, questionObj.explanation);
+        }
+
+        function showFeedbackModal(isCorrect, points, title, explanation) {
+            const modal = document.getElementById('feedback-modal');
+            const iconBox = document.getElementById('fb-icon-box');
+            const ptsBadge = document.getElementById('fb-points-badge');
+            const titleEl = document.getElementById('fb-title');
+            const expEl = document.getElementById('fb-explanation');
+
+            iconBox.textContent = isCorrect ? '🌟' : '💡';
+            iconBox.className = `w-16 h-16 rounded-2xl flex items-center justify-center text-4xl shrink-0 ${
+                isCorrect ? 'bg-emerald-100' : 'bg-amber-100'
+            }`;
+
+            ptsBadge.textContent = isCorrect ? `+${points} Poin untuk ${state.teams[state.currentTeamIdx].name}!` : `0 Poin • Giliran Berikutnya`;
+            ptsBadge.className = `inline-block text-sm font-extrabold px-3.5 py-1 rounded-full mb-1 ${
+                isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+            }`;
+
+            titleEl.textContent = title;
+            expEl.textContent = explanation;
+
+            modal.classList.remove('hidden');
+        }
+
+        function proceedAfterFeedback() {
+            SFX.tap();
+            document.getElementById('feedback-modal').classList.add('hidden');
+            advanceTeamTurn();
+
+            const zone = EXPEDITION_ZONES[state.activeZoneIdx];
+            if (state.activeQuestionIdx + 1 < zone.questions.length) {
+                state.activeQuestionIdx++;
+                renderCurrentQuestion();
+            } else {
+                // Zone finished! Check if all zones finished
+                const totalQ = EXPEDITION_ZONES.reduce((sum, z) => sum + z.questions.length, 0);
+                if (state.completedQuestions.size >= totalQ) {
+                    showPodium();
+                } else {
+                    switchScreen('screen-map');
+                    renderExpeditionMap();
+                }
+            }
+        }
+
+        /* =========================================================================
+           10. PODIUM, CONFETTI & RESET
+           ========================================================================= */
+        function showPodium() {
+            SFX.fanfare();
+            switchScreen('screen-podium');
+            launchConfetti();
+
+            const sorted = [...state.teams].sort((a, b) => b.score - a.score);
+            const podiumContainer = document.getElementById('podium-standings');
+            podiumContainer.innerHTML = '';
+
+            const medals = ['🥇', '🥈', '🥉', '🏅', '🎖️'];
+
+            sorted.forEach((team, idx) => {
+                const color = TEAM_COLORS[team.colorIdx];
+                const isFirst = idx === 0;
+                const card = document.createElement('div');
+                card.className = `rounded-3xl p-5 text-center border-3 flex flex-col justify-between ${
+                    isFirst
+                        ? 'bg-gradient-to-b from-amber-100 to-amber-50 border-amber-400 shadow-xl scale-105'
+                        : `bg-white ${color.border} shadow-md`
+                }`;
+                card.innerHTML = `
+                    <div>
+                        <div class="text-4xl mb-2">${medals[idx] || '🏅'}</div>
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Peringkat #${idx + 1}</div>
+                        <div class="font-display text-xl font-bold text-slate-800 mt-1 truncate">${team.name}</div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-200/70">
+                        <div class="font-display text-3xl font-bold ${isFirst ? 'text-amber-600' : 'text-ocean-600'}">
+                            ${team.score}
+                        </div>
+                        <div class="text-xs font-bold text-slate-500">Total Poin</div>
+                    </div>
+                `;
+                podiumContainer.appendChild(card);
+            });
+        }
+
+        function confirmGoHome() {
+            SFX.tap();
+            const isSetupVisible = !document.getElementById('screen-setup').classList.contains('hidden');
+            if (isSetupVisible) return;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            SFX.tap();
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function resetEntireGame() {
+            SFX.tap();
+            closeConfirmModal();
+            stopTimer();
+            document.getElementById('top-scoreboard').classList.add('hidden');
+            document.getElementById('timer-badge').classList.add('hidden');
+            switchScreen('screen-setup');
+        }
+
+        /* Lightweight Confetti Animation */
+        function launchConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const colors = ['#0ea5e9', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6'];
+            const pieces = Array.from({ length: 90 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                r: Math.random() * 7 + 4,
+                d: Math.random() * 4 + 2,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                tilt: Math.random() * 10 - 5
+            }));
+
+            let frame = 0;
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    ctx.beginPath();
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.r * 1.4, p.r);
+                    p.y += p.d;
+                    p.x += Math.sin(frame * 0.05 + p.tilt) * 1.5;
+                });
+                frame++;
+                if (frame < 160) {
+                    requestAnimationFrame(draw);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            draw();
+        }
+
+        // Initialize on Load
+        window.onload = function () {
+            initSetupScreen();
+        };
+    </script>
+</body>
+</html>
