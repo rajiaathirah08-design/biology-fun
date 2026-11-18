@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENGAPA POPULASI BERUBAH? Ekspedisi Evolusi</title>
+    <style>
+        /* =====================================================================
+           1. RESET, DESIGN TOKENS & SMART BOARD TYPOGRAPHY (OFFLINE / SELF-CONTAINED)
+           ===================================================================== */
+        :root {
+            --bg-grad-1: #e0f2fe;
+            --bg-grad-2: #dcfce7;
+            --bg-grad-3: #fef9c3;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-light: #e2e8f0;
+
+            --ocean-50: #f0f9ff;
+            --ocean-100: #e0f2fe;
+            --ocean-500: #0ea5e9;
+            --ocean-600: #0284c7;
+            --ocean-700: #0369a1;
+            --ocean-900: #0c4a6e;
+
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --emerald-900: #064e3b;
+
+            --amber-50: #fffbeb;
+            --amber-100: #fef3c7;
+            --amber-400: #fbbf24;
+            --amber-500: #f59e0b;
+            --amber-600: #d97706;
+            --amber-800: #92400e;
+
+            --coral-50: #fff1f2;
+            --coral-100: #ffe4e6;
+            --coral-500: #f43f5e;
+            --coral-600: #e11d48;
+            --coral-800: #9f1239;
+
+            --violet-50: #f5f3ff;
+            --violet-100: #ede9fe;
+            --violet-500: #8b5cf6;
+            --violet-600: #7c3aed;
+            --violet-800: #5b21b6;
+
+            --radius-xl: 18px;
+            --radius-2xl: 24px;
+            --radius-3xl: 32px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 50%, var(--bg-grad-3) 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            line-height: 1.5;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Layout Container */
+        .app-shell {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 14px 18px 28px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =====================================================================
+           2. 3D TACTILE SMART BOARD BUTTONS & CARDS
+           ===================================================================== */
+        .card-main {
+            background: rgba(255, 255, 255, 0.96);
+            border: 4px solid #ffffff;
+            border-radius: var(--radius-3xl);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            padding: 24px 28px;
+        }
+
+        .btn-3d {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            border-radius: var(--radius-2xl);
+            font-weight: 800;
+            cursor: pointer;
+            min-height: 62px;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            color: #ffffff;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.15s ease;
+        }
+        .btn-3d:hover:not(:disabled) { filter: brightness(1.04); }
+        .btn-3d:active:not(:disabled) { transform: translateY(4px) scale(0.99); }
+        .btn-3d:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-emerald {
+            background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+            box-shadow: 0 6px 0 #047857, 0 10px 20px rgba(5, 150, 105, 0.25);
+        }
+        .btn-emerald:active:not(:disabled) { box-shadow: 0 2px 0 #047857; }
+
+        .btn-ocean {
+            background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+            box-shadow: 0 6px 0 #0369a1, 0 10px 20px rgba(2, 132, 199, 0.25);
+        }
+        .btn-ocean:active:not(:disabled) { box-shadow: 0 2px 0 #0369a1; }
+
+        .btn-amber {
+            background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+            box-shadow: 0 6px 0 #b45309, 0 10px 20px rgba(217, 119, 6, 0.25);
+        }
+        .btn-amber:active:not(:disabled) { box-shadow: 0 2px 0 #b45309; }
+
+        .btn-coral {
+            background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+            box-shadow: 0 6px 0 #be123c, 0 10px 20px rgba(225, 29, 72, 0.25);
+        }
+        .btn-coral:active:not(:disabled) { box-shadow: 0 2px 0 #be123c; }
+
+        .btn-violet {
+            background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+            box-shadow: 0 6px 0 #5b21b6, 0 10px 20px rgba(124, 58, 237, 0.25);
+        }
+        .btn-violet:active:not(:disabled) { box-shadow: 0 2px 0 #5b21b6; }
+
+        .btn-choice {
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: var(--radius-2xl);
+            box-shadow: 0 5px 0 #cbd5e1;
+            padding: 16px 20px;
+            min-height: 74px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--text-main);
+            transition: all 0.14s ease;
+            width: 100%;
+        }
+        .btn-choice:hover:not(:disabled) {
+            border-color: var(--ocean-500);
+            background: var(--ocean-50);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 var(--ocean-500);
+        }
+        .btn-choice:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--ocean-500);
+        }
+
+        .choice-letter {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 900;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-choice:hover .choice-letter {
+            background: var(--ocean-600);
+            color: #ffffff;
+        }
+
+        /* =====================================================================
+           3. TOP FIXED HEADER & SCOREBOARD BAR
+           ===================================================================== */
+        .top-bar {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #ffffff;
+            border-radius: var(--radius-3xl);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            padding: 12px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .home-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, var(--emerald-500), var(--ocean-600));
+            color: #ffffff;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+        }
+
+        .badge-lkpd {
+            display: inline-block;
+            background: var(--emerald-100);
+            color: var(--emerald-700);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+        .app-title span { color: var(--ocean-600); }
+
+        .scoreboard-strip {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .team-pill {
+            border-radius: 16px;
+            padding: 6px 12px;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .team-pill.active {
+            transform: scale(1.06);
+            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.55);
+            border-color: #f59e0b;
+            color: #ffffff;
+        }
+        .team-score-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 1rem;
+            background: rgba(15, 23, 42, 0.08);
+        }
+        .team-pill.active .team-score-badge {
+            background: rgba(0, 0, 0, 0.25);
+            color: #fef08a;
+        }
+
+        .utility-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .timer-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--amber-100);
+            border: 2px solid var(--amber-400);
+            color: var(--amber-800);
+            padding: 6px 10px;
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 1.05rem;
+        }
+        .timer-box.danger {
+            background: var(--coral-100);
+            border-color: var(--coral-500);
+            color: var(--coral-800);
+            animation: pulseFast 0.8s infinite;
+        }
+
+        .util-btn {
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: var(--text-main);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-weight: 800;
+            font-size: 0.92rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .util-btn:hover { background: #e2e8f0; }
+        .util-btn.violet {
+            background: var(--violet-100);
+            border-color: #c4b5fd;
+            color: var(--violet-800);
+        }
+        .util-btn.ocean {
+            background: var(--ocean-100);
+            border-color: #7dd3fc;
+            color: var(--ocean-900);
+        }
+        .mini-icon-btn {
+            border: none;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            padding: 4px 8px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* =====================================================================
+           4. SETUP / LOBBY SCREEN
+           ===================================================================== */
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 24px;
+            align-items: stretch;
+        }
+        @media (max-width: 960px) {
+            .setup-grid { grid-template-columns: 1fr; }
+        }
+
+        .hero-panel {
+            background: linear-gradient(145deg, #0284c7 0%, #059669 65%, #0f766e 100%);
+            border-radius: var(--radius-2xl);
+            padding: 26px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            width: fit-content;
+        }
+        .hero-title {
+            font-size: 2.05rem;
+            font-weight: 900;
+            line-height: 1.18;
+        }
+        .hero-desc {
+            font-size: 1.05rem;
+            color: #e0f2fe;
+        }
+        .hero-features {
+            background: rgba(255, 255, 255, 0.14);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .setup-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .section-label {
+            font-size: 1.12rem;
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pill-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+        .pill-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .pill-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        @media (max-width: 640px) {
+            .pill-grid-5 { grid-template-columns: repeat(3, 1fr); }
+            .pill-grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .opt-card {
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 1rem;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.14s ease;
+        }
+        .opt-card small {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .opt-card.selected-emerald {
+            border-color: var(--emerald-500);
+            background: var(--emerald-50);
+            color: var(--emerald-900);
+        }
+        .opt-card.selected-violet {
+            border-color: var(--violet-500);
+            background: var(--violet-50);
+            color: var(--violet-800);
+        }
+        .opt-card.selected-ocean {
+            border-color: var(--ocean-500);
+            background: var(--ocean-50);
+            color: var(--ocean-900);
+        }
+
+        .team-inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 10px;
+        }
+        .team-input-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 16px;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+        }
+        .team-num-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .team-input-box input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            background: #ffffff;
+        }
+
+        /* =====================================================================
+           5. EXPEDITION MAP SCREEN (4 ZONA LKPD)
+           ===================================================================== */
+        .map-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .turn-banner {
+            background: var(--amber-100);
+            border: 3px solid var(--amber-400);
+            border-radius: 20px;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .zones-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+        @media (max-width: 820px) {
+            .zones-grid { grid-template-columns: 1fr; }
+        }
+
+        .zone-card {
+            border-radius: 26px;
+            padding: 22px;
+            border: 3px solid #cbd5e1;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .zone-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+        }
+        .zone-card.ocean { border-color: #38bdf8; background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%); }
+        .zone-card.emerald { border-color: #34d399; background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 100%); }
+        .zone-card.amber { border-color: #fbbf24; background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%); }
+        .zone-card.violet { border-color: #a78bfa; background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%); }
+
+        .zone-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .zone-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+        }
+        .zone-status {
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            background: #e2e8f0;
+            color: #334155;
+        }
+        .zone-status.done {
+            background: var(--emerald-100);
+            color: var(--emerald-800);
+        }
+
+        /* =====================================================================
+           6. GAMEPLAY ARENA & MINI-GAMES (SORTING, MATCHING, DATA LAB)
+           ===================================================================== */
+        .arena-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #f1f5f9;
+            margin-bottom: 18px;
+        }
+
+        .question-prompt-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+            border: 2px solid #bae6fd;
+            border-radius: 24px;
+            padding: 22px 26px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .question-tag {
+            display: inline-block;
+            background: var(--ocean-100);
+            color: var(--ocean-900);
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+        }
+        .question-title {
+            font-size: 1.55rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.32;
+        }
+        .question-sub {
+            font-size: 1.02rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+        @media (max-width: 768px) {
+            .choices-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Data Lab (LKPD 1C) */
+        .data-lab-box {
+            background: var(--amber-50);
+            border: 3px solid #fcd34d;
+            border-radius: 24px;
+            padding: 18px 20px;
+            margin-bottom: 16px;
+        }
+        .data-b-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        @media (max-width: 820px) {
+            .data-b-grid { grid-template-columns: 1fr; }
+        }
+        .lkpd-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            font-size: 0.98rem;
+        }
+        .lkpd-table th {
+            background: var(--amber-500);
+            color: #ffffff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 800;
+        }
+        .lkpd-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #fef3c7;
+            font-weight: 800;
+        }
+        .bar-chart-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 14px 16px;
+            border: 1px solid #fde68a;
+        }
+        .bar-row { margin-bottom: 10px; }
+        .bar-row:last-child { margin-bottom: 0; }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .bar-track {
+            height: 16px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        /* Tap-to-Sort Mini-Game (LKPD 1B) */
+        .sort-pool {
+            background: #f1f5f9;
+            border: 3px dashed #94a3b8;
+            border-radius: 22px;
+            padding: 14px;
+            min-height: 84px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .sort-chip {
+            background: #ffffff;
+            border: 3px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 4px 0 #cbd5e1;
+            transition: all 0.14s ease;
+        }
+        .sort-chip.selected {
+            background: var(--amber-400);
+            border-color: #b45309;
+            box-shadow: 0 4px 0 #b45309, 0 0 0 5px rgba(251, 191, 36, 0.45);
+            transform: scale(1.04);
+        }
+        .buckets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        @media (max-width: 820px) {
+            .buckets-grid { grid-template-columns: 1fr; }
+        }
+        .bucket-box {
+            border-radius: 24px;
+            border: 3px solid #cbd5e1;
+            padding: 16px;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .bucket-box.ocean { background: var(--ocean-50); border-color: var(--ocean-500); }
+        .bucket-box.amber { background: var(--amber-50); border-color: var(--amber-500); }
+        .bucket-box.violet { background: var(--violet-50); border-color: var(--violet-500); }
+        .bucket-box.ready {
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.35);
+        }
+        .placed-item {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        /* Tap-to-Match Mini-Game (LKPD 1C) */
+        .match-row {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .match-statement {
+            flex: 1;
+            min-width: 260px;
+            font-weight: 800;
+            font-size: 1.04rem;
+            color: var(--text-main);
+        }
+        .match-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .match-pill {
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 3px solid #cbd5e1;
+            background: #ffffff;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 155px;
+        }
+        .match-pill.sel-lamarck {
+            background: var(--coral-500);
+            border-color: var(--coral-800);
+            color: #ffffff;
+        }
+        .match-pill.sel-darwin {
+            background: var(--emerald-600);
+            border-color: var(--emerald-900);
+            color: #ffffff;
+        }
+
+        /* =====================================================================
+           7. MODALS (FEEDBACK, LKPD SUMMARY GUIDE, CONFIRM) & PODIUM
+           ===================================================================== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.72);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+        }
+        .modal-card {
+            background: #ffffff;
+            border: 4px solid #ffffff;
+            border-radius: 30px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 26px 28px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            animation: popIn 0.25s ease;
+        }
+        .explanation-box {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin: 18px 0 22px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Podium & Reflection */
+        .podium-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .podium-card {
+            border-radius: 24px;
+            padding: 18px;
+            text-align: center;
+            border: 3px solid #cbd5e1;
+            background: #ffffff;
+        }
+        .podium-card.first {
+            background: linear-gradient(180deg, #fef3c7 0%, #fffbeb 100%);
+            border-color: #f59e0b;
+            transform: scale(1.03);
+            box-shadow: 0 12px 24px rgba(245, 158, 11, 0.22);
+        }
+        .accuracy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+        .ref-item {
+            background: #ffffff;
+            border: 2px solid #a7f3d0;
+            border-radius: 18px;
+            padding: 14px 16px;
+        }
+
+        /* =====================================================================
+           8. PURE CSS CONFETTI & ANIMATIONS
+           ===================================================================== */
+        #confetti-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 60;
+        }
+        .confetti-piece {
+            position: absolute;
+            top: -20px;
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes pulseFast {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pure CSS Confetti Layer -->
+    <div id="confetti-layer"></div>
+
+    <div class="app-shell">
+        <!-- ==================== TOP FIXED BAR ==================== -->
+        <header class="top-bar">
+            <div class="brand-box">
+                <button type="button" class="home-btn" onclick="openHomeConfirm()" title="Kembali ke Layar Pengaturan">🧬</button>
+                <div>
+                    <span class="badge-lkpd">LKPD Evolusi • Pertemuan 1</span>
+                    <div class="app-title">MENGAPA POPULASI BERUBAH? <span>Ekspedisi Evolusi</span></div>
+                </div>
+            </div>
+
+            <!-- Live Team Scoreboard -->
+            <div id="scoreboard-strip" class="scoreboard-strip hidden"></div>
+
+            <!-- Timer, LKPD Guide Modal, and Fullscreen -->
+            <div class="utility-group">
+                <div id="timer-box" class="timer-box hidden">
+                    <span>⏱️ <span id="timer-display">45d</span></span>
+                    <button type="button" id="btn-timer-toggle" class="mini-icon-btn" onclick="toggleTimerPause()" title="Jeda / Lanjutkan Waktu">⏸️</button>
+                    <button type="button" class="mini-icon-btn" onclick="resetTimer()" title="Reset Waktu">↻</button>
+                </div>
+
+                <button type="button" class="util-btn violet" onclick="openGuideModal()">
+                    📖 Petunjuk LKPD
+                </button>
+
+                <button type="button" class="util-btn ocean" onclick="toggleFullscreen()">
+                    ⛶ Layar Penuh
+                </button>
+            </div>
+        </header>
+
+        <!-- ==================== SCREEN 1: SETUP / LOBBY ==================== -->
+        <main id="screen-setup" class="card-main">
+            <div class="setup-grid">
+                <!-- Left Educational Board Banner -->
+                <div class="hero-panel">
+                    <div>
+                        <div class="hero-pill">🧭 Game Papan Petualangan Sains</div>
+                        <h1 class="hero-title" style="margin-top: 12px;">Menelusuri Evolusi dari Bukti, Variasi, Seleksi hingga Hanyutan Genetik</h1>
+                        <p class="hero-desc" style="margin-top: 10px;">
+                            Dirancang khusus untuk layar sentuh <strong>Smart Board</strong> kelas. Siswa bekerja dalam kelompok untuk menaklukkan 4 Zona Misi LKPD Pertemuan 1 secara interaktif!
+                        </p>
+                    </div>
+
+                    <div class="hero-features">
+                        <!-- Custom Inline SVG Giraffe & DNA Emblem -->
+                        <svg width="78" height="78" viewBox="0 0 100 100" fill="none" style="flex-shrink:0;">
+                            <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,0.2)"/>
+                            <path d="M40 88 L45 40 L55 40 L60 88 Z" fill="#fbbf24"/>
+                            <ellipse cx="52" cy="34" rx="12" ry="8" fill="#fbbf24"/>
+                            <circle cx="47" cy="23" r="3" fill="#78350f"/>
+                            <circle cx="57" cy="23" r="3" fill="#78350f"/>
+                            <line x1="47" y1="26" x2="47" y2="29" stroke="#78350f" stroke-width="3"/>
+                            <line x1="57" y1="26" x2="57" y2="29" stroke="#78350f" stroke-width="3"/>
+                            <circle cx="49" cy="33" r="2.2" fill="#0f172a"/>
+                            <circle cx="57" cy="33" r="2.2" fill="#0f172a"/>
+                            <circle cx="49" cy="53" r="4" fill="#d97706"/>
+                            <circle cx="53" cy="67" r="4.5" fill="#d97706"/>
+                            <circle cx="47" cy="79" r="3.5" fill="#d97706"/>
+                        </svg>
+                        <div>
+                            <div style="font-weight: 900; font-size: 1.1rem; color: #fde047;">Cakupan Materi LKPD 1A – 1D:</div>
+                            <div style="font-size: 0.92rem; margin-top: 4px;">
+                                • Zona 1: Diagnostik Mitos vs Fakta (LKPD 1A)<br>
+                                • Zona 2: 5 Stasiun Bukti & Tap-to-Sort Struktur (LKPD 1B)<br>
+                                • Zona 3: Lab Data Jerapah & Tap-to-Match (LKPD 1C)<br>
+                                • Zona 4: Kalimat Ilmiah & Mekanisme Populasi (LKPD 1D)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Setup Controls -->
+                <div class="setup-controls">
+                    <!-- 1. Team Count -->
+                    <div>
+                        <div class="section-label">
+                            <span>1. Jumlah Tim Kelompok (1–5 Tim):</span>
+                        </div>
+                        <div class="pill-grid-5" id="team-count-group">
+                            <button type="button" class="opt-card" data-count="1" onclick="selectTeamCount(1)">1 Tim<small>Klasikal</small></button>
+                            <button type="button" class="opt-card" data-count="2" onclick="selectTeamCount(2)">2 Tim<small>Duel</small></button>
+                            <button type="button" class="opt-card" data-count="3" onclick="selectTeamCount(3)">3 Tim<small>Kelompok</small></button>
+                            <button type="button" class="opt-card" data-count="4" onclick="selectTeamCount(4)">4 Tim<small>Kelompok</small></button>
+                            <button type="button" class="opt-card selected-emerald" data-count="5" onclick="selectTeamCount(5)">5 Tim<small>5 Stasiun</small></button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Team Names -->
+                    <div>
+                        <div class="section-label">
+                            <span>2. Nama Kelompok (Ketuk untuk Edit):</span>
+                            <button type="button" class="util-btn" style="padding: 5px 10px; font-size: 0.8rem;" onclick="resetTeamNames()">Reset Nama Stasiun</button>
+                        </div>
+                        <div class="team-inputs-grid" id="team-names-grid"></div>
+                    </div>
+
+                    <!-- 3. Game Mode -->
+                    <div>
+                        <div class="section-label"><span>3. Pilih Mode Permainan:</span></div>
+                        <div class="pill-grid-2">
+                            <button type="button" class="opt-card selected-violet" data-mode="zones" onclick="selectGameMode('zones')">
+                                🗺️ Petualangan Bertahap 4 Zona LKPD
+                                <small>Menjelajah berurutan LKPD 1A → 1B → 1C → 1D</small>
+                            </button>
+                            <button type="button" class="opt-card" data-mode="arcade" onclick="selectGameMode('arcade')">
+                                🎲 Tantangan Cepat Acak
+                                <small>10 soal & mini-game acak lintas seluruh materi LKPD</small>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. Timer Duration -->
+                    <div>
+                        <div class="section-label"><span>4. Pengaturan Durasi Timer Diskusi:</span></div>
+                        <div class="pill-grid-4">
+                            <button type="button" class="opt-card selected-ocean" data-timer="0" onclick="selectTimer(0)">♾️ Tanpa Timer<small>Diskusi Bebas</small></button>
+                            <button type="button" class="opt-card" data-timer="30" onclick="selectTimer(30)">⚡ 30 Detik<small>Cepat</small></button>
+                            <button type="button" class="opt-card" data-timer="45" onclick="selectTimer(45)">⏱️ 45 Detik<small>Standar</small></button>
+                            <button type="button" class="opt-card" data-timer="60" onclick="selectTimer(60)">⏳ 60 Detik<small>Analisis Data</small></button>
+                        </div>
+                    </div>
+
+                    <!-- Start Button -->
+                    <button type="button" class="btn-3d btn-emerald" style="width: 100%; font-size: 1.4rem; padding: 18px;" onclick="startGame()">
+                        🚀 MULAI EKSPEDISI EVOLUSI
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==================== SCREEN 2: EXPEDITION BOARD MAP ==================== -->
+        <section id="screen-map" class="card-main hidden">
+            <div class="map-header">
+                <div>
+                    <span class="badge-lkpd" style="background: var(--ocean-100); color: var(--ocean-900);">Papan Petualangan Kelas</span>
+                    <h2 style="font-size: 1.85rem; font-weight: 900; margin-top: 4px;">Pilih Zona Misi LKPD Evolusi</h2>
+                </div>
+                <div class="turn-banner">
+                    <span style="font-size: 1.8rem;">🎯</span>
+                    <div>
+                        <div style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase; color: var(--amber-800);">Giliran Tim Aktif (Ketuk tim di atas untuk ganti):</div>
+                        <div id="map-active-team" style="font-size: 1.25rem; font-weight: 900; color: #78350f;">Tim Fosil</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="zones-container" class="zones-grid"></div>
+
+            <div style="margin-top: 22px; padding-top: 16px; border-top: 2px solid #f1f5f9; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+                <div style="font-weight: 800; color: var(--text-muted); font-size: 1.05rem;">
+                    Progres Kelas: <span id="map-progress-label" style="color: var(--emerald-700);">0 / 16 Tantangan Selesai</span>
+                </div>
+                <button type="button" class="btn-3d btn-amber" onclick="openPodium()">
+                    🏆 Lihat Podium & Rangkuman LKPD 1D
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 3: QUESTION & MINI-GAME ARENA ==================== -->
+        <section id="screen-arena" class="card-main hidden">
+            <div class="arena-meta">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                    <button type="button" id="btn-back-map" class="util-btn" onclick="returnToMap()">🗺️ Peta Zona</button>
+                    <span id="arena-zone-badge" class="badge-lkpd" style="font-size: 0.9rem; padding: 6px 14px; background: var(--ocean-100); color: var(--ocean-900);">Zona 1</span>
+                    <span id="arena-step-badge" class="badge-lkpd" style="font-size: 0.9rem; padding: 6px 14px; background: #f1f5f9; color: #334155;">Soal 1 / 4</span>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+                    <div style="background: var(--amber-100); border: 2px solid var(--amber-400); padding: 6px 14px; border-radius: 14px; font-weight: 900; color: var(--amber-800);">
+                        🎯 Giliran: <span id="arena-team-name">Tim Fosil</span>
+                    </div>
+                    <button type="button" class="util-btn violet" onclick="toggleQuestionHint()">
+                        💡 Petunjuk Soal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Hint Box -->
+            <div id="question-hint-box" class="hidden" style="background: var(--violet-50); border: 2px solid #c4b5fd; border-radius: 18px; padding: 14px 18px; margin-bottom: 16px; color: var(--violet-800); font-weight: 700;">
+                <strong>💡 Petunjuk LKPD:</strong> <span id="question-hint-text"></span>
+            </div>
+
+            <!-- Dynamic Question Workspace -->
+            <div id="arena-workspace"></div>
+
+            <!-- Footer for Mini-Game Check Button -->
+            <div id="arena-footer" class="hidden" style="margin-top: 18px; padding-top: 14px; border-top: 2px solid #f1f5f9; display: flex; justify-content: flex-end;"></div>
+        </section>
+
+        <!-- ==================== SCREEN 4: FINAL PODIUM & LKPD 1D REFLECTION ==================== -->
+        <section id="screen-podium" class="card-main hidden">
+            <div style="text-align: center; margin-bottom: 22px;">
+                <span class="badge-lkpd" style="background: var(--amber-100); color: var(--amber-800); font-size: 0.9rem; padding: 6px 16px;">🎉 Ekspedisi Evolusi Selesai!</span>
+                <h2 style="font-size: 2.2rem; font-weight: 900; margin-top: 8px;">Podium Peneliti Evolusi Terbaik</h2>
+            </div>
+
+            <!-- Team Rankings -->
+            <div id="podium-standings" class="podium-grid"></div>
+
+            <!-- Zone Accuracy Breakdown -->
+            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 24px; padding: 18px 20px; margin-bottom: 20px;">
+                <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 12px;">📊 Statistik Akurasi Kelas per Zona LKPD:</h3>
+                <div id="podium-accuracy-grid" class="accuracy-grid" style="margin-bottom: 0;"></div>
+            </div>
+
+            <!-- LKPD 1D Closing Reflection Summary -->
+            <div style="background: linear-gradient(135deg, var(--emerald-50), var(--ocean-50)); border: 3px solid #6ee7b7; border-radius: 24px; padding: 20px; margin-bottom: 22px;">
+                <h3 style="font-size: 1.25rem; font-weight: 900; color: var(--emerald-900); margin-bottom: 12px;">
+                    📝 Kartu Rangkuman Refleksi Penutup (Lembar Kerja 1D):
+                </h3>
+                <div class="reflection-grid">
+                    <div class="ref-item">
+                        <div style="font-weight: 900; color: var(--ocean-700); margin-bottom: 4px;">1. Revisi Konsep Populasi & Tujuan</div>
+                        <p style="font-size: 0.95rem; color: #334155;">Individu <strong>tidak</strong> berevolusi selama hidupnya. Evolusi adalah perubahan proporsi alel dan sifat terwariskan dalam <strong>populasi</strong> antar generasi, serta <strong>tidak bertujuan</strong>.</p>
+                    </div>
+                    <div class="ref-item">
+                        <div style="font-weight: 900; color: var(--emerald-700); margin-bottom: 4px;">2. Lima Bukti Lintas Bidang</div>
+                        <p style="font-size: 0.95rem; color: #334155;">Didukung oleh <strong>Fosil</strong>, <strong>Anatomi Perbandingan</strong> (homolog, analog, vestigial), <strong>Embriologi</strong>, <strong>Biokimia/Molekuler</strong>, dan <strong>Biogeografi</strong> (Garis Wallace).</p>
+                    </div>
+                    <div class="ref-item">
+                        <div style="font-weight: 900; color: var(--amber-800); margin-bottom: 4px;">3. Darwin–Wallace vs Lamarck</div>
+                        <p style="font-size: 0.95rem; color: #334155;">Sifat latihan fisik selama hidup (Data A) tidak diwariskan. Keberhasilan reproduksi diferensial pada variasi alami (Data B) membuktikan seleksi alam Darwin–Wallace.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;">
+                <button type="button" id="btn-podium-map" class="btn-3d btn-ocean" onclick="returnToMap()">🗺️ Kembali ke Peta Zona</button>
+                <button type="button" class="btn-3d btn-emerald" onclick="resetAllToLobby()">🔄 Main Lagi dari Awal</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== MODAL 1: INSTANT FEEDBACK & EXPLANATION ==================== -->
+    <div id="modal-feedback" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div id="fb-emoji" style="width: 68px; height: 68px; border-radius: 20px; background: var(--emerald-100); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; flex-shrink: 0;">🌟</div>
+                <div>
+                    <span id="fb-score-pill" class="badge-lkpd" style="font-size: 0.88rem; padding: 4px 12px;">+100 Poin!</span>
+                    <h3 id="fb-heading" style="font-size: 1.75rem; font-weight: 900; margin-top: 4px;">Jawaban Tepat Sekali!</h3>
+                </div>
+            </div>
+
+            <div class="explanation-box">
+                <div style="font-size: 0.82rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ocean-700); margin-bottom: 6px;">
+                    🔬 Pembahasan Ilmiah Sesuai LKPD:
+                </div>
+                <p id="fb-body"></p>
+            </div>
+
+            <button type="button" class="btn-3d btn-ocean" style="width: 100%; font-size: 1.3rem;" onclick="continueAfterFeedback()">
+                Lanjut ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: LKPD RINGKASAN MATERI (PETUNJUK GURU/SISWA) ==================== -->
+    <div id="modal-guide" class="modal-backdrop hidden" onclick="if(event.target===this) closeGuideModal()">
+        <div class="modal-card" style="max-width: 820px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <h3 style="font-size: 1.6rem; font-weight: 900; color: var(--violet-800);">📖 Ringkasan Dasar Teori LKPD Evolusi (Pertemuan 1)</h3>
+                <button type="button" class="util-btn" onclick="closeGuideModal()">✕ Tutup</button>
+            </div>
+            <div style="display: grid; gap: 12px; font-size: 0.98rem; color: #1e293b;">
+                <div style="background: var(--ocean-50); border-left: 5px solid var(--ocean-600); padding: 12px 16px; border-radius: 12px;">
+                    <strong>A. Unit & Mekanisme Evolusi:</strong> Evolusi adalah perubahan karakteristik terwariskan pada <strong>populasi</strong> dari generasi ke generasi. Individu tidak mengubah susunan genetiknya selama hidup. Bahan baku variasi: <em>mutasi, rekombinasi, aliran gen</em>. Mekanisme perubahan: <em>seleksi alam</em> (terarah), <em>hanyutan genetik</em> (acak & kuat pada populasi kecil), <em>aliran gen</em> (menyamakan/menambah variasi antarpopulasi), dan <em>perkawinan tidak acak</em>. Evolusi <strong>tidak bertujuan</strong>.
+                </div>
+                <div style="background: var(--emerald-50); border-left: 5px solid var(--emerald-600); padding: 12px 16px; border-radius: 12px;">
+                    <strong>B. Lima Stasiun Bukti (LKPD 1B):</strong> (1) Fosil, (2) Anatomi perbandingan: <em>Homolog</em> (asal sama, fungsi beda: tangan manusia, sayap kelelawar, sirip paus), <em>Analog</em> (fungsi sama, asal beda: sayap burung & kupu-kupu), <em>Vestigial</em> (organ sisa: tulang ekor manusia, umbai cacing, sisa tulang panggul paus), (3) Embriologi, (4) Biokimia/molekuler, (5) Biogeografi (Garis Wallace).
+                </div>
+                <div style="background: var(--amber-50); border-left: 5px solid var(--amber-600); padding: 12px 16px; border-radius: 12px;">
+                    <strong>C. Lamarck vs Darwin–Wallace (LKPD 1C):</strong> Lamarck berpendapat sifat perolehan latihan selama hidup (<em>use & disuse</em>) diwariskan—dibantah oleh <strong>Data A</strong> (anak atlet berotot lahir dengan otot normal). Darwin–Wallace menjelaskan variasi alami terwariskan dan keberhasilan reproduksi diferensial—didukung <strong>Data B</strong> (20 induk jerapah: Pendek 6 × 1,0 = 6 anak; Sedang 8 × 2,0 = 16 anak; Panjang 6 × 3,0 = 18 anak dewasa).
+                </div>
+            </div>
+            <div style="margin-top: 18px; text-align: right;">
+                <button type="button" class="btn-3d btn-violet" onclick="closeGuideModal()">Mengerti, Kembali ke Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: CONFIRM BACK TO HOME ==================== -->
+    <div id="modal-confirm" class="modal-backdrop hidden">
+        <div class="modal-card" style="max-width: 460px; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 8px;">🧭</div>
+            <h3 style="font-size: 1.55rem; font-weight: 900; margin-bottom: 8px;">Kembali ke Layar Pengaturan?</h3>
+            <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 20px;">
+                Skor tim dan progres kuis saat ini akan direset jika kembali ke halaman pembuka.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <button type="button" class="util-btn" style="justify-content: center; font-size: 1.05rem; padding: 14px;" onclick="closeHomeConfirm()">Batal</button>
+                <button type="button" class="btn-3d btn-coral" onclick="resetAllToLobby()">Ya, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =====================================================================
+           1. CURRICULUM DATA BANK (100% ALIGNED WITH LKPD EVOLUSI PERTEMUAN 1)
+           ===================================================================== */
+        const STATION_TEAM_NAMES = [
+            "Tim Fosil",
+            "Tim Anatomi",
+            "Tim Embriologi",
+            "Tim Biokimia",
+            "Tim Biogeografi"
+        ];
+
+        const TEAM_THEMES = [
+            { solid: "#0284c7", light: "#e0f2fe", border: "#38bdf8" },
+            { solid: "#059669", light: "#d1fae5", border: "#34d399" },
+            { solid: "#d97706", light: "#fef3c7", border: "#fbbf24" },
+            { solid: "#7c3aed", light: "#ede9fe", border: "#a78bfa" },
+            { solid: "#e11d48", light: "#ffe4e6", border: "#fb7185" }
+        ];
+
+        const ZONES_DATA = [
+            {
+                id: 0,
+                code: "ZONA 1 • LKPD 1A",
+                title: "Diagnostik Mitos vs Fakta",
+                desc: "Meluruskan miskonsepsi individu vs populasi, tujuan evolusi, dan makna teori ilmiah.",
+                theme: "ocean",
+                icon: "🔍",
+                questions: [
+                    {
+                        id: "z1_1",
+                        type: "truefalse",
+                        tag: "Lembar Kerja 1A • Pernyataan Diagnostik #1",
+                        prompt: "“Individu berevolusi selama hidupnya.”",
+                        subprompt: "Tentukan apakah pernyataan diagnostik LKPD 1A ini BENAR atau SALAH!",
+                        correctBool: false,
+                        hint: "Periksa Dasar Teori LKPD: Apakah individu mengubah susunan genetik yang diwariskannya selama hidup, ataukah populasi yang berevolusi?",
+                        explanation: "SALAH. Individu tidak mengubah susunan genetik yang diwariskannya selama hidup. Populasi—kumpulan individu satu spesies di wilayah yang sama dan saling kawin—adalah unit evolusi yang mengalami perubahan proporsi alel antar generasi."
+                    },
+                    {
+                        id: "z1_2",
+                        type: "truefalse",
+                        tag: "Lembar Kerja 1A • Pernyataan Diagnostik #2",
+                        prompt: "“Evolusi bertujuan membuat makhluk hidup makin sempurna.”",
+                        subprompt: "Tentukan apakah pernyataan diagnostik LKPD 1A ini BENAR atau SALAH!",
+                        correctBool: false,
+                        hint: "Ingat penegasan LKPD: Evolusi tidak bertujuan dan tidak semua perubahan pada populasi bersifat adaptif.",
+                        explanation: "SALAH. Evolusi tidak bertujuan (bukan teleologis). Perubahan populasi bergantung pada kondisi lingkungan saat itu serta dipengaruhi juga oleh mekanisme acak seperti hanyutan genetik."
+                    },
+                    {
+                        id: "z1_3",
+                        type: "truefalse",
+                        tag: "Lembar Kerja 1A • Pernyataan Diagnostik #3",
+                        prompt: "“Teori evolusi hanyalah dugaan yang belum dibuktikan.”",
+                        subprompt: "Tentukan apakah pernyataan diagnostik LKPD 1A ini BENAR atau SALAH!",
+                        correctBool: false,
+                        hint: "Dalam sains, teori bukanlah tebakan, melainkan kerangka penjelasan yang teruji oleh 5 stasiun bukti pada LKPD 1B.",
+                        explanation: "SALAH. Dalam sains, teori adalah penjelasan menyeluruh yang didukung banyak bukti lintas bidang yang saling menguatkan: fosil, anatomi perbandingan, embriologi, biokimia/molekuler, dan biogeografi."
+                    },
+                    {
+                        id: "z1_4",
+                        type: "mcq",
+                        tag: "Dasar Teori LKPD • Unit Evolusi",
+                        prompt: "Manakah pernyataan yang paling tepat menjelaskan mengapa POPULASI disebut sebagai unit evolusi?",
+                        options: [
+                            "Karena satu individu dapat mewariskan otot hasil latihannya kepada seluruh spesies",
+                            "Karena perubahan proporsi alel dan sifat terwariskan hanya teramati pada kelompok individu satu spesies dari generasi ke generasi",
+                            "Karena setiap individu mampu merencanakan mutasi genetik sesuai kebutuhannya",
+                            "Karena semua individu dalam populasi memiliki susunan gen yang identik selamanya"
+                        ],
+                        correctIdx: 1,
+                        hint: "Ingat definisi populasi dan evolusi pada paragraf pertama Dasar Teori LKPD.",
+                        explanation: "TEPAT! Individu lahir dengan susunan genetik tertentu, sedangkan evolusi adalah perubahan proporsi alel dan sifat terwariskan dalam populasi dari satu generasi ke generasi berikutnya."
+                    }
+                ]
+            },
+            {
+                id: 1,
+                code: "ZONA 2 • LKPD 1B",
+                title: "5 Stasiun Bukti & Struktur Anatomi",
+                desc: "Klasifikasi Homolog, Analog, Vestigial serta analisis Fosil, Embriologi, Molekuler & Garis Wallace.",
+                theme: "emerald",
+                icon: "🦴",
+                questions: [
+                    {
+                        id: "z2_1",
+                        type: "sort",
+                        tag: "Mini-Game Tap-to-Sort • Klasifikasi Struktur LKPD 1B",
+                        prompt: "Kelompokkan 6 contoh organ berikut ke kotak HOMOLOG, ANALOG, atau VESTIGIAL!",
+                        subprompt: "Ketuk kartu contoh organ di atas, lalu ketuk kotak kategori yang sesuai di bawah.",
+                        buckets: [
+                            { id: "homolog", name: "HOMOLOG", desc: "Struktur dasar sama (nenek moyang sama), fungsi berbeda", theme: "ocean" },
+                            { id: "analog", name: "ANALOG", desc: "Fungsi sama (adaptasi serupa), asal evolusi berbeda", theme: "amber" },
+                            { id: "vestigial", name: "VESTIGIAL", desc: "Sisa organ yang menyusut / kehilangan fungsi utama", theme: "violet" }
+                        ],
+                        items: [
+                            { id: "s1", label: "Tungkai depan manusia & sayap kelelawar", target: "homolog" },
+                            { id: "s2", label: "Sayap burung & sayap kupu-kupu", target: "analog" },
+                            { id: "s3", label: "Tulang ekor manusia & umbai cacing", target: "vestigial" },
+                            { id: "s4", label: "Sirip paus & tungkai depan manusia", target: "homolog" },
+                            { id: "s5", label: "Sirip ikan hiu & sirip lumba-lumba", target: "analog" },
+                            { id: "s6", label: "Sisa tulang panggul pada paus", target: "vestigial" }
+                        ],
+                        hint: "Homolog = pola rangka dasar sama (tungkai manusia, sayap kelelawar, sirip paus). Analog = fungsi terbang/berenang sama tapi asal struktur beda. Vestigial = organ sisa.",
+                        explanation: "SEMPURNA! Struktur Homolog (tungkai manusia, sayap kelelawar, sirip paus) menunjukkan warisan nenek moyang bersama; Analog (sayap burung vs kupu-kupu) menunjukkan adaptasi lingkungan serupa; Vestigial (tulang ekor manusia, umbai cacing, sisa tulang panggul paus) adalah jejak sejarah evolusi."
+                    },
+                    {
+                        id: "z2_2",
+                        type: "mcq",
+                        tag: "Stasiun 5 • Biogeografi & Peta Garis Wallace",
+                        prompt: "Bagaimana peta Garis Wallace (pemisah fauna Paparan Sunda dan Wallacea/Sahul) menjadi bukti evolusi?",
+                        options: [
+                            "Membuktikan bahwa semua pulau di Indonesia pernah menyatu dengan benua Amerika",
+                            "Sawar geografis (palung laut dalam) mengisolasi populasi sehingga berkembang secara terpisah sesuai kondisi lokalnya",
+                            "Hewan darat bermigrasi melintasi laut dalam setiap tahun tanpa mengalami perubahan",
+                            "Iklim di Kalimantan dan Sulawesi bertolak belakang sehingga spesies tidak bisa bertahan"
+                        ],
+                        correctIdx: 1,
+                        hint: "Hubungkan peta Garis Wallace dengan konsep isolasi geografis dan sejarah geologis paparan benua.",
+                        explanation: "BENAR! Biogeografi memperlihatkan bahwa isolasi geografis memisahkan populasi nenek moyang sehingga masing-masing garis keturunan berevolusi secara mandiri di wilayahnya."
+                    },
+                    {
+                        id: "z2_3",
+                        type: "mcq",
+                        tag: "Stasiun 4 • Bukti Biokimia / Molekuler",
+                        prompt: "Mengapa bukti Biokimia/Molekuler (perbandingan urutan basa DNA & asam amino) memiliki kekuatan bukti sangat tinggi (skor 3 pada LKPD 1B)?",
+                        options: [
+                            "Karena DNA dapat diamati langsung dengan lup tanpa alat laboratorium",
+                            "Karena DNA adalah materi genetik yang diwariskan langsung, sehingga derajat kemiripannya mengukur kekerabatan evolusioner secara objektif",
+                            "Karena semua spesies memiliki jumlah gen dan urutan basa yang 100% sama",
+                            "Karena DNA membuktikan bahwa latihan fisik mengubah gen individu"
+                        ],
+                        correctIdx: 1,
+                        hint: "Pikirkan hubungan antara pewarisan materi genetik DNA dengan kedekatan hubungan kekerabatan antar spesies.",
+                        explanation: "TEPAT! Kemiripan urutan DNA dan protein mencerminkan pewarisan dari nenek moyang bersama secara kuantitatif dan objektif."
+                    },
+                    {
+                        id: "z2_4",
+                        type: "mcq",
+                        tag: "Stasiun 1 & 3 • Fosil & Embriologi Perbandingan",
+                        prompt: "Apa kesimpulan utama yang ditunjukkan oleh catatan fosil berlapis dan kemiripan tahap awal embrio berbagai vertebrata?",
+                        options: [
+                            "Vertebrata darat tidak memiliki hubungan kekerabatan dengan vertebrata air",
+                            "Adanya nenek moyang bersama dan urutan perubahan morfologi bertahap dari waktu ke waktu",
+                            "Embrio mamalia menggunakan insang untuk bernapas setelah dilahirkan",
+                            "Seluruh spesies muncul serentak tanpa pernah mengalami perubahan"
+                        ],
+                        correctIdx: 1,
+                        hint: "Ingat celah faring dan ekor pasca-anus pada tahap awal perkembangan embrio vertebrata serta urutan stratigrafi fosil.",
+                        explanation: "BENAR! Fosil menunjukkan bukti perubahan bertahap lintas waktu geologis, sedangkan embriologi memperlihatkan pola perkembangan awal yang diwarisi dari nenek moyang bersama."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                code: "ZONA 3 • LKPD 1C",
+                title: "Lab Data: Lamarck vs Darwin–Wallace",
+                desc: "Analisis Data A (Atlet), Grafik Data B (20 Jerapah Induk), dan Tabel Perbandingan Teori.",
+                theme: "amber",
+                icon: "🦒",
+                questions: [
+                    {
+                        id: "z3_1",
+                        type: "datalab",
+                        labMode: "dataA",
+                        tag: "Lembar Kerja 1C • Analisis Data Hipotetis A",
+                        prompt: "Berdasarkan Data A di atas, mengapa kasus seorang atlet berotot besar yang memiliki anak dengan otot bayi normal membantah gagasan Lamarck?",
+                        options: [
+                            "Karena atlet tersebut kurang berlatih sebelum memiliki anak",
+                            "Karena sifat yang diperoleh akibat latihan selama hidup (acquired traits) tidak mengubah materi genetik yang diwariskan ke keturunan",
+                            "Karena otot manusia hanya dikendalikan oleh makanan, bukan genetika",
+                            "Karena Darwin menyatakan bahwa otot besar merugikan kelangsungan hidup"
+                        ],
+                        correctIdx: 1,
+                        hint: "Bandingkan prinsip Lamarck ('pewarisan sifat yang diperoleh selama hidup') dengan mekanisme pewarisan genetik.",
+                        explanation: "TEPAT! Data A menjadi titik lemah utama gagasan Lamarck: perubahan fisik akibat penggunaan/latihan organ selama hidup terjadi pada sel tubuh (somatik), bukan pada gen sel kelamin yang diwariskan."
+                    },
+                    {
+                        id: "z3_2",
+                        type: "datalab",
+                        labMode: "dataB",
+                        tag: "Lembar Kerja 1C • Perhitungan Data Hipotetis B",
+                        prompt: "Perhatikan tabel dan grafik Data B (20 jerapah induk saat musim kering). Berapakah TOTAL anak yang mencapai dewasa untuk kelompok Pendek, Sedang, dan Panjang?",
+                        options: [
+                            "Pendek = 6 anak | Sedang = 16 anak | Panjang = 18 anak",
+                            "Pendek = 1 anak | Sedang = 2 anak | Panjang = 3 anak",
+                            "Pendek = 6 anak | Sedang = 8 anak | Panjang = 6 anak",
+                            "Pendek = 18 anak | Sedang = 16 anak | Panjang = 6 anak"
+                        ],
+                        correctIdx: 0,
+                        hint: "Kalikan Jumlah Induk dengan Rata-rata anak mencapai dewasa: Pendek (6 × 1,0), Sedang (8 × 2,0), Panjang (6 × 3,0).",
+                        explanation: "HITUNGAN TEPAT! Pendek: 6 × 1,0 = 6 anak; Sedang: 8 × 2,0 = 16 anak; Panjang: 6 × 3,0 = 18 anak. Dari total 40 anak dewasa, 45% berasal dari induk berleher panjang!"
+                    },
+                    {
+                        id: "z3_3",
+                        type: "datalab",
+                        labMode: "dataB",
+                        tag: "Lembar Kerja 1C • Interpretasi Seleksi Alam Data B",
+                        prompt: "Mengapa pada generasi berikutnya proporsi jerapah berleher panjang meningkat berdasarkan Data B?",
+                        options: [
+                            "Karena jerapah berleher pendek menarik lehernya hingga memanjang lalu mewariskannya",
+                            "Karena individu berleher panjang lebih berhasil bertahan dan bereproduksi (rata-rata 3,0 anak) sehingga alel leher panjang makin banyak diwariskan",
+                            "Karena alam berencana menciptakan jerapah yang mampu mencapai pucuk pohon tertinggi",
+                            "Karena jerapah berleher pendek tidak menghasilkan keturunan sama sekali"
+                        ],
+                        correctIdx: 1,
+                        hint: "Gunakan konsep keberhasilan reproduksi diferensial dan pewarisan sifat alami.",
+                        explanation: "BENAR! Data B membuktikan mekanisme seleksi alam Darwin–Wallace: dalam populasi terdapat variasi alami terwariskan, dan individu yang lebih sesuai dengan lingkungan musim kering memiliki keberhasilan reproduksi lebih tinggi."
+                    },
+                    {
+                        id: "z3_4",
+                        type: "match",
+                        tag: "Mini-Game Tap-to-Match • Tabel Perbandingan LKPD 1C",
+                        prompt: "Lengkapi tabel perbandingan LKPD 1C dengan memasangkan setiap pernyataan ke LAMARCK atau DARWIN–WALLACE!",
+                        pairs: [
+                            { id: "m1", text: "Mekanisme: Use & Disuse (penggunaan organ) serta pewarisan sifat yang diperoleh selama hidup.", answer: "Lamarck" },
+                            { id: "m2", text: "Mekanisme: Variasi alami terwariskan dalam populasi dan seleksi alam (reproduksi diferensial).", answer: "Darwin-Wallace" },
+                            { id: "m3", text: "Bukti & Titik Lemah: Dibantah oleh Data A karena otot hasil latihan atlet tidak otomatis diwariskan.", answer: "Lamarck" },
+                            { id: "m4", text: "Bukti & Titik Lemah: Didukung Data B (keberhasilan reproduksi 3,0 vs 1,0 anak pada populasi jerapah).", answer: "Darwin-Wallace" }
+                        ],
+                        hint: "Ingat: Lamarck fokus pada perubahan individu karena usaha/latihan (dibantah Data A); Darwin–Wallace fokus pada variasi populasi & keberhasilan reproduksi (didukung Data B).",
+                        explanation: "LUAR BIASA! Gagasan Darwin–Wallace paling konsisten dengan bukti pewarisan genetik modern karena menjelaskan perubahan frekuensi sifat di tingkat populasi."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                code: "ZONA 4 • LKPD 1D",
+                title: "Kalimat Ilmiah & Mekanisme Populasi",
+                desc: "Menulis penjelasan evolusi bebas teleologi serta membedakan 5 faktor perubahan populasi.",
+                theme: "violet",
+                icon: "🧬",
+                questions: [
+                    {
+                        id: "z4_1",
+                        type: "mcq",
+                        tag: "Dasar Teori LKPD • Kalimat Ilmiah Anti-Teleologi",
+                        prompt: "Manakah kalimat ILMIAH yang tepat untuk menjelaskan perubahan ukuran paruh burung pemakan biji keras sesuai panduan LKPD?",
+                        options: [
+                            "“Burung membutuhkan paruh panjang dan tebal agar bisa memecah biji keras di pulau tersebut.”",
+                            "“Evolusi bertujuan menyempurnakan bentuk paruh burung sesuai jenis makanannya.”",
+                            "“Individu berparuh lebih panjang/tebal lebih berhasil bereproduksi sehingga proporsinya meningkat pada generasi berikutnya.”",
+                            "“Burung terus melatih paruhnya setiap hari hingga memanjang lalu mewariskannya.”"
+                        ],
+                        correctIdx: 2,
+                        hint: "Periksa paragraf kedua Dasar Teori LKPD: Hindari kata 'membutuhkan' atau 'bertujuan', gunakan konsep keberhasilan reproduksi & proporsi.",
+                        explanation: "TEPAT SEKALI! Kalimat ilmiah evolusi harus bebas dari tujuan (teleologi): “individu berparuh panjang lebih berhasil bereproduksi sehingga proporsinya meningkat”, bukan “burung membutuhkan paruh panjang”."
+                    },
+                    {
+                        id: "z4_2",
+                        type: "mcq",
+                        tag: "Dasar Teori LKPD • Hanyutan Genetik (Genetic Drift)",
+                        prompt: "Banjir bandang menyisakan secara acak hanya 8 ekor katak dari populasi awal 2.000 ekor, sehingga frekuensi alel warna kulit berubah drastis tanpa memandang keunggulan adaptifnya. Peristiwa ini adalah contoh...",
+                        options: [
+                            "Seleksi alam yang selalu menghasilkan sifat adaptif",
+                            "Hanyutan genetik (Genetic drift) yang menghasilkan perubahan acak dan kuat pada populasi kecil",
+                            "Pewarisan sifat perolehan menurut Lamarck",
+                            "Perkawinan acak pada populasi berukuran tak terbatas"
+                        ],
+                        correctIdx: 1,
+                        hint: "Cari mekanisme di Dasar Teori LKPD yang menghasilkan 'perubahan acak dan kuat pada populasi kecil'.",
+                        explanation: "BENAR! Hanyutan genetik (genetic drift) menyebabkan perubahan frekuensi alel secara ACAK dan berdampak kuat pada populasi kecil, sehingga tidak semua perubahan evolusioner bersifat adaptif."
+                    },
+                    {
+                        id: "z4_3",
+                        type: "mcq",
+                        tag: "Dasar Teori LKPD • Bahan Baku Variasi & Aliran Gen",
+                        prompt: "Apa sumber bahan baku variasi terwariskan dalam populasi, dan mekanisme apa yang menyamakan atau menambah variasi antarpopulasi akibat perpindahan individu?",
+                        options: [
+                            "Bahan baku: Mutasi, rekombinasi, aliran gen | Antarpopulasi: Aliran gen (Gene flow)",
+                            "Bahan baku: Latihan fisik & nutrisi | Antarpopulasi: Hanyutan genetik",
+                            "Bahan baku: Keinginan individu | Antarpopulasi: Seleksi alam terarah",
+                            "Bahan baku: Fosil & embrio | Antarpopulasi: Perkawinan tidak acak"
+                        ],
+                        correctIdx: 0,
+                        hint: "Baca kembali kalimat pertama paragraf kedua pada bagian A. Dasar Teori LKPD.",
+                        explanation: "AKURAT! Mutasi, rekombinasi, dan aliran gen menyediakan variasi terwariskan sebagai bahan baku evolusi, sedangkan aliran gen menyamakan atau menambah variasi antarpopulasi."
+                    },
+                    {
+                        id: "z4_4",
+                        type: "mcq",
+                        tag: "Lembar Kerja 1D • Sintesis Refleksi Akhir",
+                        prompt: "Sebagai revisi akhir (Lembar Kerja 1D), pernyataan manakah yang merangkum seluruh konsep evolusi Pertemuan 1 secara utuh?",
+                        options: [
+                            "Evolusi adalah perubahan individu menuju kesempurnaan selama masa hidupnya",
+                            "Evolusi adalah perubahan proporsi alel dan sifat terwariskan pada populasi antar generasi akibat seleksi alam, hanyutan genetik, aliran gen, mutasi, dan perkawinan tidak acak",
+                            "Evolusi hanya dapat dijelaskan oleh teori Lamarck melalui latihan organ",
+                            "Semua perubahan pada populasi selalu membuat organisme lebih sempurna dan adaptif"
+                        ],
+                        correctIdx: 1,
+                        hint: "Gabungkan konsep populasi, perubahan antar generasi, dan lima faktor yang memengaruhi perubahan populasi.",
+                        explanation: "SELAMAT! Kamu telah menguasai seluruh konsep inti LKPD Evolusi Pertemuan 1 dari Lembar Kerja 1A hingga 1D!"
+                    }
+                ]
+            }
+        ];
+
+        /* =====================================================================
+           2. APPLICATION STATE
+           ===================================================================== */
+        const state = {
+            teamCount: 5,
+            teams: [], // { name, score, streak, themeIdx }
+            currentTeamIdx: 0,
+            gameMode: "zones", // "zones" | "arcade"
+            timerSetting: 0,   // 0, 30, 45, 60
+            timerLeft: 0,
+            timerPaused: false,
+            timerId: null,
+            activeZoneIdx: 0,
+            activeQIdx: 0,
+            arcadeList: [],
+            arcadeCursor: 0,
+            completedIds: new Set(),
+            firstTryCorrectIds: new Set(),
+            // Mini-game states
+            selectedSortId: null,
+            sortMap: {},
+            matchMap: {}
+        };
+
+        /* =====================================================================
+           3. SETUP & LOBBY CONTROLS
+           ===================================================================== */
+        function initLobby() {
+            selectTeamCount(5);
+            selectGameMode("zones");
+            selectTimer(0);
+        }
+
+        function selectTeamCount(count) {
+            state.teamCount = count;
+            document.querySelectorAll("#team-count-group .opt-card").forEach(btn => {
+                btn.classList.toggle("selected-emerald", Number(btn.dataset.count) === count);
+            });
+            renderTeamNameInputs();
+        }
+
+        function renderTeamNameInputs() {
+            const container = document.getElementById("team-names-grid");
+            const prevValues = Array.from(container.querySelectorAll("input")).map(inp => inp.value);
+            container.innerHTML = "";
+
+            for (let i = 0; i < state.teamCount; i++) {
+                const theme = TEAM_THEMES[i % TEAM_THEMES.length];
+                const defaultLabel = state.teamCount === 1 ? "Kelas Biologi" : STATION_TEAM_NAMES[i];
+                const val = prevValues[i] || defaultLabel;
+
+                const box = document.createElement("div");
+                box.className = "team-input-box";
+                box.style.borderColor = theme.border;
+                box.style.background = theme.light;
+                box.innerHTML = `
+                    <span class="team-num-badge" style="background: ${theme.solid};">${i + 1}</span>
+                    <input type="text" id="team-name-inp-${i}" value="${escapeHtml(val)}" maxlength="22" placeholder="Nama Tim ${i + 1}">
+                `;
+                container.appendChild(box);
+            }
+        }
+
+        function resetTeamNames() {
+            for (let i = 0; i < state.teamCount; i++) {
+                const inp = document.getElementById(`team-name-inp-${i}`);
+                if (inp) inp.value = state.teamCount === 1 ? "Kelas Biologi" : STATION_TEAM_NAMES[i];
+            }
+        }
+
+        function selectGameMode(mode) {
+            state.gameMode = mode;
+            document.querySelectorAll("[data-mode]").forEach(btn => {
+                btn.classList.toggle("selected-violet", btn.dataset.mode === mode);
+            });
+        }
+
+        function selectTimer(sec) {
+            state.timerSetting = sec;
+            document.querySelectorAll("[data-timer]").forEach(btn => {
+                btn.classList.toggle("selected-ocean", Number(btn.dataset.timer) === sec);
+            });
+        }
+
+        function startGame() {
+            state.teams = [];
+            for (let i = 0; i < state.teamCount; i++) {
+                const inp = document.getElementById(`team-name-inp-${i}`);
+                const cleanName = (inp && inp.value.trim()) ? inp.value.trim() : `Tim ${i + 1}`;
+                state.teams.push({
+                    name: cleanName,
+                    score: 0,
+                    streak: 0,
+                    themeIdx: i % TEAM_THEMES.length
+                });
+            }
+
+            state.currentTeamIdx = 0;
+            state.completedIds.clear();
+            state.firstTryCorrectIds.clear();
+
+            document.getElementById("scoreboard-strip").classList.remove("hidden");
+            renderScoreboard();
+
+            if (state.gameMode === "arcade") {
+                const pool = [];
+                ZONES_DATA.forEach((zone, zIdx) => {
+                    zone.questions.forEach((q, qIdx) => {
+                        pool.push({ zIdx, qIdx });
+                    });
+                });
+                state.arcadeList = shuffleArray(pool).slice(0, 10);
+                state.arcadeCursor = 0;
+                state.activeZoneIdx = state.arcadeList[0].zIdx;
+                state.activeQIdx = state.arcadeList[0].qIdx;
+                showScreen("screen-arena");
+                renderQuestion();
+            } else {
+                showScreen("screen-map");
+                renderMap();
+            }
+        }
+
+        /* =====================================================================
+           4. SCREEN NAVIGATION, SCOREBOARD & TIMER
+           ===================================================================== */
+        function showScreen(id) {
+            clearQuestionTimer();
+            ["screen-setup", "screen-map", "screen-arena", "screen-podium"].forEach(s => {
+                document.getElementById(s).classList.add("hidden");
+            });
+            document.getElementById(id).classList.remove("hidden");
+        }
+
+        function renderScoreboard() {
+            const strip = document.getElementById("scoreboard-strip");
+            strip.innerHTML = "";
+
+            state.teams.forEach((team, idx) => {
+                const theme = TEAM_THEMES[team.themeIdx];
+                const isActive = idx === state.currentTeamIdx;
+                const pill = document.createElement("button");
+                pill.type = "button";
+                pill.className = `team-pill ${isActive ? "active" : ""}`;
+                pill.style.borderColor = isActive ? "#f59e0b" : theme.border;
+                pill.style.background = isActive ? theme.solid : "#ffffff";
+                pill.title = "Ketuk untuk mengganti giliran tim secara manual";
+                pill.onclick = () => {
+                    state.currentTeamIdx = idx;
+                    renderScoreboard();
+                    syncActiveTeamLabels();
+                };
+
+                pill.innerHTML = `
+                    <span>${escapeHtml(team.name)}</span>
+                    <span class="team-score-badge">${team.score}</span>
+                    ${team.streak >= 2 ? `<span style="background:#facc15;color:#0f172a;padding:1px 6px;border-radius:8px;font-size:0.78rem;">🔥${team.streak}</span>` : ""}
+                `;
+                strip.appendChild(pill);
+            });
+
+            syncActiveTeamLabels();
+        }
+
+        function syncActiveTeamLabels() {
+            if (!state.teams.length) return;
+            const currentName = state.teams[state.currentTeamIdx].name;
+            const mapLbl = document.getElementById("map-active-team");
+            const arenaLbl = document.getElementById("arena-team-name");
+            if (mapLbl) mapLbl.textContent = currentName;
+            if (arenaLbl) arenaLbl.textContent = currentName;
+        }
+
+        function nextTeamTurn() {
+            if (state.teams.length > 1) {
+                state.currentTeamIdx = (state.currentTeamIdx + 1) % state.teams.length;
+                renderScoreboard();
+            }
+        }
+
+        function startQuestionTimer() {
+            clearQuestionTimer();
+            const box = document.getElementById("timer-box");
+            const display = document.getElementById("timer-display");
+            const toggleBtn = document.getElementById("btn-timer-toggle");
+
+            if (state.timerSetting <= 0) {
+                box.classList.add("hidden");
+                return;
+            }
+
+            box.classList.remove("hidden", "danger");
+            state.timerPaused = false;
+            state.timerLeft = state.timerSetting;
+            toggleBtn.textContent = "⏸️";
+            display.textContent = `${state.timerLeft}d`;
+
+            state.timerId = setInterval(() => {
+                if (state.timerPaused) return;
+                state.timerLeft--;
+                display.textContent = `${state.timerLeft}d`;
+
+                if (state.timerLeft <= 10) {
+                    box.classList.add("danger");
+                }
+                if (state.timerLeft <= 0) {
+                    clearQuestionTimer();
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function toggleTimerPause() {
+            state.timerPaused = !state.timerPaused;
+            const toggleBtn = document.getElementById("btn-timer-toggle");
+            const display = document.getElementById("timer-display");
+            if (state.timerPaused) {
+                toggleBtn.textContent = "▶️";
+                display.textContent = `${state.timerLeft}d (Jeda)`;
+            } else {
+                toggleBtn.textContent = "⏸️";
+                display.textContent = `${state.timerLeft}d`;
+            }
+        }
+
+        function resetTimer() {
+            startQuestionTimer();
+        }
+
+        function clearQuestionTimer() {
+            if (state.timerId) {
+                clearInterval(state.timerId);
+                state.timerId = null;
+            }
+        }
+
+        function handleTimeout() {
+            const q = ZONES_DATA[state.activeZoneIdx].questions[state.activeQIdx];
+            state.teams[state.currentTeamIdx].streak = 0;
+            state.completedIds.add(q.id);
+            renderScoreboard();
+            openFeedbackModal(false, 0, "Waktu Habis! ⏰", q.explanation);
+        }
+
+        /* =====================================================================
+           5. EXPEDITION MAP RENDERER (4 ZONA LKPD)
+           ===================================================================== */
+        function renderMap() {
+            const container = document.getElementById("zones-container");
+            container.innerHTML = "";
+
+            let totalQuestions = 0;
+            let totalDone = 0;
+
+            ZONES_DATA.forEach((zone, zIdx) => {
+                const doneCount = zone.questions.filter(q => state.completedIds.has(q.id)).length;
+                const allDone = doneCount === zone.questions.length;
+                totalQuestions += zone.questions.length;
+                totalDone += doneCount;
+
+                const btnColors = {
+                    ocean: "btn-ocean",
+                    emerald: "btn-emerald",
+                    amber: "btn-amber",
+                    violet: "btn-violet"
+                };
+
+                const card = document.createElement("div");
+                card.className = `zone-card ${zone.theme}`;
+                card.innerHTML = `
+                    <div class="zone-top">
+                        <div style="display: flex; gap: 14px; align-items: center;">
+                            <div class="zone-icon">${zone.icon}</div>
+                            <div>
+                                <div style="font-size: 0.82rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted);">${zone.code}</div>
+                                <h3 style="font-size: 1.35rem; font-weight: 900; color: var(--text-main);">${zone.title}</h3>
+                            </div>
+                        </div>
+                        <span class="zone-status ${allDone ? "done" : ""}">
+                            ${allDone ? "✅ Selesai" : `${doneCount} / ${zone.questions.length}`}
+                        </span>
+                    </div>
+                    <p style="font-size: 0.98rem; color: var(--text-muted); font-weight: 600;">${zone.desc}</p>
+                    <button type="button" class="btn-3d ${btnColors[zone.theme]}" style="width: 100%;" onclick="enterZone(${zIdx})">
+                        ${allDone ? "🔄 Ulangi Zona Ini" : (doneCount > 0 ? "▶️ Lanjutkan Zona Ini" : "🚀 Masuk Zona Misi")}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById("map-progress-label").textContent = `${totalDone} / ${totalQuestions} Tantangan Selesai`;
+        }
+
+        function enterZone(zIdx) {
+            state.activeZoneIdx = zIdx;
+            const zone = ZONES_DATA[zIdx];
+            const firstUnfinished = zone.questions.findIndex(q => !state.completedIds.has(q.id));
+            state.activeQIdx = firstUnfinished >= 0 ? firstUnfinished : 0;
+            showScreen("screen-arena");
+            renderQuestion();
+        }
+
+        function returnToMap() {
+            if (state.gameMode === "arcade") {
+                openHomeConfirm();
+                return;
+            }
+            showScreen("screen-map");
+            renderMap();
+        }
+
+        /* =====================================================================
+           6. QUESTION & MINI-GAME RENDERERS
+           ===================================================================== */
+        function toggleQuestionHint() {
+            document.getElementById("question-hint-box").classList.toggle("hidden");
+        }
+
+        function renderQuestion() {
+            const zone = ZONES_DATA[state.activeZoneIdx];
+            const q = zone.questions[state.activeQIdx];
+
+            const backMapBtn = document.getElementById("btn-back-map");
+            if (state.gameMode === "arcade") {
+                backMapBtn.classList.add("hidden");
+                document.getElementById("arena-zone-badge").textContent = `🎲 Mode Acak (${zone.code})`;
+                document.getElementById("arena-step-badge").textContent = `Ronde ${state.arcadeCursor + 1} / ${state.arcadeList.length}`;
+            } else {
+                backMapBtn.classList.remove("hidden");
+                document.getElementById("arena-zone-badge").textContent = `${zone.icon} ${zone.code}: ${zone.title}`;
+                document.getElementById("arena-step-badge").textContent = `Soal ${state.activeQIdx + 1} / ${zone.questions.length}`;
+            }
+
+            document.getElementById("question-hint-box").classList.add("hidden");
+            document.getElementById("question-hint-text").textContent = q.hint;
+
+            const workspace = document.getElementById("arena-workspace");
+            const footer = document.getElementById("arena-footer");
+            workspace.innerHTML = "";
+            footer.innerHTML = "";
+            footer.classList.add("hidden");
+
+            startQuestionTimer();
+
+            if (q.type === "truefalse") {
+                renderTrueFalse(q, workspace);
+            } else if (q.type === "mcq") {
+                renderMCQ(q, workspace);
+            } else if (q.type === "datalab") {
+                renderDataLab(q, workspace);
+            } else if (q.type === "sort") {
+                renderSortGame(q, workspace, footer);
+            } else if (q.type === "match") {
+                renderMatchGame(q, workspace, footer);
+            }
+        }
+
+        /* --- A. TRUE / FALSE (LKPD 1A) --- */
+        function renderTrueFalse(q, container) {
+            container.innerHTML = `
+                <div class="question-prompt-box">
+                    <span class="question-tag">${q.tag}</span>
+                    <div class="question-title">${q.prompt}</div>
+                    <div class="question-sub">${q.subprompt}</div>
+                </div>
+                <div class="choices-grid">
+                    <button type="button" class="btn-3d btn-emerald" style="min-height: 92px; font-size: 1.5rem;" onclick="answerTrueFalse(true)">
+                        ✔️ BENAR <span style="font-size: 0.95rem; font-weight: 700; opacity: 0.9;">(Fakta Ilmiah)</span>
+                    </button>
+                    <button type="button" class="btn-3d btn-coral" style="min-height: 92px; font-size: 1.5rem;" onclick="answerTrueFalse(false)">
+                        ✖️ SALAH <span style="font-size: 0.95rem; font-weight: 700; opacity: 0.9;">(Miskonsepsi)</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function answerTrueFalse(choice) {
+            clearQuestionTimer();
+            const q = ZONES_DATA[state.activeZoneIdx].questions[state.activeQIdx];
+            handleAnswerResult(choice === q.correctBool, q);
+        }
+
+        /* --- B. MULTIPLE CHOICE --- */
+        function renderMCQ(q, container) {
+            const letters = ["A", "B", "C", "D"];
+            container.innerHTML = `
+                <div class="question-prompt-box">
+                    <span class="question-tag">${q.tag}</span>
+                    <div class="question-title">${q.prompt}</div>
+                </div>
+                <div class="choices-grid">
+                    ${q.options.map((opt, idx) => `
+                        <button type="button" class="btn-choice" onclick="answerMCQ(${idx})">
+                            <span class="choice-letter">${letters[idx]}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `).join("")}
+                </div>
+            `;
+        }
+
+        function answerMCQ(idx) {
+            clearQuestionTimer();
+            const q = ZONES_DATA[state.activeZoneIdx].questions[state.activeQIdx];
+            handleAnswerResult(idx === q.correctIdx, q);
+        }
+
+        /* --- C. DATA LAB (LKPD 1C DATA A & DATA B) --- */
+        function renderDataLab(q, container) {
+            const letters = ["A", "B", "C", "D"];
+            let labHtml = "";
+
+            if (q.labMode === "dataA") {
+                labHtml = `
+                    <div class="data-lab-box">
+                        <div style="font-size: 0.85rem; font-weight: 900; text-transform: uppercase; color: var(--amber-800); margin-bottom: 6px;">
+                            💪 Kartu Data Hipotetis A (LKPD 1C)
+                        </div>
+                        <p style="font-size: 1.08rem; font-weight: 800; color: var(--text-main);">
+                            Seorang atlet berotot besar karena latihan fisik bertahun-tahun; anak-anaknya lahir dengan otot bayi yang tidak otomatis besar.
+                        </p>
+                    </div>
+                `;
+            } else {
+                labHtml = `
+                    <div class="data-lab-box">
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
+                            <span style="font-size: 0.85rem; font-weight: 900; text-transform: uppercase; color: var(--amber-800);">
+                                🦒 Data Hipotetis B: Populasi 20 Jerapah Induk (Musim Kering)
+                            </span>
+                            <span class="badge-lkpd" style="background: #fde68a; color: #78350f;">Total Induk = 20 Ekor</span>
+                        </div>
+                        <div class="data-b-grid">
+                            <table class="lkpd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Panjang Leher Induk</th>
+                                        <th style="text-align:center;">Jumlah Induk</th>
+                                        <th style="text-align:center;">Rata-rata Anak Dewasa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Pendek</td><td style="text-align:center;">6</td><td style="text-align:center; color:#e11d48;">1,0</td></tr>
+                                    <tr><td>Sedang</td><td style="text-align:center;">8</td><td style="text-align:center; color:#d97706;">2,0</td></tr>
+                                    <tr><td>Panjang</td><td style="text-align:center;">6</td><td style="text-align:center; color:#059669;">3,0</td></tr>
+                                </tbody>
+                            </table>
+
+                            <div class="bar-chart-card">
+                                <div style="font-size: 0.82rem; font-weight: 800; color: var(--text-muted); margin-bottom: 8px; text-align: center;">
+                                    Grafik Batang Keberhasilan Reproduksi per Induk
+                                </div>
+                                <div class="bar-row">
+                                    <div class="bar-label"><span>Leher Pendek (6 induk)</span><span style="color:#e11d48;">1,0 anak/induk</span></div>
+                                    <div class="bar-track"><div class="bar-fill" style="width: 33.3%; background: #f43f5e;"></div></div>
+                                </div>
+                                <div class="bar-row">
+                                    <div class="bar-label"><span>Leher Sedang (8 induk)</span><span style="color:#d97706;">2,0 anak/induk</span></div>
+                                    <div class="bar-track"><div class="bar-fill" style="width: 66.6%; background: #f59e0b;"></div></div>
+                                </div>
+                                <div class="bar-row">
+                                    <div class="bar-label"><span>Leher Panjang (6 induk)</span><span style="color:#059669;">3,0 anak/induk</span></div>
+                                    <div class="bar-track"><div class="bar-fill" style="width: 100%; background: #10b981;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                ${labHtml}
+                <div class="question-prompt-box" style="padding: 16px 20px;">
+                    <span class="question-tag">${q.tag}</span>
+                    <div class="question-title" style="font-size: 1.32rem;">${q.prompt}</div>
+                </div>
+                <div class="choices-grid">
+                    ${q.options.map((opt, idx) => `
+                        <button type="button" class="btn-choice" onclick="answerMCQ(${idx})">
+                            <span class="choice-letter">${letters[idx]}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `).join("")}
+                </div>
+            `;
+        }
+
+        /* --- D. TAP-TO-SORT MINI-GAME (LKPD 1B) --- */
+        function renderSortGame(q, container, footer) {
+            state.selectedSortId = null;
+            state.sortMap = {};
+
+            function drawSortUI() {
+                const remaining = q.items.filter(it => !state.sortMap[it.id]);
+
+                container.innerHTML = `
+                    <div class="question-prompt-box" style="padding: 16px 20px;">
+                        <span class="question-tag">${q.tag}</span>
+                        <div class="question-title" style="font-size: 1.35rem;">${q.prompt}</div>
+                        <div class="question-sub">${q.subprompt}</div>
+                    </div>
+
+                    <div class="sort-pool">
+                        ${remaining.length === 0
+                            ? `<span style="color: var(--emerald-700); font-weight: 900; font-size: 1.08rem;">✨ Semua kartu organ telah ditempatkan! Tekan tombol Periksa Klasifikasi di bawah.</span>`
+                            : remaining.map(it => `
+                                <button type="button" class="sort-chip ${state.selectedSortId === it.id ? "selected" : ""}" onclick="pickSortChip('${it.id}')">
+                                    🦴 ${it.label}
+                                </button>
+                            `).join("")
+                        }
+                    </div>
+
+                    <div class="buckets-grid">
+                        ${q.buckets.map(b => {
+                            const inside = q.items.filter(it => state.sortMap[it.id] === b.id);
+                            return `
+                                <div class="bucket-box ${b.theme} ${state.selectedSortId ? "ready" : ""}" onclick="dropSortChip('${b.id}')">
+                                    <div>
+                                        <div style="font-size: 1.3rem; font-weight: 900; text-align: center;">${b.name}</div>
+                                        <div style="font-size: 0.84rem; font-weight: 700; text-align: center; color: var(--text-muted); margin-bottom: 10px;">${b.desc}</div>
+                                        ${inside.map(it => `
+                                            <div class="placed-item" onclick="event.stopPropagation(); undoSortChip('${it.id}')" title="Ketuk untuk mengembalikan kartu">
+                                                <span>${it.label}</span>
+                                                <span style="color: #e11d48; font-weight: 900;">✕</span>
+                                            </div>
+                                        `).join("")}
+                                    </div>
+                                    <div style="text-align: center; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); margin-top: 12px;">
+                                        ${state.selectedSortId ? "👇 Ketuk kotak ini untuk menaruh kartu" : "Ketuk kartu di atas lalu ketuk kotak ini"}
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+                `;
+
+                if (remaining.length === 0) {
+                    footer.classList.remove("hidden");
+                    footer.innerHTML = `
+                        <button type="button" class="btn-3d btn-emerald" onclick="submitSortGame()">
+                            ✅ Periksa Klasifikasi Struktur
+                        </button>
+                    `;
+                } else {
+                    footer.classList.add("hidden");
+                }
+            }
+
+            window.pickSortChip = (id) => {
+                state.selectedSortId = (state.selectedSortId === id) ? null : id;
+                drawSortUI();
+            };
+
+            window.dropSortChip = (bucketId) => {
+                if (!state.selectedSortId) return;
+                state.sortMap[state.selectedSortId] = bucketId;
+                state.selectedSortId = null;
+                drawSortUI();
+            };
+
+            window.undoSortChip = (itemId) => {
+                delete state.sortMap[itemId];
+                drawSortUI();
+            };
+
+            drawSortUI();
+        }
+
+        function submitSortGame() {
+            clearQuestionTimer();
+            const q = ZONES_DATA[state.activeZoneIdx].questions[state.activeQIdx];
+            let right = 0;
+            q.items.forEach(it => {
+                if (state.sortMap[it.id] === it.target) right++;
+            });
+            const allRight = right === q.items.length;
+            handleAnswerResult(
+                allRight,
+                q,
+                allRight ? "Klasifikasi Sempurna (6/6)! 🎉" : `Benar ${right} dari 6 Contoh Struktur`
+            );
+        }
+
+        /* --- E. TAP-TO-MATCH MINI-GAME (LKPD 1C) --- */
+        function renderMatchGame(q, container, footer) {
+            state.matchMap = {};
+
+            function drawMatchUI() {
+                const complete = q.pairs.every(p => state.matchMap[p.id]);
+                container.innerHTML = `
+                    <div class="question-prompt-box" style="padding: 16px 20px;">
+                        <span class="question-tag">${q.tag}</span>
+                        <div class="question-title" style="font-size: 1.35rem;">${q.prompt}</div>
+                    </div>
+                    <div>
+                        ${q.pairs.map((p, idx) => {
+                            const val = state.matchMap[p.id];
+                            return `
+                                <div class="match-row">
+                                    <div class="match-statement">${idx + 1}. ${p.text}</div>
+                                    <div class="match-btns">
+                                        <button type="button" class="match-pill ${val === "Lamarck" ? "sel-lamarck" : ""}" onclick="pickMatch('${p.id}', 'Lamarck')">
+                                            Lamarck
+                                        </button>
+                                        <button type="button" class="match-pill ${val === "Darwin-Wallace" ? "sel-darwin" : ""}" onclick="pickMatch('${p.id}', 'Darwin-Wallace')">
+                                            Darwin–Wallace
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+                `;
+
+                if (complete) {
+                    footer.classList.remove("hidden");
+                    footer.innerHTML = `
+                        <button type="button" class="btn-3d btn-amber" onclick="submitMatchGame()">
+                            ✅ Periksa Tabel Perbandingan
+                        </button>
+                    `;
+                } else {
+                    footer.classList.add("hidden");
+                }
+            }
+
+            window.pickMatch = (pairId, choice) => {
+                state.matchMap[pairId] = choice;
+                drawMatchUI();
+            };
+
+            drawMatchUI();
+        }
+
+        function submitMatchGame() {
+            clearQuestionTimer();
+            const q = ZONES_DATA[state.activeZoneIdx].questions[state.activeQIdx];
+            let right = 0;
+            q.pairs.forEach(p => {
+                if (state.matchMap[p.id] === p.answer) right++;
+            });
+            const allRight = right === q.pairs.length;
+            handleAnswerResult(
+                allRight,
+                q,
+                allRight ? "Tabel Perbandingan Tepat (4/4)! 🎉" : `Benar ${right} dari 4 Baris Tabel`
+            );
+        }
+
+        /* =====================================================================
+           7. SCORING, FEEDBACK MODAL & PURE CSS CONFETTI
+           ===================================================================== */
+        function handleAnswerResult(isCorrect, qObj, customHeading = null) {
+            const team = state.teams[state.currentTeamIdx];
+            const alreadyDone = state.completedIds.has(qObj.id);
+            let pts = 0;
+
+            if (isCorrect) {
+                team.streak += 1;
+                const bonus = team.streak >= 2 ? 20 : 0;
+                pts = alreadyDone ? 25 : (100 + bonus);
+                team.score += pts;
+                if (!alreadyDone) state.firstTryCorrectIds.add(qObj.id);
+                state.completedIds.add(qObj.id);
+                triggerCssConfetti();
+            } else {
+                team.streak = 0;
+                state.completedIds.add(qObj.id);
+            }
+
+            renderScoreboard();
+            const heading = customHeading || (isCorrect ? "Jawaban Tepat Sekali! 🎉" : "Kurang Tepat — Mari Pelajari! 🔍");
+            openFeedbackModal(isCorrect, pts, heading, qObj.explanation);
+        }
+
+        function openFeedbackModal(isCorrect, pts, heading, explanation) {
+            const emojiBox = document.getElementById("fb-emoji");
+            const pill = document.getElementById("fb-score-pill");
+            emojiBox.textContent = isCorrect ? "🌟" : "💡";
+            emojiBox.style.background = isCorrect ? "var(--emerald-100)" : "var(--amber-100)";
+
+            pill.textContent = isCorrect
+                ? `+${pts} Poin untuk ${state.teams[state.currentTeamIdx].name}!`
+                : "0 Poin • Lanjut Giliran Berikutnya";
+            pill.style.background = isCorrect ? "var(--emerald-100)" : "var(--coral-100)";
+            pill.style.color = isCorrect ? "var(--emerald-800)" : "var(--coral-800)";
+
+            document.getElementById("fb-heading").textContent = heading;
+            document.getElementById("fb-body").textContent = explanation;
+            document.getElementById("modal-feedback").classList.remove("hidden");
+        }
+
+        function continueAfterFeedback() {
+            document.getElementById("modal-feedback").classList.add("hidden");
+            nextTeamTurn();
+
+            if (state.gameMode === "arcade") {
+                if (state.arcadeCursor + 1 < state.arcadeList.length) {
+                    state.arcadeCursor++;
+                    state.activeZoneIdx = state.arcadeList[state.arcadeCursor].zIdx;
+                    state.activeQIdx = state.arcadeList[state.arcadeCursor].qIdx;
+                    renderQuestion();
+                } else {
+                    openPodium();
+                }
+                return;
+            }
+
+            const zone = ZONES_DATA[state.activeZoneIdx];
+            if (state.activeQIdx + 1 < zone.questions.length) {
+                state.activeQIdx++;
+                renderQuestion();
+            } else {
+                const totalAll = ZONES_DATA.reduce((acc, z) => acc + z.questions.length, 0);
+                if (state.completedIds.size >= totalAll) {
+                    openPodium();
+                } else {
+                    showScreen("screen-map");
+                    renderMap();
+                }
+            }
+        }
+
+        function triggerCssConfetti() {
+            const layer = document.getElementById("confetti-layer");
+            layer.innerHTML = "";
+            const colors = ["#0ea5e9", "#10b981", "#f59e0b", "#f43f5e", "#8b5cf6"];
+
+            for (let i = 0; i < 42; i++) {
+                const piece = document.createElement("div");
+                piece.className = "confetti-piece";
+                piece.style.left = `${Math.random() * 100}vw`;
+                piece.style.background = colors[i % colors.length];
+                piece.style.animationDuration = `${1.4 + Math.random() * 1.4}s`;
+                piece.style.animationDelay = `${Math.random() * 0.25}s`;
+                layer.appendChild(piece);
+            }
+            setTimeout(() => { layer.innerHTML = ""; }, 3200);
+        }
+
+        /* =====================================================================
+           8. PODIUM, GUIDE MODAL & FULLSCREEN
+           ===================================================================== */
+        function openPodium() {
+            showScreen("screen-podium");
+            triggerCssConfetti();
+
+            const backMapBtn = document.getElementById("btn-podium-map");
+            backMapBtn.classList.toggle("hidden", state.gameMode === "arcade");
+
+            const ranked = [...state.teams].sort((a, b) => b.score - a.score);
+            const medals = ["🥇", "🥈", "🥉", "🏅", "🎖️"];
+            const standings = document.getElementById("podium-standings");
+            standings.innerHTML = "";
+
+            ranked.forEach((t, idx) => {
+                const theme = TEAM_THEMES[t.themeIdx];
+                const card = document.createElement("div");
+                card.className = `podium-card ${idx === 0 ? "first" : ""}`;
+                if (idx !== 0) card.style.borderColor = theme.border;
+                card.innerHTML = `
+                    <div style="font-size: 2.4rem;">${medals[idx] || "🏅"}</div>
+                    <div style="font-size: 0.78rem; font-weight: 900; text-transform: uppercase; color: var(--text-muted); margin-top: 4px;">Peringkat #${idx + 1}</div>
+                    <div style="font-size: 1.25rem; font-weight: 900; margin: 4px 0 12px;">${escapeHtml(t.name)}</div>
+                    <div style="padding-top: 10px; border-top: 2px solid #f1f5f9;">
+                        <div style="font-size: 1.9rem; font-weight: 900; color: ${idx === 0 ? "#d97706" : theme.solid};">${t.score}</div>
+                        <div style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted);">Total Poin</div>
+                    </div>
+                `;
+                standings.appendChild(card);
+            });
+
+            const accGrid = document.getElementById("podium-accuracy-grid");
+            accGrid.innerHTML = "";
+            ZONES_DATA.forEach(z => {
+                const attempted = z.questions.filter(q => state.completedIds.has(q.id)).length;
+                const right = z.questions.filter(q => state.firstTryCorrectIds.has(q.id)).length;
+                const pct = attempted > 0 ? Math.round((right / attempted) * 100) : 0;
+
+                const item = document.createElement("div");
+                item.style.cssText = "background:#ffffff;border:2px solid #e2e8f0;border-radius:16px;padding:12px 14px;";
+                item.innerHTML = `
+                    <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:900;color:var(--text-muted);">
+                        <span>${z.icon} ${z.code}</span>
+                        <span style="color:var(--emerald-700);">${right}/${attempted} Benar</span>
+                    </div>
+                    <div style="font-weight:800;font-size:0.95rem;margin:4px 0 8px;">${z.title}</div>
+                    <div class="bar-track" style="height:12px;"><div class="bar-fill" style="width:${pct}%;background:#10b981;"></div></div>
+                    <div style="text-align:right;font-size:0.8rem;font-weight:900;color:var(--text-muted);margin-top:4px;">Akurasi: ${pct}%</div>
+                `;
+                accGrid.appendChild(item);
+            });
+        }
+
+        function openGuideModal() {
+            document.getElementById("modal-guide").classList.remove("hidden");
+        }
+        function closeGuideModal() {
+            document.getElementById("modal-guide").classList.add("hidden");
+        }
+
+        function openHomeConfirm() {
+            if (!document.getElementById("screen-setup").classList.contains("hidden")) return;
+            document.getElementById("modal-confirm").classList.remove("hidden");
+        }
+        function closeHomeConfirm() {
+            document.getElementById("modal-confirm").classList.add("hidden");
+        }
+
+        function resetAllToLobby() {
+            closeHomeConfirm();
+            clearQuestionTimer();
+            document.getElementById("scoreboard-strip").classList.add("hidden");
+            document.getElementById("timer-box").classList.add("hidden");
+            showScreen("screen-setup");
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(() => {});
+                }
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        /* =====================================================================
+           9. UTILITIES
+           ===================================================================== */
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        window.onload = function () {
+            initLobby();
+        };
+    </script>
+</body>
+</html>
